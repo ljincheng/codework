@@ -51,27 +51,7 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>com.eic</groupId>
-			<artifactId>jcpt-common</artifactId>
-			<version>${eic.version}</version>
-		</dependency>
 
-		<dependency>
-			<groupId>com.eic</groupId>
-			<artifactId>jcpt-shiro</artifactId>
-			<version>${eic.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.eic</groupId>
-			<artifactId>jcpt-system-api</artifactId>
-			<version>${eic.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.eic</groupId>
-			<artifactId>jcpt-system-default</artifactId>
-			<version>${eic.version}</version>
-		</dependency>
 
 		<!-- 添加依赖以支持 JSTL 和 JSP -->
 <!--		<dependency>-->

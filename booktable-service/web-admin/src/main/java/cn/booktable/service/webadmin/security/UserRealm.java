@@ -35,7 +35,7 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        SysUserDo user = (SysUserDo)principals.getPrimaryPrincipal();
+//        SysUserDo user = (SysUserDo)principals.getPrimaryPrincipal();
 ////			SysUserDo user=sysUserService.findSysUserByUserName((String)principal);
         if(user!=null && (user.getLocked()==null || user.getLocked().intValue()!=2))//账户存在，且不是锁定状态
         {
