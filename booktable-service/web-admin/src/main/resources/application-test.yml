@@ -20,3 +20,12 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
+
+mybatis:
+  mapperLocations: classpath*:/mapper/**/*.xml
+  configLocation: classpath:mybatis/mybatis-config.xml
+  typeAliasesPackage: cn.booktable.modules.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30

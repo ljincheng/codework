@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.sys.SysUserDao">
+    <resultMap id="BaseResultMap" type="sysUserEntity" >
+        <result column="id" property="id" />
+        <result column="userName" property="userName" />
+        <result column="password" property="password" />
+        <result column="locked" property="locked" />
+        <result column="img" property="img" />
+        <result column="bgImg" property="bgImg" />
+        <result column="realName" property="realName" />
+        <result column="telphone" property="telphone" />
+        <result column="email" property="email" />
+        <result column="ip" property="ip" />
+        <result column="createTime" property="createTime" />
+        <result column="incorrectTime" property="incorrectTime" />
+        <result column="modifyPwdTime" property="modifyPwdTime" />
+        <result column="lastTime" property="lastTime" />
+        <result column="updateTime" property="updateTime" />
+        <result column="status" property="status" />
+        <result column="platformId" property="platformId" />
+        <result column="sex" property="sex" />
+        <result column="teacherType" property="teacherType" />
+        <result column="partTimeJob" property="partTimeJob" />
+        <result column="englishName" property="englishName" />
+        <result column="birthday" property="birthday" />
+        <result column="address" property="address" />
+        <result column="motto" property="motto" />
+        <result column="concernCnt" property="concernCnt" />
+        <result column="beConcernCnt" property="beConcernCnt" />
+        <result column="collectCnt" property="collectCnt" />
+        <result column="remark" property="remark" />
+    </resultMap>
+    <insert id="insert" parameterType="sysUserEntity"  keyProperty="id"  useGeneratedKeys="true" >
+        INSERT INTO sys_user(userName,password,locked,img,bgImg,realName,telphone,email,ip,createTime,incorrectTime,modifyPwdTime,lastTime,updateTime,status,platformId,sex,teacherType,partTimeJob,englishName,birthday,address,motto,concernCnt,beConcernCnt,collectCnt,remark) VALUES (#{userName},#{password},#{locked},#{img},#{bgImg},#{realName},#{telphone},#{email},#{ip},#{createTime},#{incorrectTime},#{modifyPwdTime},#{lastTime},#{updateTime},#{status},#{platformId},#{sex},#{teacherType},#{partTimeJob},#{englishName},#{birthday},#{address},#{motto},#{concernCnt},#{beConcernCnt},#{collectCnt},#{remark})
+    </insert>
+    <select id="queryList" parameterType="map" resultType="sysUserEntity">
+        SELECT * FROM  sys_user  WHERE 1=1
+        <if test="id!= null "> and id = #{id} </if>
+        <if test="userName!= null and userName != '' "> and userName = #{userName} </if>
+        <if test="password!= null and password != '' "> and password = #{password} </if>
+        <if test="locked!= null "> and locked = #{locked} </if>
+        <if test="img!= null and img != '' "> and img = #{img} </if>
+        <if test="bgImg!= null and bgImg != '' "> and bgImg = #{bgImg} </if>
+        <if test="realName!= null and realName != '' "> and realName = #{realName} </if>
+        <if test="telphone!= null and telphone != '' "> and telphone = #{telphone} </if>
+        <if test="email!= null and email != '' "> and email = #{email} </if>
+        <if test="ip!= null and ip != '' "> and ip = #{ip} </if>
+        <if test="createTime!= null "> and createTime = #{createTime} </if>
+        <if test="incorrectTime!= null "> and incorrectTime = #{incorrectTime} </if>
+        <if test="modifyPwdTime!= null "> and modifyPwdTime = #{modifyPwdTime} </if>
+        <if test="lastTime!= null "> and lastTime = #{lastTime} </if>
+        <if test="updateTime!= null "> and updateTime = #{updateTime} </if>
+        <if test="status!= null "> and status = #{status} </if>
+        <if test="platformId!= null "> and platformId = #{platformId} </if>
+        <if test="sex!= null "> and sex = #{sex} </if>
+        <if test="teacherType!= null "> and teacherType = #{teacherType} </if>
+        <if test="partTimeJob!= null "> and partTimeJob = #{partTimeJob} </if>
+        <if test="englishName!= null and englishName != '' "> and englishName = #{englishName} </if>
+        <if test="birthday!= null "> and birthday = #{birthday} </if>
+        <if test="address!= null and address != '' "> and address = #{address} </if>
+        <if test="motto!= null and motto != '' "> and motto = #{motto} </if>
+        <if test="concernCnt!= null "> and concernCnt = #{concernCnt} </if>
+        <if test="beConcernCnt!= null "> and beConcernCnt = #{beConcernCnt} </if>
+        <if test="collectCnt!= null "> and collectCnt = #{collectCnt} </if>
+        <if test="remark!= null and remark != '' "> and remark = #{remark} </if>
+    </select>
+    <select id="queryListPage" parameterType="map" resultType="sysUserEntity">
+        SELECT * FROM  sys_user WHERE 1=1
+        <if test="id!= null "> and id = #{id} </if>
+        <if test="userName!= null and userName != '' "> and userName = #{userName} </if>
+        <if test="password!= null and password != '' "> and password = #{password} </if>
+        <if test="locked!= null "> and locked = #{locked} </if>
+        <if test="img!= null and img != '' "> and img = #{img} </if>
+        <if test="bgImg!= null and bgImg != '' "> and bgImg = #{bgImg} </if>
+        <if test="realName!= null and realName != '' "> and realName = #{realName} </if>
+        <if test="telphone!= null and telphone != '' "> and telphone = #{telphone} </if>
+        <if test="email!= null and email != '' "> and email = #{email} </if>
+        <if test="ip!= null and ip != '' "> and ip = #{ip} </if>
+        <if test="createTime!= null "> and createTime = #{createTime} </if>
+        <if test="incorrectTime!= null "> and incorrectTime = #{incorrectTime} </if>
+        <if test="modifyPwdTime!= null "> and modifyPwdTime = #{modifyPwdTime} </if>
+        <if test="lastTime!= null "> and lastTime = #{lastTime} </if>
+        <if test="updateTime!= null "> and updateTime = #{updateTime} </if>
+        <if test="status!= null "> and status = #{status} </if>
+        <if test="platformId!= null "> and platformId = #{platformId} </if>
+        <if test="sex!= null "> and sex = #{sex} </if>
+        <if test="teacherType!= null "> and teacherType = #{teacherType} </if>
+        <if test="partTimeJob!= null "> and partTimeJob = #{partTimeJob} </if>
+        <if test="englishName!= null and englishName != '' "> and englishName = #{englishName} </if>
+        <if test="birthday!= null "> and birthday = #{birthday} </if>
+        <if test="address!= null and address != '' "> and address = #{address} </if>
+        <if test="motto!= null and motto != '' "> and motto = #{motto} </if>
+        <if test="concernCnt!= null "> and concernCnt = #{concernCnt} </if>
+        <if test="beConcernCnt!= null "> and beConcernCnt = #{beConcernCnt} </if>
+        <if test="collectCnt!= null "> and collectCnt = #{collectCnt} </if>
+        <if test="remark!= null and remark != '' "> and remark = #{remark} </if>
+    </select>
+    <update id="updateById" parameterType="sysUserEntity">
+        update sys_user set userName=#{userName},password=#{password},locked=#{locked},img=#{img},bgImg=#{bgImg},realName=#{realName},telphone=#{telphone},email=#{email},ip=#{ip},createTime=#{createTime},incorrectTime=#{incorrectTime},modifyPwdTime=#{modifyPwdTime},lastTime=#{lastTime},updateTime=#{updateTime},status=#{status},platformId=#{platformId},sex=#{sex},teacherType=#{teacherType},partTimeJob=#{partTimeJob},englishName=#{englishName},birthday=#{birthday},address=#{address},motto=#{motto},concernCnt=#{concernCnt},beConcernCnt=#{beConcernCnt},collectCnt=#{collectCnt},remark=#{remark} where id = #{id}
+    </update>
+    <delete id="deleteById" parameterType="Integer">
+        DELETE FROM sys_user WHERE id = #{id}
+    </delete>
+    <select id="findById" parameterType="Integer" resultType="sysUserEntity">
+        SELECT * FROM sys_user WHERE id = #{id}
+    </select>
+</mapper>

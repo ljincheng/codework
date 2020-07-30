@@ -1,7 +1,8 @@
 package cn.booktable.service.webadmin.security;
 
-import com.eic.jcptsystem.model.system.SysUserDo;
-import com.eic.shiro.util.SessionUtils;
+import cn.booktable.core.shiro.SessionUtils;
+import cn.booktable.core.shiro.SysUserPrimaryPrincipal;
+import cn.booktable.modules.entity.sys.SysUserEntity;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -35,7 +36,7 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-//        SysUserDo user = (SysUserDo)principals.getPrimaryPrincipal();
+        SysUserEntity user = (SysUserEntity)principals.getPrimaryPrincipal();
 ////			SysUserDo user=sysUserService.findSysUserByUserName((String)principal);
         if(user!=null && (user.getLocked()==null || user.getLocked().intValue()!=2))//账户存在，且不是锁定状态
         {
@@ -64,13 +65,13 @@ public class UserRealm extends AuthorizingRealm {
         Object credentialsObj=authcToken.getCredentials();
 //        if(authcToken instanceof UsernamePasswordToken) {
 //            UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
-            SysUserDo user = new SysUserDo();
+        SysUserEntity user = new SysUserEntity();
             user.setUserName(principalObj.toString());
             user.setPassword(credentialsObj.toString());
             if ("666666".equalsIgnoreCase(user.getUserName()) && "666666".equalsIgnoreCase(user.getPassword())) {
                 user.setId(10000);
                 AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(user, user.getPassword(), getName());
-                List<Session> list = SessionUtils.getSessionListByUserName(principalObj.toString());
+                List<Session> list = SessionUtils.getSessionListByUserName((SysUserPrimaryPrincipal) user);
                 if (null != list && list.size() > 0) {
                     DefaultWebSessionManager sessionManager = SessionUtils.getSessionManager();
                     for (Session session : list) {

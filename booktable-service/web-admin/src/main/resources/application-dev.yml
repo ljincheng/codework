@@ -1,25 +1,38 @@
+mybatis:
+  type-aliases-package: cn.booktable.modules.entity # 实体类包的路径
+  configuration:
+    map-underscore-to-camel-case: true # 将下划线转为驼峰命名
+    default-fetch-size: 100
+    default-statement-timeout: 3000
+  mapper-locations: classpath*:/mapper/**/*.xml # mapper xml配置文件文件路径
+# 打印sql
+logging:
+  level:
+    cn.booktable.modules.dao : debug
+# 数据库
 spring:
   datasource:
-    name: dataSource
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/edu_school?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/edu_school?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=UTC
     username: root
     password:
-    # 使用druid连接池
+    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    filters: stat
-    maxActive: 20
-    initialSize: 1
-    maxWait: 60000
-    minIdle: 1
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: select 'x'
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxOpenPreparedStatements: 20
+    # druid
+    druid:
+      initialSize: 1
+      filters: stat
+      maxActive: 2
+      maxWait: 60000
+      minIdle: 1
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxOpenPreparedStatements: 20
+
 
 #spring:
 #  datasource:

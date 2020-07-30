@@ -11,7 +11,7 @@
 	<properties>
 		<shiro.version>1.4.0</shiro.version>
 		<eic.version>4.0</eic.version>
-		<mybatis.version>2.1.3</mybatis.version>
+
 
 	</properties>
 
@@ -22,7 +22,18 @@
 			<artifactId>booktable-core</artifactId>
 			<version>${parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>cn.booktable</groupId>
+			<artifactId>booktable-core</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
 
+
+		<dependency>
+			<groupId>cn.booktable</groupId>
+			<artifactId>modules-sys-impl</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
 		<dependency>
 		    <groupId>org.apache.shiro</groupId>
 		    <artifactId>shiro-core</artifactId>
@@ -34,11 +45,7 @@
 		    <version>${shiro.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>${mybatis.version}</version>
-		</dependency>
+
 
 
 
@@ -71,10 +78,15 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
+					<include>**/*.yml</include>
+					<include>**/mybatis/*</include>
+					<include>**/*.properties</include>
 					<include>**/views/*</include>
+					<include>**/templates/*</include>
 					<include>**/res/*</include>
 					<include>**/*.html</include>
 				</includes>
+				<filtering>false</filtering>
 			</resource>
 
 
@@ -83,6 +95,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
