@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.sys.SysNotificationDao">
+
+    <sql id="selectColumnList"> id,title,content,notice_type,receives,status,notice_time,create_time,update_time</sql>
+
+    <insert id="insert" parameterType="sysNotificationDo"  >
+       INSERT INTO sys_notification (id,title,content,notice_type,receives,status,notice_time,create_time,update_time) VALUES (#{id},#{title},#{content},#{noticeType},#{receives},#{status},#{noticeTime},#{createTime},#{updateTime})
+    </insert>
+
+    <select id="queryList" parameterType="map" resultType="sysNotificationDo">
+        SELECT <include refid="selectColumnList" /> FROM  sys_notification WHERE 1=1
+        <if test="id!= null and id != '' "> and id=#{id}</if>
+        <if test="title!= null and title != '' "> and title=#{title}</if>
+        <if test="content!= null and content != '' "> and content=#{content}</if>
+        <if test="noticeType!= null "> and notice_type=#{noticeType}</if>
+        <if test="receives!= null and receives != '' "> and receives=#{receives}</if>
+        <if test="status!= null "> and status=#{status}</if>
+        <if test="noticeTime!= null "> and notice_time=#{noticeTime}</if>
+        <if test="createTime!= null "> and create_time=#{createTime}</if>
+        <if test="updateTime!= null "> and update_time=#{updateTime}</if>
+
+    </select>
+
+    <select id="queryListPage" parameterType="map" resultType="sysNotificationDo">
+        SELECT <include refid="selectColumnList" /> FROM  sys_notification WHERE 1=1
+        <if test="id!= null and id != '' "> and id=#{id}</if>
+        <if test="title!= null and title != '' "> and title=#{title}</if>
+        <if test="content!= null and content != '' "> and content=#{content}</if>
+        <if test="noticeType!= null "> and notice_type=#{noticeType}</if>
+        <if test="receives!= null and receives != '' "> and receives=#{receives}</if>
+        <if test="status!= null "> and status=#{status}</if>
+        <if test="noticeTime!= null "> and notice_time=#{noticeTime}</if>
+        <if test="createTime!= null "> and create_time=#{createTime}</if>
+        <if test="updateTime!= null "> and update_time=#{updateTime}</if>
+
+    </select>
+
+	 <update id="updateById" parameterType="sysNotificationDo">
+	 	 update  sys_notification set title= #{title},content= #{content},notice_type= #{noticeType},receives= #{receives},status= #{status},notice_time= #{noticeTime},create_time= #{createTime},update_time= #{updateTime} WHERE id=#{id}
+	 </update>
+
+    <delete id="deleteById" parameterType="String">
+        DELETE FROM sys_notification WHERE id=#{id}
+    </delete>
+
+     <select id="findById" parameterType="String" resultType="sysNotificationDo">
+        SELECT <include refid="selectColumnList" /> FROM  sys_notification WHERE id=#{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.sys.SysOperateLogDao">
+
+    <insert id="insert" parameterType="sysOperateLogDo"  >
+       INSERT INTO sys_operate_log(userId, url, ip, userAgent, status, createTime)VALUES(#{userId}, #{url}, #{ip}, #{userAgent}, #{status}, now())
+    </insert>
+
+    <select id="queryList" parameterType="map" resultType="sysOperateLogDo">
+        SELECT id, userId, url, ip, userAgent, status, createTime FROM sys_operate_log l where 1=1
+        <if test="id!= null and id != ''"> and id=#{id}</if>
+    </select>
+
+    <select id="queryListPage" parameterType="map" resultType="sysOperateLogDo">
+		 SELECT l.id, l.userId, l.url, l.ip, l.userAgent, l.STATUS, l.createTime ,u.userName,u.realName,p2.name parentUrlName,p.name urlName
+		 FROM sys_operate_log l
+		 JOIN sys_user u ON l.userId = u.id
+		 LEFT JOIN sys_permission p ON l.url = p.url
+		 LEFT JOIN sys_permission p2 ON p.parentId = p2.id
+		 WHERE 1=1
+        <if test="userName!= null and userName != '' "> and u.userName LIKE concat('%',#{userName},'%')</if>
+        <if test="realName!= null and realName != '' "> and u.realName LIKE concat('%',#{realName},'%')</if>
+        <if test="parentUrlName!= null and parentUrlName != '' "> and p2.name LIKE concat('%',#{parentUrlName},'%')</if>
+        <if test="startDate  != null "><![CDATA[ and l.createTime  >= #{startDate}]]></if>
+        <if test="endDate  != null  "><![CDATA[ and  l.createTime <= #{endDate}]]></if>
+        <if test="status!= null "> and l.status=#{status}</if>
+		ORDER BY l.createTime DESC
+    </select>
+
+	 <update id="updateById" parameterType="sysOperateLogDo">
+
+	 </update>
+
+    <delete id="deleteById" parameterType="String">
+        DELETE FROM sys_operate_log WHERE id=#{id}
+    </delete>
+
+     <select id="findById" parameterType="String" resultType="sysOperateLogDo">
+        SELECT id, userId, url, ip, userAgent, status, createTime FROM sys_operate_log l WHERE id=#{id}
+    </select>
+
+</mapper>

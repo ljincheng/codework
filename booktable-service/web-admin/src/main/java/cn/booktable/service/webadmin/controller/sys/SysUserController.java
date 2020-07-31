@@ -1,6 +1,7 @@
 package cn.booktable.service.webadmin.controller.sys;
 
 import cn.booktable.core.page.PageDo;
+import cn.booktable.modules.entity.sys.SysUserDo;
 import cn.booktable.modules.entity.sys.SysUserEntity;
 import cn.booktable.modules.service.sys.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class SysUserController {
     public ModelAndView sysUserList_methodGet(Model model){
         ModelAndView view=new ModelAndView("sys/sysUserEntityList");
         try{
-            List<SysUserEntity> userEntityList= sysUserService.querySysUserList(null);
+            List<SysUserDo> userEntityList= sysUserService.querySysUserList(null);
             view.addObject("sysUserList",userEntityList);
             System.out.println("num="+userEntityList.size());
         }catch (Exception ex)
@@ -42,8 +43,8 @@ public class SysUserController {
     public ModelAndView sysUserListPage_methodGet(){
         ModelAndView view=new ModelAndView("sys/sysUserEntityList");
         try{
-            PageDo<SysUserEntity> userEntityListPage= sysUserService.querySysUserListPage(1L,20,null);
-            List<SysUserEntity> userEntityList=userEntityListPage.getPage();
+            PageDo<SysUserDo> userEntityListPage= sysUserService.querySysUserListPage(1L,20,null);
+            List<SysUserDo> userEntityList=userEntityListPage.getPage();
             view.addObject("sysUserList",userEntityList);
             System.out.println("num="+userEntityList.size());
         }catch (Exception ex)

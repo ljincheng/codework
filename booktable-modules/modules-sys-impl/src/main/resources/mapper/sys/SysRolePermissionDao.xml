@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.sys.SysRolePermissionDao">
+
+    <insert id="insert" parameterType="sysRolePermissionDo"  >
+       INSERT INTO sys_role_permission (id,roleId,permissionId) VALUES (#{id},#{roleId},#{permissionId})
+    </insert>
+
+    <select id="queryList" parameterType="map" resultType="sysRolePermissionDo">
+        SELECT id,roleId,permissionId FROM  sys_role_permission WHERE 1=1
+        <if test="id!= null"> and id=#{id}</if>
+        <if test="roleId!= null"> and roleId=#{roleId}</if>
+        <if test="permissionId!= null"> and permissionId=#{permissionId}</if>
+
+    </select>
+
+	 <update id="updateById" parameterType="sysRolePermissionDo">
+	 	 update  sys_role_permission set roleId= #{roleId},permissionId= #{permissionId} WHERE id=#{id}
+	 </update>
+
+    <delete id="deleteById" parameterType="String">
+        DELETE FROM sys_role_permission WHERE id=#{id}
+    </delete>
+
+     <select id="findById" parameterType="String" resultType="sysRolePermissionDo">
+        SELECT id,roleId,permissionId FROM  sys_role_permission WHERE id=#{id}
+    </select>
+
+
+    <delete id="deletePermissionsByRoleId" parameterType="string">
+        DELETE FROM sys_role_permission WHERE roleId=#{roleId}
+    </delete>
+
+    <select id="getPermissionByRoleId" parameterType="String" resultType="sysPermissionDo">
+        SELECT t2.* FROM sys_role_permission t1 LEFT JOIN sys_permission t2 ON t1.permissionId=t2.id WHERE t1.roleId=#{roleId}
+    </select>
+
+    <select id="getPermissionByRoleIdAndPlatformId" parameterType="map" resultType="sysPermissionDo">
+        SELECT t2.* FROM sys_role_permission t1 LEFT JOIN sys_permission t2 ON t1.permissionId=t2.id
+        left join sys_platform_menu t3 on t3.menu_id=t2.id
+		WHERE t3.platform_id=#{platformId} and t1.roleId=#{roleId}
+    </select>
+</mapper>

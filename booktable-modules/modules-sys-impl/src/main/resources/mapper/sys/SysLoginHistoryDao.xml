@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.sys.SysLoginHistoryDao">
+
+    <sql id="selectColumnList"> id,ip,userName,createTime,userAgent,status</sql>
+
+    <insert id="insert" parameterType="sysLoginHistoryDo"  keyProperty="id"  useGeneratedKeys="true" >
+       INSERT INTO sys_loginhistory (ip,userName,createTime,userAgent,status) VALUES (#{ip},#{userName},now(),#{userAgent},#{status})
+    </insert>
+
+    <select id="queryList" parameterType="map" resultType="sysLoginHistoryDo">
+        SELECT <include refid="selectColumnList" /> FROM  sys_loginhistory WHERE 1=1
+        <if test="id!= null "> and id=#{id}</if>
+        <if test="ip!= null and ip != '' "> and ip=#{ip}</if>
+        <if test="userName!= null and userName != '' "> and userName=#{userName}</if>
+        <if test="createTime!= null "> and createTime=#{createTime}</if>
+        <if test="startDate  != null  "><![CDATA[ and createTime  >= #{startDate}]]></if>
+        <if test="endDate  != null   "><![CDATA[ and  createTime <= #{endDate}]]></if>
+        <if test="userAgent!= null and userAgent != '' "> and userAgent=#{userAgent}</if>
+        <if test="status!= null "> and status=#{status}</if>
+
+    </select>
+
+    <select id="queryListPage" parameterType="map" resultType="sysLoginHistoryDo">
+        SELECT <include refid="selectColumnList" /> FROM  sys_loginhistory WHERE 1=1
+        <if test="id!= null "> and id=#{id}</if>
+        <if test="ip!= null and ip != '' "> and ip=#{ip}</if>
+        <if test="userName!= null and userName != '' "> and userName=#{userName}</if>
+        <if test="createTime!= null "> and createTime=#{createTime}</if>
+        <if test="startDate  != null "><![CDATA[ and createTime  >= #{startDate}]]></if>
+        <if test="endDate  != null "><![CDATA[ and  createTime <= #{endDate}]]></if>
+        <if test="userAgent!= null and userAgent != '' "> and userAgent=#{userAgent}</if>
+        <if test="status!= null "> and status=#{status}</if>
+
+    </select>
+
+	 <update id="updateById" parameterType="sysLoginHistoryDo">
+	 	 update  sys_loginhistory set ip= #{ip},userName= #{userName},userAgent= #{userAgent},status= #{status} WHERE id=#{id}
+	 </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM sys_loginhistory WHERE id=#{id}
+    </delete>
+
+     <select id="findById" parameterType="Long" resultType="sysLoginHistoryDo">
+        SELECT <include refid="selectColumnList" /> FROM  sys_loginhistory WHERE id=#{id}
+    </select>
+
+     <update id="updateStatusById" parameterType="sysLoginHistoryDo">
+	 	 update  sys_loginhistory set  status= #{status} WHERE id=#{id}
+	 </update>
+
+</mapper>

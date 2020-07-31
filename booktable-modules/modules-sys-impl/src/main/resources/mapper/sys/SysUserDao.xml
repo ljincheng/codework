@@ -1,108 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.booktable.modules.dao.sys.SysUserDao">
-    <resultMap id="BaseResultMap" type="sysUserEntity" >
-        <result column="id" property="id" />
-        <result column="userName" property="userName" />
-        <result column="password" property="password" />
-        <result column="locked" property="locked" />
-        <result column="img" property="img" />
-        <result column="bgImg" property="bgImg" />
-        <result column="realName" property="realName" />
-        <result column="telphone" property="telphone" />
-        <result column="email" property="email" />
-        <result column="ip" property="ip" />
-        <result column="createTime" property="createTime" />
-        <result column="incorrectTime" property="incorrectTime" />
-        <result column="modifyPwdTime" property="modifyPwdTime" />
-        <result column="lastTime" property="lastTime" />
-        <result column="updateTime" property="updateTime" />
-        <result column="status" property="status" />
-        <result column="platformId" property="platformId" />
-        <result column="sex" property="sex" />
-        <result column="teacherType" property="teacherType" />
-        <result column="partTimeJob" property="partTimeJob" />
-        <result column="englishName" property="englishName" />
-        <result column="birthday" property="birthday" />
-        <result column="address" property="address" />
-        <result column="motto" property="motto" />
-        <result column="concernCnt" property="concernCnt" />
-        <result column="beConcernCnt" property="beConcernCnt" />
-        <result column="collectCnt" property="collectCnt" />
-        <result column="remark" property="remark" />
-    </resultMap>
-    <insert id="insert" parameterType="sysUserEntity"  keyProperty="id"  useGeneratedKeys="true" >
-        INSERT INTO sys_user(userName,password,locked,img,bgImg,realName,telphone,email,ip,createTime,incorrectTime,modifyPwdTime,lastTime,updateTime,status,platformId,sex,teacherType,partTimeJob,englishName,birthday,address,motto,concernCnt,beConcernCnt,collectCnt,remark) VALUES (#{userName},#{password},#{locked},#{img},#{bgImg},#{realName},#{telphone},#{email},#{ip},#{createTime},#{incorrectTime},#{modifyPwdTime},#{lastTime},#{updateTime},#{status},#{platformId},#{sex},#{teacherType},#{partTimeJob},#{englishName},#{birthday},#{address},#{motto},#{concernCnt},#{beConcernCnt},#{collectCnt},#{remark})
+
+
+     <sql id="selectColumnList"> * </sql>
+
+    <insert id="insert" parameterType="sysUserDo"  keyProperty="id"  useGeneratedKeys="true" >
+       INSERT INTO sys_user (userName,password,locked,img,bgImg,realName,telphone,email,ip,createTime,lastTime,updateTime,modifyPwdTime,platformId,sex,teacherType,partTimeJob,birthday,englishName,address,remark,motto,concernCnt ,beConcernCnt,collectCnt ) VALUES (#{userName},#{password},#{locked},#{img},#{bgImg},#{realName},#{telphone},#{email},#{ip},now(),now(),now(),now(),#{platformId},#{sex},#{teacherType},#{partTimeJob},#{birthday},#{englishName},#{address},#{remark},#{motto},#{concernCnt},#{beConcernCnt},#{collectCnt})
     </insert>
-    <select id="queryList" parameterType="map" resultType="sysUserEntity">
-        SELECT * FROM  sys_user  WHERE 1=1
-        <if test="id!= null "> and id = #{id} </if>
-        <if test="userName!= null and userName != '' "> and userName = #{userName} </if>
-        <if test="password!= null and password != '' "> and password = #{password} </if>
-        <if test="locked!= null "> and locked = #{locked} </if>
-        <if test="img!= null and img != '' "> and img = #{img} </if>
-        <if test="bgImg!= null and bgImg != '' "> and bgImg = #{bgImg} </if>
-        <if test="realName!= null and realName != '' "> and realName = #{realName} </if>
-        <if test="telphone!= null and telphone != '' "> and telphone = #{telphone} </if>
-        <if test="email!= null and email != '' "> and email = #{email} </if>
-        <if test="ip!= null and ip != '' "> and ip = #{ip} </if>
-        <if test="createTime!= null "> and createTime = #{createTime} </if>
-        <if test="incorrectTime!= null "> and incorrectTime = #{incorrectTime} </if>
-        <if test="modifyPwdTime!= null "> and modifyPwdTime = #{modifyPwdTime} </if>
-        <if test="lastTime!= null "> and lastTime = #{lastTime} </if>
-        <if test="updateTime!= null "> and updateTime = #{updateTime} </if>
-        <if test="status!= null "> and status = #{status} </if>
-        <if test="platformId!= null "> and platformId = #{platformId} </if>
-        <if test="sex!= null "> and sex = #{sex} </if>
-        <if test="teacherType!= null "> and teacherType = #{teacherType} </if>
-        <if test="partTimeJob!= null "> and partTimeJob = #{partTimeJob} </if>
-        <if test="englishName!= null and englishName != '' "> and englishName = #{englishName} </if>
-        <if test="birthday!= null "> and birthday = #{birthday} </if>
-        <if test="address!= null and address != '' "> and address = #{address} </if>
-        <if test="motto!= null and motto != '' "> and motto = #{motto} </if>
-        <if test="concernCnt!= null "> and concernCnt = #{concernCnt} </if>
-        <if test="beConcernCnt!= null "> and beConcernCnt = #{beConcernCnt} </if>
-        <if test="collectCnt!= null "> and collectCnt = #{collectCnt} </if>
-        <if test="remark!= null and remark != '' "> and remark = #{remark} </if>
-    </select>
-    <select id="queryListPage" parameterType="map" resultType="sysUserEntity">
+
+    <select id="queryList" parameterType="map" resultType="sysUserDo">
         SELECT * FROM  sys_user WHERE 1=1
-        <if test="id!= null "> and id = #{id} </if>
-        <if test="userName!= null and userName != '' "> and userName = #{userName} </if>
-        <if test="password!= null and password != '' "> and password = #{password} </if>
-        <if test="locked!= null "> and locked = #{locked} </if>
-        <if test="img!= null and img != '' "> and img = #{img} </if>
-        <if test="bgImg!= null and bgImg != '' "> and bgImg = #{bgImg} </if>
-        <if test="realName!= null and realName != '' "> and realName = #{realName} </if>
-        <if test="telphone!= null and telphone != '' "> and telphone = #{telphone} </if>
-        <if test="email!= null and email != '' "> and email = #{email} </if>
-        <if test="ip!= null and ip != '' "> and ip = #{ip} </if>
-        <if test="createTime!= null "> and createTime = #{createTime} </if>
-        <if test="incorrectTime!= null "> and incorrectTime = #{incorrectTime} </if>
-        <if test="modifyPwdTime!= null "> and modifyPwdTime = #{modifyPwdTime} </if>
-        <if test="lastTime!= null "> and lastTime = #{lastTime} </if>
-        <if test="updateTime!= null "> and updateTime = #{updateTime} </if>
-        <if test="status!= null "> and status = #{status} </if>
-        <if test="platformId!= null "> and platformId = #{platformId} </if>
-        <if test="sex!= null "> and sex = #{sex} </if>
-        <if test="teacherType!= null "> and teacherType = #{teacherType} </if>
-        <if test="partTimeJob!= null "> and partTimeJob = #{partTimeJob} </if>
-        <if test="englishName!= null and englishName != '' "> and englishName = #{englishName} </if>
-        <if test="birthday!= null "> and birthday = #{birthday} </if>
-        <if test="address!= null and address != '' "> and address = #{address} </if>
-        <if test="motto!= null and motto != '' "> and motto = #{motto} </if>
-        <if test="concernCnt!= null "> and concernCnt = #{concernCnt} </if>
-        <if test="beConcernCnt!= null "> and beConcernCnt = #{beConcernCnt} </if>
-        <if test="collectCnt!= null "> and collectCnt = #{collectCnt} </if>
-        <if test="remark!= null and remark != '' "> and remark = #{remark} </if>
+        <if test="id!= null "> and id=#{id}</if>
+        <if test="userName!= null and userName != '' "> and userName=#{userName}</if>
+        <if test="password!= null and password != '' "> and password=#{password}</if>
+        <if test="locked!= null "> and locked=#{locked}</if>
+        <if test="img!= null and img != '' "> and img=#{img}</if>
+        <if test="realName!= null and realName != '' "> and realName=#{realName}</if>
+        <if test="telphone!= null and telphone != '' "> and telphone=#{telphone}</if>
+        <if test="email!= null and email != '' "> and email=#{email}</if>
+        <if test="ip!= null and ip != '' "> and ip=#{ip}</if>
+        <if test="createTime!= null "> and createTime=#{createTime}</if>
+        <if test="startDate  != null   "><![CDATA[ and createTime  >= #{startDate}]]></if>
+        <if test="endDate  != null "><![CDATA[ and  createTime <= #{endDate}]]></if>
+        <if test="incorrectTime!= null "> and incorrectTime=#{incorrectTime}</if>
+        <if test="lastTime!= null "> and lastTime=#{lastTime}</if>
+        <if test="updateTime!= null "> and updateTime=#{updateTime}</if>
+         <if test="status!= null "> and status=#{status}</if>
+         <if test="sex!= null "> and sex=#{sex}</if>
+         <if test="teacherType!= null "> and teacherType=#{teacherType}</if>
+         <if test="partTimeJob!= null "> and partTimeJob=#{partTimeJob}</if>
+         <if test="birthday!= null "> and birthday=#{birthday}</if>
+         <if test="englishName!= null "> and englishName=#{englishName}</if>
+         <if test="bgImg!= null "> and bgImg=#{bgImg}</if>
+         <if test="motto!= null "> and motto=#{motto}</if>
+         <if test="concernCnt!= null "> and concernCnt=#{concernCnt}</if>
+         <if test="beConcernCnt!= null "> and beConcernCnt=#{beConcernCnt}</if>
+         <if test="collectCnt!= null "> and collectCnt=#{collectCnt}</if>
+
     </select>
-    <update id="updateById" parameterType="sysUserEntity">
-        update sys_user set userName=#{userName},password=#{password},locked=#{locked},img=#{img},bgImg=#{bgImg},realName=#{realName},telphone=#{telphone},email=#{email},ip=#{ip},createTime=#{createTime},incorrectTime=#{incorrectTime},modifyPwdTime=#{modifyPwdTime},lastTime=#{lastTime},updateTime=#{updateTime},status=#{status},platformId=#{platformId},sex=#{sex},teacherType=#{teacherType},partTimeJob=#{partTimeJob},englishName=#{englishName},birthday=#{birthday},address=#{address},motto=#{motto},concernCnt=#{concernCnt},beConcernCnt=#{beConcernCnt},collectCnt=#{collectCnt},remark=#{remark} where id = #{id}
-    </update>
-    <delete id="deleteById" parameterType="Integer">
-        DELETE FROM sys_user WHERE id = #{id}
+
+    <select id="queryListPage" parameterType="map" resultType="sysUserDo">
+        SELECT * FROM  sys_user WHERE 1=1
+        <if test="id!= null "> and id=#{id}</if>
+        <if test="userName!= null and userName != '' "> and userName LIKE concat('%',#{userName},'%')</if>
+        <if test="password!= null and password != '' "> and password=#{password}</if>
+        <if test="locked!= null "> and locked=#{locked}</if>
+        <if test="img!= null and img != '' "> and img=#{img}</if>
+        <if test="realName!= null and realName != '' "> and realName LIKE concat('%',#{realName},'%')</if>
+        <if test="telphone!= null and telphone != '' "> and telphone like concat('%',#{telphone},'%')</if>
+        <if test="email!= null and email != '' "> and email=#{email}</if>
+        <if test="ip!= null and ip != '' "> and ip=#{ip}</if>
+        <if test="createTime!= null "> and createTime=#{createTime}</if>
+        <if test="startDate  != null "><![CDATA[ and createTime  >= #{startDate}]]></if>
+        <if test="endDate  != null  "><![CDATA[ and  createTime <= #{endDate}]]></if>
+        <if test="incorrectTime!= null "> and incorrectTime=#{incorrectTime}</if>
+        <if test="lastTime!= null "> and lastTime=#{lastTime}</if>
+        <if test="updateTime!= null "> and updateTime=#{updateTime}</if>
+        <if test="status!= null "> and status=#{status}</if>
+        <if test="platformId != null "> and platformId=#{platformId}</if>
+		<if test="sex!= null "> and sex=#{sex}</if>
+		<if test="teacherType!= null "> and teacherType=#{teacherType}</if>
+		<if test="partTimeJob!= null "> and partTimeJob=#{partTimeJob}</if>
+		 <if test="birthday!= null "> and birthday=#{birthday}</if>
+         <if test="englishName!= null "> and englishName=#{englishName}</if>
+        <if test="bgImg!= null "> and bgImg=#{bgImg}</if>
+        <if test="motto!= null "> and motto=#{motto}</if>
+        <if test="concernCnt!= null "> and concernCnt=#{concernCnt}</if>
+        <if test="beConcernCnt!= null "> and beConcernCnt=#{beConcernCnt}</if>
+        <if test="collectCnt!= null "> and collectCnt=#{collectCnt}</if>
+    </select>
+
+	 <update id="updateById" parameterType="sysUserDo">
+	 	 update  sys_user set
+	 	 <if test="userName!= null and userName != '' ">userName= #{userName},</if>
+	 	 <if test="password!= null and password != '' ">password= #{password},</if>
+        <if test="locked!= null "> locked= #{locked},</if>
+        <if test="img!= null and img != '' ">img=#{img},</if>
+        <if test="realName!= null and realName != '' ">realName=#{realName},</if>
+        <if test="telphone!= null and telphone != '' ">telphone=#{telphone},</if>
+        <if test="email!= null and email != '' ">email=#{email},</if>
+        <if test="ip!= null and ip != '' ">ip=#{ip},</if>
+        <if test="incorrectTime!= null ">incorrectTime=#{incorrectTime},</if>
+        <if test="lastTime!= null ">lastTime=#{lastTime},</if>
+	 	<if test="status!= null ">status=#{status},</if>
+        <if test="incorrectTime!= null">incorrectTime=#{incorrectTime},</if>
+        <if test="lastTime!= null">lastTime=#{lastTime},</if>
+	 	<if test="status!= null and status!= ''">status=#{status},</if>
+	 	<if test="teacherType!= null "> teacherType=#{teacherType},</if>
+	 	<if test="partTimeJob!= null "> partTimeJob=#{partTimeJob},</if>
+	 	 <if test="birthday!= null ">  birthday=#{birthday},</if>
+         <if test="englishName!= null ">  englishName=#{englishName},</if>
+         <if test="bgImg!= null ">  bgImg=#{bgImg},</if>
+         <if test="motto!= null ">  motto=#{motto},</if>
+         <if test="concernCnt!= null ">  concernCnt=#{concernCnt},</if>
+         <if test="beConcernCnt!= null ">  beConcernCnt=#{beConcernCnt},</if>
+         <if test="collectCnt!= null ">  collectCnt=#{collectCnt},</if>
+          sex=#{sex},address=#{address},remark=#{remark},updateTime=now()
+	 	 WHERE id=#{id}
+	 	 and status=1
+	 </update>
+
+    <delete id="deleteById" parameterType="int">
+        UPDATE sys_user SET status=0 WHERE id=#{id}
     </delete>
-    <select id="findById" parameterType="Integer" resultType="sysUserEntity">
-        SELECT * FROM sys_user WHERE id = #{id}
+
+     <select id="findById" parameterType="int" resultType="sysUserDo">
+        SELECT * FROM  sys_user WHERE id=#{id}
     </select>
+
+    <select id="findByUserName" parameterType="String" resultType="sysUserDo">
+        SELECT * FROM  sys_user WHERE userName=#{userName}
+    </select>
+
+    <update id="resetPassword" parameterType="sysUserDo">
+    	update sys_user set password=#{password},updateTime=now() <if test="null != modifyPwdTime">,modifyPwdTime=#{modifyPwdTime}</if> where id=#{id} and status=1
+    </update>
+
+    <update id="updateLoginExcessiveAttemptsByUserId" parameterType="sysUserDo">
+    	update sys_user set <![CDATA[incorrectTime=#{incorrectTime},ip=#{ip},locked=case when 5< ifnull(incorrectTime,0) then 2 else locked end, ]]> lastTime=now(),updateTime=now() where id=#{id} and status=1
+    </update>
+
+    <update id="updateLockStatus" parameterType="map">
+    	update sys_user set locked=#{locked},incorrectTime = 0,updateTime=now() where id=#{id} and status=1
+    </update>
+
+
+    <delete id="deleteUserRolesByUserId" parameterType="int">
+    	DELETE FROM sys_user_role where userId=#{userId}
+    </delete>
+
+ 	 <insert id="insertUserRoles" parameterType="sysUserRoleDo"  >
+       INSERT INTO sys_user_role (id,roleId,userId) VALUES (#{id},#{roleId},#{userId})
+    </insert>
+
+
+    <update id="updateUserPhoto" parameterType="sysUserDo">
+        update sys_user set img=#{img},updateTime=now() where id=#{id}
+    </update>
+
+    <update id="updateUserWallPhoto" parameterType="sysUserDo">
+        update sys_user set bgImg=#{bgImg},updateTime=now() where id=#{id}
+    </update>
 </mapper>

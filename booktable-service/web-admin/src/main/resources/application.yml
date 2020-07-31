@@ -33,3 +33,4 @@ spring:
 
 shiro:
   globalSessionTimeout: 3600
+  cookieName: token1

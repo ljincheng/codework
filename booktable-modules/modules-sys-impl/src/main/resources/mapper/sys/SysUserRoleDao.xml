@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.sys.SysUserRoleDao">
+
+    <insert id="insert" parameterType="sysUserRoleDo"  >
+       INSERT INTO sys_user_role (id,roleId,userId) VALUES (#{id},#{roleId},#{userId})
+    </insert>
+
+    <select id="queryList" parameterType="map" resultType="sysUserRoleDo">
+        SELECT id,roleId,userId FROM  sys_user_role WHERE 1=1
+        <if test="id!= null"> and id=#{id}</if>
+        <if test="roleId!= null"> and roleId=#{roleId}</if>
+        <if test="userId!= null"> and userId=#{userId}</if>
+
+    </select>
+
+	 <update id="updateById" parameterType="sysUserRoleDo">
+	 	 update  sys_user_role set roleId= #{roleId},userId= #{userId} WHERE id=#{id}
+	 </update>
+
+    <delete id="deleteById" parameterType="String">
+        DELETE FROM sys_user_role WHERE id=#{id}
+    </delete>
+
+     <select id="findById" parameterType="String" resultType="sysUserRoleDo">
+        SELECT id,roleId,userId FROM  sys_user_role WHERE id=#{id}
+    </select>
+     <select id="queryUserByRoleIdListPage" parameterType="map" resultType="sysUserDo">
+        select t2.* from sys_user_role t1 left join sys_user t2 on t1.userId=t2.id where t1.roleId=#{roleId}
+         <if test="userId!= null "> and t2.id=#{userId}</if>
+        <if test="userName!= null and userName != '' "> and t2.userName LIKE concat('%',#{userName},'%')</if>
+        <if test="realName!= null and realName != '' "> and t2.realName LIKE concat('%',#{realName},'%')</if>
+        <if test="locked!= null "> and t2.locked=#{locked}</if>
+        <if test="createTime!= null "> and t2.createTime=#{createTime}</if>
+		<if test="startDate  != null "><![CDATA[ and  t2.createTime >= #{startDate} ]]></if>
+		<if test="endDate  != null  "><![CDATA[ and  t2.createTime <=#{endDate}]]></if>
+        <if test="lastTime!= null "> and t2.lastTime=#{lastTime}</if>
+        <if test="updateTime!= null "> and t2.updateTime=#{updateTime}</if>
+        <if test="platformId != null "> and t2.platformId=#{platformId}</if>
+    </select>
+
+    <select id="queryUserNoInRoleIdListPage" parameterType="map" resultType="sysUserDo">
+<![CDATA[
+        select t1.* from sys_user t1 where t1.id>0 and  t1.id not in(
+        select t2.userId from sys_user_role t2 where t2.roleId in
+        ]]>
+        <foreach collection="roleIdList" item="roleId" index="index" open="(" close=")" separator=",">
+            #{roleId}
+        </foreach>
+        )
+        <if test="userId!= null "> and t1.id=#{userId}</if>
+        <if test="userName!= null and userName != '' "> and t1.userName LIKE concat('%',#{userName},'%')</if>
+        <if test="realName!= null and realName != '' "> and t1.realName LIKE concat('%',#{realName},'%')</if>
+        <if test="locked!= null "> and t1.locked=#{locked}</if>
+        <if test="createTime!= null "> and t1.createTime=#{createTime}</if>
+        <if test="startDate  != null "><![CDATA[ and  t1.createTime >= #{startDate} ]]></if>
+        <if test="endDate  != null  "><![CDATA[ and  t1.createTime <=#{endDate}]]></if>
+        <if test="lastTime!= null "> and t1.lastTime=#{lastTime}</if>
+        <if test="updateTime!= null "> and t1.updateTime=#{updateTime}</if>
+        <if test="platformId != null "> and t1.platformId=#{platformId}</if>
+
+    </select>
+
+</mapper>

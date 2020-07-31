@@ -1,5 +1,6 @@
 package cn.booktable.service.webadmin.controller.platform;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -33,7 +34,8 @@ public class LoginController {
         ModelAndView model = new ModelAndView();
         model.setViewName("platform/login");
         try{
-            UsernamePasswordToken token = new UsernamePasswordToken(username, passwd);
+            String psw= DigestUtils.md5Hex(passwd+ "OWSd0&sd(fQl1%Uma8OL");
+            UsernamePasswordToken token = new UsernamePasswordToken(username, psw);
             Subject currentUser = SecurityUtils.getSubject();
             if (currentUser.isAuthenticated()) {
                 model = new ModelAndView("redirect:hello");

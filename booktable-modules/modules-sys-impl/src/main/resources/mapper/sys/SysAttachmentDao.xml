@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.sys.SysAttachmentDao">
+
+    <sql id="selectColumnList"> id,filePath,fileType,fileName,groupType,checkedStatus,createUserId,updateUserId,createTime,updateTime</sql>
+
+    <insert id="insert" parameterType="sysAttachmentDo"  keyProperty="id"  useGeneratedKeys="true" >
+       INSERT INTO SysAttachment (filePath,fileType,fileName,groupType,checkedStatus,createUserId,updateUserId,createTime,updateTime) VALUES (#{filePath},#{fileType},#{fileName},#{groupType},#{checkedStatus},#{createUserId},#{updateUserId},#{createTime},#{updateTime})
+    </insert>
+
+    <select id="queryList" parameterType="map" resultType="sysAttachmentDo">
+        SELECT <include refid="selectColumnList" /> FROM  SysAttachment WHERE 1=1
+        <if test="id!= null "> and id=#{id}</if>
+        <if test="filePath!= null and filePath != '' "> and filePath=#{filePath}</if>
+        <if test="fileType!= null and fileType != '' "> and fileType=#{fileType}</if>
+        <if test="fileName!= null and fileName != '' "> and fileName=#{fileName}</if>
+        <if test="groupType!= null and groupType != '' "> and groupType=#{groupType}</if>
+        <if test="checkedStatus!= null "> and checkedStatus=#{checkedStatus}</if>
+        <if test="createUserId!= null "> and createUserId=#{createUserId}</if>
+        <if test="updateUserId!= null "> and updateUserId=#{updateUserId}</if>
+        <if test="createTime!= null "> and createTime=#{createTime}</if>
+        <if test="startDate  != null and startDate != '' "><![CDATA[ and createTime  >= #{startDate}]]></if>
+        <if test="endDate  != null and endDate != '' "><![CDATA[ and  createTime <= #{endDate}]]></if>
+        <if test="updateTime!= null "> and updateTime=#{updateTime}</if>
+
+    </select>
+
+    <select id="queryListPage" parameterType="map" resultType="sysAttachmentDo">
+        SELECT <include refid="selectColumnList" /> FROM  SysAttachment WHERE 1=1
+        <if test="id!= null "> and id=#{id}</if>
+        <if test="filePath!= null and filePath != '' "> and filePath=#{filePath}</if>
+        <if test="fileType!= null and fileType != '' "> and fileType=#{fileType}</if>
+        <if test="fileName!= null and fileName != '' "> and fileName=#{fileName}</if>
+        <if test="groupType!= null and groupType != '' "> and groupType=#{groupType}</if>
+        <if test="checkedStatus!= null "> and checkedStatus=#{checkedStatus}</if>
+        <if test="createUserId!= null "> and createUserId=#{createUserId}</if>
+        <if test="updateUserId!= null "> and updateUserId=#{updateUserId}</if>
+        <if test="createTime!= null "> and createTime=#{createTime}</if>
+        <if test="startDate  != null and startDate != '' "><![CDATA[ and createTime  >= #{startDate}]]></if>
+        <if test="endDate  != null and endDate != '' "><![CDATA[ and  createTime <= #{endDate}]]></if>
+        <if test="updateTime!= null "> and updateTime=#{updateTime}</if>
+
+    </select>
+
+	 <update id="updateById" parameterType="sysAttachmentDo">
+	 	 update  SysAttachment set filePath= #{filePath},fileType= #{fileType},fileName= #{fileName},groupType= #{groupType},checkedStatus= #{checkedStatus},createUserId= #{createUserId},updateUserId= #{updateUserId},createTime= #{createTime},updateTime= #{updateTime} WHERE id=#{id}
+	 </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM SysAttachment WHERE id=#{id}
+    </delete>
+
+     <select id="findById" parameterType="Long" resultType="sysAttachmentDo">
+        SELECT <include refid="selectColumnList" /> FROM  SysAttachment WHERE id=#{id}
+    </select>
+
+  	<update id="updateCheckedStatus" parameterType="map">
+	 	 update  SysAttachment set   checkedStatus= #{checkedStatus},updateUserId= #{updateUserId},updateTime=now() WHERE id=#{id}
+	 </update>
+</mapper>

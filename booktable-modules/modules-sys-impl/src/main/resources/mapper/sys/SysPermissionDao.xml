@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.sys.SysPermissionDao">
+
+    <sql id="selectColumns"> id,name,dataType,url,perCode,parentId,path,indexs,available,createTime,icon </sql>
+
+    <insert id="insert" parameterType="sysPermissionDo"  keyProperty="id"  useGeneratedKeys="true" >
+       INSERT INTO sys_permission (id,name,dataType,url,perCode,parentId,path,indexs,available,createTime,icon) VALUES (#{id},#{name},#{dataType},#{url},#{perCode},#{parentId},#{path},#{indexs},#{available},#{createTime},#{icon})
+    </insert>
+
+    <select id="queryList" parameterType="map" resultType="sysPermissionDo">
+         SELECT
+		<include refid="selectColumns"></include>
+		 FROM  sys_permission WHERE 1=1
+         <if test="id!= null"> and id=#{id}</if>
+        <if test="name!= null and name !=''"> and name=#{name}</if>
+        <if test="dataType!= null"> and dataType=#{dataType}</if>
+        <if test="url!= null and url !='' "> and url=#{url}</if>
+        <if test="perCode!= null and perCode !='' "> and perCode=#{perCode}</if>
+        <if test="parentId!= null"> and parentId=#{parentId}</if>
+        <if test="path!= null and path!='' "> and path=#{path}</if>
+        <if test="indexs!= null"> and indexs=#{indexs}</if>
+        <if test="available!= null"> and available=#{available}</if>
+        <if test="createTime!= null"> and createTime=#{createTime}</if>
+
+    </select>
+
+	 <update id="updateById" parameterType="sysPermissionDo">
+	 	 update  sys_permission set name= #{name},dataType= #{dataType},url= #{url},perCode= #{perCode},parentId= #{parentId},path= #{path},indexs= #{indexs},available= #{available},createTime= #{createTime} WHERE id=#{id}
+	 </update>
+
+	 <update id="updateBaseInfoById" parameterType="sysPermissionDo">
+	 	 update  sys_permission set name= #{name},dataType= #{dataType},url= #{url},perCode= #{perCode},indexs= #{indexs},available= #{available},icon=#{icon} WHERE id=#{id}
+	 </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM sys_permission WHERE id=#{id}
+    </delete>
+
+    <delete id="deleteByPath" parameterType="String">
+        DELETE FROM sys_permission WHERE path like CONCAT(#{path},'%');
+    </delete>
+
+     <select id="findById" parameterType="Long" resultType="sysPermissionDo">
+        SELECT <include refid="selectColumns"></include>
+		FROM  sys_permission WHERE id=#{id}
+    </select>
+
+     <select id="getMenuListByUserId" parameterType="int" resultType="sysPermissionDo">
+        SELECT distinct t1.* FROM  sys_permission  t1
+		left join sys_role_permission t2 on t1.id=t2.permissionId
+		left join sys_user_role t3 on t3.roleId=t2.roleId
+		left join sys_role t4 on t3.roleId=t4.id
+		where t3.userId=#{userId} and <![CDATA[t1.dataType <> 2 ]]> and t1.available=1 and t4.available=1
+			order by t1.parentId,t1.indexs
+    </select>
+
+    <select id="getCodeListByUserId" parameterType="int" resultType="sysPermissionDo">
+        SELECT distinct t1.id,t1.name,t1.dataType,t1.url,t1.perCode,t1.parentId,t1.path,t1.indexs,t1.available,t1.createTime FROM  sys_permission  t1
+		left join sys_role_permission t2 on t1.id=t2.permissionId
+		left join sys_user_role t3 on t3.roleId=t2.roleId
+		left join sys_role t4 on t3.roleId=t4.id
+		where t3.userId=#{userId} and t1.dataType=2 and t1.available=1 and t4.available=1
+    </select>
+
+     <select id="getCodeStrListByUserId" parameterType="int" resultType="String">
+        SELECT distinct t1.perCode FROM  sys_permission  t1
+		left join sys_role_permission t2 on t1.id=t2.permissionId
+		left join sys_user_role t3 on t3.roleId=t2.roleId
+		left join sys_role t4 on t3.roleId=t4.id
+		where t3.userId=#{userId} and t1.dataType=2 and t1.available=1 and t4.available=1
+    </select>
+
+     <select id="queryListPage" parameterType="map" resultType="sysPermissionDo">
+        SELECT <include refid="selectColumns"></include>
+		 FROM  sys_permission WHERE 1=1
+        <if test="id!= null"> and id=#{id}</if>
+        <if test="name!= null and name !='' "> and name LIKE concat('%',#{name},'%')</if>
+        <if test="dataType!= null"> and dataType=#{dataType}</if>
+        <if test="url!= null and url !='' "> and url=#{url}</if>
+        <if test="perCode!= null and perCode !='' "> and perCode LIKE concat('%',#{perCode},'%')</if>
+        <if test="parentId!= null"> and parentId=#{parentId}</if>
+        <if test="path!= null and path!='' "> and path=#{path}</if>
+        <if test="indexs!= null"> and indexs=#{indexs}</if>
+        <if test="available!= null"> and available=#{available}</if>
+        <if test="createTime!= null"> and createTime=#{createTime}</if>
+        order by indexs
+    </select>
+
+      <select id="getMaxId"   resultType="long">
+        SELECT max(id)  FROM  sys_permission
+    </select>
+
+  <select id="findChildMenuList" parameterType="long" resultType="sysPermissionDo">
+   SELECT <include refid="selectColumns"></include>
+		 FROM  sys_permission WHERE 1=1
+<!--    	<![CDATA[ and dataType in (1,3)  ]]> -->
+   	<if test="id !=null"> <![CDATA[ and path like CONCAT(select t2.path from sys_permission t2 where t2.id=#{id} ,'%') ]]></if>
+   	order by indexs asc
+  </select>
+
+</mapper>

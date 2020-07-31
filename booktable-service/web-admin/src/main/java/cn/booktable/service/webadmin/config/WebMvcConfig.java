@@ -1,8 +1,10 @@
 package cn.booktable.service.webadmin.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -10,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author ljc
  */
 @Configuration
+//public class WebMvcConfig implements WebMvcConfigurationSupport {
 public class WebMvcConfig implements WebMvcConfigurer {
 
     /**
@@ -18,8 +21,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/res/**").addResourceLocations("classpath:/res/");
+        registry.addResourceHandler("/res/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"/res/");
 //        registry.addResourceHandler("/views/**").addResourceLocations("classpath:/views/");
+
     }
 
     /**

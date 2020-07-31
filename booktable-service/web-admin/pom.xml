@@ -79,9 +79,7 @@
 				<directory>src/main/resources</directory>
 				<includes>
 					<include>**/*.yml</include>
-					<include>**/mybatis/*</include>
 					<include>**/*.properties</include>
-					<include>**/views/*</include>
 					<include>**/templates/*</include>
 					<include>**/res/*</include>
 					<include>**/*.html</include>

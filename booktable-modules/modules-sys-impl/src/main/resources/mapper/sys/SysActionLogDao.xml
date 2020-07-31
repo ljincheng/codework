@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.sys.SysActionLogDao">
+
+
+
+    <insert id="insert" parameterType="sysActionLogDo"  keyProperty="id"  useGeneratedKeys="true" >
+       INSERT INTO sys_action_log (level,mode,detail,content,userId,actionUrl,createTime) VALUES (#{level},#{mode},#{detail},#{content},#{userId},#{actionUrl},#{createTime})
+    </insert>
+
+    <select id="queryList" parameterType="map" resultType="sysActionLogDo">
+        SELECT * FROM  sys_action_log WHERE 1=1
+        <if test="id!= null "> and id=#{id}</if>
+        <if test="level!= null and level != '' "> and level=#{level}</if>
+        <if test="mode!= null and mode != '' "> and mode=#{mode}</if>
+        <if test="detail!= null and detail != '' "> and detail=#{detail}</if>
+        <if test="content!= null and content != '' "> and content=#{content}</if>
+        <if test="userId!= null "> and userId=#{userId}</if>
+        <if test="actionUrl!= null and actionUrl != '' "> and actionUrl=#{actionUrl}</if>
+        <if test="createTime!= null "> and createTime=#{createTime}</if>
+        <if test="startDate  != null "><![CDATA[ and createTime  >= #{startDate}]]></if>
+        <if test="endDate  != null  "><![CDATA[ and  createTime <= #{endDate}]]></if>
+
+    </select>
+
+    <select id="queryListPage" parameterType="map" resultType="sysActionLogDo">
+        SELECT t2.realName,t1.* FROM  sys_action_log t1 left join sys_user t2 on t1.userId=t2.id WHERE 1=1
+        <if test="id!= null "> and t1.id=#{id}</if>
+        <if test="level!= null and level != '' "> and t1.level=#{level}</if>
+        <if test="mode!= null and mode != '' "> and t1.mode=#{mode}</if>
+        <if test="detail!= null and detail != '' "> and t1.detail=#{detail}</if>
+        <if test="content!= null and content != '' "> and t1.content=#{content}</if>
+        <if test="userId!= null "> and t1.userId=#{userId}</if>
+        <if test="actionUrl!= null and actionUrl != '' "> and t1.actionUrl=#{actionUrl}</if>
+        <if test="createTime!= null "> and t1.createTime=#{createTime}</if>
+        <if test="startDate  != null "><![CDATA[ and t1.createTime  >= #{startDate}]]></if>
+        <if test="endDate  != null  "><![CDATA[ and  t1.createTime <= #{endDate}]]></if>
+        order by t1.id desc
+    </select>
+
+	 <update id="updateById" parameterType="sysActionLogDo">
+	 	 update  sys_action_log set level= #{level},mode= #{mode},detail= #{detail},content= #{content},userId= #{userId},actionUrl= #{actionUrl},createTime= #{createTime} WHERE id=#{id}
+	 </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM sys_action_log WHERE id=#{id}
+    </delete>
+
+     <select id="findById" parameterType="Long" resultType="sysActionLogDo">
+        SELECT t2.realName,t1.* FROM  sys_action_log t1 left join sys_user t2 on t1.userId=t2.id WHERE t1.id=#{id}
+    </select>
+
+</mapper>

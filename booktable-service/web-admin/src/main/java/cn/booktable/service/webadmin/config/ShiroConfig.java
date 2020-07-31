@@ -1,8 +1,10 @@
 package cn.booktable.service.webadmin.config;
 
+import cn.booktable.service.webadmin.security.UserCookieRealm;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -18,9 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author ljc
@@ -32,13 +32,14 @@ public class ShiroConfig {
      * 单机环境，session交给shiro管理
      */
     @Bean
-    public DefaultWebSessionManager sessionManager(@Value("${shiro.globalSessionTimeout:3600}") long globalSessionTimeout){
+    public DefaultWebSessionManager sessionManager(@Value("${shiro.globalSessionTimeout:3600}") long globalSessionTimeout,@Value("${shiro.cookieName:token}") String cookieName){
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setSessionValidationSchedulerEnabled(true);
         sessionManager.setSessionIdUrlRewritingEnabled(false);
         sessionManager.setSessionValidationInterval(globalSessionTimeout * 1000);
         sessionManager.setGlobalSessionTimeout(globalSessionTimeout * 1000);
-        sessionManager.setSessionIdCookie(new Oauth2Cookie("token",true));
+        sessionManager.setSessionIdCookie(new Oauth2Cookie(cookieName));
+
 
         return sessionManager;
     }
@@ -52,9 +53,13 @@ public class ShiroConfig {
     }
 
     @Bean("securityManager")
-    public SecurityManager securityManager(UserRealm userRealm, SessionManager sessionManager) {
+    public SecurityManager securityManager(UserRealm userRealm, UserCookieRealm cookieRealm, SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(userRealm);
+//        securityManager.setRealm(userRealm);
+        List<Realm> realms=new ArrayList<>();
+        realms.add(userRealm);
+        realms.add(cookieRealm);
+        securityManager.setRealms(realms);
         securityManager.setSessionManager(sessionManager);
         securityManager.setRememberMeManager(null);
 
@@ -92,6 +97,7 @@ public class ShiroConfig {
         filterMap.put("/favicon.ico", "anon");
         filterMap.put("/captcha", "anon");
         filterMap.put("/**", "oauth2");
+//        filterMap.put("/**", "authc");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilter;

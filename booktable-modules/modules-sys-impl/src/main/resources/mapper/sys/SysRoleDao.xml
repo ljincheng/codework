@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.sys.SysRoleDao">
+
+    <insert id="insert" parameterType="sysRoleDo"  >
+       INSERT INTO sys_role (id,name,available,createTime,updateTime) VALUES (#{id},#{name},#{available},#{createTime},updateTime=now())
+    </insert>
+
+    <select id="queryList" parameterType="map" resultType="sysRoleDo">
+        SELECT id,name,available,createTime FROM  sys_role WHERE 1=1
+        <if test="id!= null"> and id=#{id}</if>
+        <if test="name!= null"> and name=#{name}</if>
+        <if test="available!= null"> and available=#{available}</if>
+        <if test="createTime!= null"> and createTime=#{createTime}</if>
+        order by available desc,createTime asc
+
+    </select>
+
+     <select id="queryListPage" parameterType="map" resultType="sysRoleDo">
+        SELECT id,name,available,createTime FROM  sys_role WHERE 1=1
+        <if test="id!= null and id != '' "> and id=#{id}</if>
+        <if test="name!= null and name != '' "> and name LIKE concat('%',#{name},'%')</if>
+        <if test="available!= null "> and available=#{available}</if>
+        <if test="createTime!= null "> and createTime=#{createTime}</if>
+        <if test="startDate  != null "><![CDATA[ and createTime  >= #{startDate}]]></if>
+        <if test="endDate  != null  "><![CDATA[ and  createTime <= #{endDate}]]></if>
+        order by available desc,createTime asc
+    </select>
+
+
+	 <update id="updateById" parameterType="sysRoleDo">
+	 	 update  sys_role set name= #{name},available= #{available},updateTime=now() WHERE id=#{id}
+	 </update>
+
+    <delete id="deleteById" parameterType="String">
+        DELETE FROM sys_role WHERE id=#{id}
+    </delete>
+
+     <select id="findById" parameterType="String" resultType="sysRoleDo">
+        SELECT id,name,available,createTime,updateTime FROM  sys_role WHERE id=#{id}
+    </select>
+     <select id="findByName" parameterType="String" resultType="sysRoleDo">
+        SELECT id,name,available,createTime,updateTime FROM  sys_role WHERE name=#{name}
+    </select>
+
+ 	 <select id="getNameListByUserId" parameterType="int" resultType="String">
+        SELECT name FROM  sys_role t1
+		left join sys_user_role t2 on t2.roleId=t1.id
+		WHERE t2.userId=#{userId} and t1.available=1
+    </select>
+
+     <select id="getRoleListWithUserId" parameterType="int" resultType="sysRoleDo">
+        SELECT t1.id,t1.name,t1.available,t1.createTime,t1.updateTime,t2.userId FROM  sys_role t1
+		left join sys_user_role t2 on t1.id=t2.roleid and t2.userid=#{userId} where t1.available=1
+    </select>
+
+</mapper>

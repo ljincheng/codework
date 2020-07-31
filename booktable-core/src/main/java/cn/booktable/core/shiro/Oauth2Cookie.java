@@ -13,17 +13,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class Oauth2Cookie extends SimpleCookie {
 
-    private boolean readFromHeader=false;
+
 
     public Oauth2Cookie(){super();}
     public Oauth2Cookie(String name)
     {
         super(name);
-    }
-    public Oauth2Cookie(String name,boolean fromHeader)
-    {
-        super(name);
-        this.readFromHeader=fromHeader;
     }
     public Oauth2Cookie(Cookie cookie)
     {
@@ -31,23 +26,15 @@ public class Oauth2Cookie extends SimpleCookie {
     }
     @Override
     public String readValue(HttpServletRequest request, HttpServletResponse ignored) {
-        String tokenKey=getName();
-        if(readFromHeader) {
+            String tokenKey=getName();
             String value = request.getHeader(tokenKey);
             if (StringUtils.isBlank(value)) {
-                return null;
+                return super.readValue(request, ignored);
             }
             return value;
-        }else {
-            return super.readValue(request, ignored);
-        }
+
     }
 
-    public boolean isReadFromHeader() {
-        return readFromHeader;
-    }
 
-    public void setReadFromHeader(boolean readFromHeader) {
-        this.readFromHeader = readFromHeader;
-    }
+
 }

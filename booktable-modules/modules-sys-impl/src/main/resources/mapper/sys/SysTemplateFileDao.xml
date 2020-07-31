@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.sys.SysTemplateFileDao">
+
+
+
+    <insert id="insert" parameterType="sysTemplateFileDo"  keyProperty="id"  useGeneratedKeys="true" >
+       INSERT INTO sys_template_file (filePath,fileType,fileName,icon,userId,createTime,updateTime,remark) VALUES (#{filePath},#{fileType},#{fileName},#{icon},#{userId},#{createTime},#{updateTime},#{remark});
+    </insert>
+
+    <select id="queryList" parameterType="map" resultType="sysTemplateFileDo">
+        SELECT * FROM  sys_template_file WHERE 1=1
+        <if test="id!= null "> and id=#{id}</if>
+        <if test="filePath!= null and filePath != '' "> and filePath=#{filePath}</if>
+        <if test="fileType!= null and fileType != '' "> and fileType=#{fileType}</if>
+        <if test="fileName!= null and fileName != '' "> and fileName=#{fileName}</if>
+        <if test="icon!= null and icon != '' "> and icon=#{icon}</if>
+        <if test="userId!= null "> and userId=#{userId}</if>
+        <if test="createTime!= null "> and createTime=#{createTime}</if>
+        <if test="startDate  != null "><![CDATA[ and createTime  >= #{startDate}]]></if>
+        <if test="endDate  != null  "><![CDATA[ and  createTime <= #{endDate}]]></if>
+        <if test="updateTime!= null "> and updateTime=#{updateTime}</if>
+        <if test="remark!= null and remark != '' "> and remark=#{remark}</if>
+        <if test="locked!= null "> and locked=#{locked}</if>
+        <if test="fixedId!= null "> and fixedId=#{fixedId}</if>
+
+    </select>
+
+    <select id="queryListPage" parameterType="map" resultType="sysTemplateFileDo">
+        SELECT * FROM  sys_template_file WHERE 1=1
+        <if test="id!= null "> and id=#{id}</if>
+        <if test="filePath!= null and filePath != '' "> and filePath=#{filePath}</if>
+        <if test="fileType!= null and fileType != '' "> and fileType=#{fileType}</if>
+        <if test="fileName!= null and fileName != '' "> and fileName LIKE concat('%',#{fileName},'%')</if>
+        <if test="icon!= null and icon != '' "> and icon=#{icon}</if>
+        <if test="userId!= null "> and userId=#{userId}</if>
+        <if test="createTime!= null "> and createTime=#{createTime}</if>
+        <if test="startDate  != null "><![CDATA[ and createTime  >= #{startDate}]]></if>
+        <if test="endDate  != null  "><![CDATA[ and  createTime <= #{endDate}]]></if>
+        <if test="updateTime!= null "> and updateTime=#{updateTime}</if>
+        <if test="remark!= null and remark != '' "> and remark=#{remark}</if>
+        <if test="locked!= null "> and locked=#{locked}</if>
+        <if test="fixedId!= null "> and fixedId=#{fixedId}</if>
+        order by id desc
+    </select>
+
+    <update id="updateById" parameterType="sysTemplateFileDo">
+	 	 update  sys_template_file set filePath= #{filePath},fileType= #{fileType},fileName= #{fileName},icon= #{icon},updateTime= #{updateTime},remark= #{remark} WHERE id=#{id}
+	 </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM sys_template_file WHERE locked=0 and id=#{id}
+    </delete>
+
+    <select id="findById" parameterType="Long" resultType="sysTemplateFileDo">
+        SELECT * FROM  sys_template_file WHERE id=#{id}
+    </select>
+
+    <select id="findByFixedId" parameterType="int" resultType="sysTemplateFileDo">
+        SELECT * FROM  sys_template_file WHERE fixedId=#{fixedId}
+    </select>
+
+</mapper>
