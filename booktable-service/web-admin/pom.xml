@@ -81,7 +81,7 @@
 					<include>**/*.yml</include>
 					<include>**/*.properties</include>
 					<include>**/templates/*</include>
-					<include>**/res/*</include>
+					<include>**/res/**</include>
 					<include>**/*.html</include>
 				</includes>
 				<filtering>false</filtering>
