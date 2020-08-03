@@ -138,7 +138,8 @@ public class RedisCache<K, V> implements Cache<K, V> {
                 Object rawValue = cache.get(getStringKey(key));
 
                 if(rawValue!=null) {
-                    V value = (V) rawValue;
+                    @SuppressWarnings("unchecked")
+                    V value = (V)rawValue;
                     return value;
                 }
             }
@@ -152,6 +153,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
     public V put(K key, V value) throws CacheException {
         logger.debug("根据key从存储 key [" + key + "]");
         try {
+//            byte[] bytesValue= SerializeUtils.serialize(value);
             cache.set(getStringKey(key), value,expire);
             return value;
         } catch (Throwable t) {

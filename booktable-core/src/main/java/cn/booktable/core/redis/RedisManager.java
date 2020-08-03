@@ -19,8 +19,9 @@ public class RedisManager {
         this.redisTemplate=redisTemplate;
         if(redisTemplate!=null)
         {
-            redisTemplate.setKeySerializer(new StringRedisSerializer());
+            redisTemplate.setKeySerializer(new RedisObjectSerializer());
             redisTemplate.setValueSerializer(new RedisObjectSerializer());
+            redisTemplate.setDefaultSerializer(new RedisObjectSerializer());
             this.group=group;
         }
     }
@@ -31,10 +32,15 @@ public class RedisManager {
         return redisVal;
     }
 
-
     public Object set(Object key,Object value,long expire){
 
         redisTemplate.opsForValue().set(key,value,expire, TimeUnit.MILLISECONDS);
+        return value;
+    }
+
+    public Object set(Object key,Object value){
+
+        redisTemplate.opsForValue().set(key,value);
         return value;
     }
 

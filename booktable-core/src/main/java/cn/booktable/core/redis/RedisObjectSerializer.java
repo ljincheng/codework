@@ -1,5 +1,6 @@
 package cn.booktable.core.redis;
 
+import cn.booktable.core.util.SerializeUtils;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
@@ -20,7 +21,8 @@ public class RedisObjectSerializer implements RedisSerializer<Object> {
             return null;
         }
         try {
-            return deserializer.convert(bytes);
+//            return deserializer.convert(bytes);
+            return SerializeUtils.deserialize(bytes);
         } catch (Exception ex) {
             throw new SerializationException("Cannot deserialize", ex);
         }
@@ -31,7 +33,8 @@ public class RedisObjectSerializer implements RedisSerializer<Object> {
             return EMPTY_ARRAY;
         }
         try {
-            return serializer.convert(object);
+//            return serializer.convert(object);
+            return SerializeUtils.serialize(object);
         } catch (Exception ex) {
             return EMPTY_ARRAY;
         }
