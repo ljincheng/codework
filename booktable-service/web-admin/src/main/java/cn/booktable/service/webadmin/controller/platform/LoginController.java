@@ -1,8 +1,15 @@
 package cn.booktable.service.webadmin.controller.platform;
 
 import cn.booktable.cryptojs.CryptoJSUtil;
+import cn.booktable.modules.entity.sys.AtlantisHtmlMenu;
+import cn.booktable.modules.entity.sys.SystemDo;
+import cn.booktable.modules.service.sys.AtlantisHtmlMenuHandler;
+import cn.booktable.modules.service.sys.MenuListHandler;
+import cn.booktable.modules.service.sys.SysPermissionService;
+import cn.booktable.service.webadmin.controller.base.BaseController;
 import cn.booktable.util.StringUtils;
 import cn.booktable.util.VerifyCodeUtils;
+import com.sun.management.OperatingSystemMXBean;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -11,11 +18,14 @@ import org.apache.shiro.web.util.SavedRequest;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -23,14 +33,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author ljc
  */
 @Controller
 @EnableAutoConfiguration
-public class LoginController {
+public class LoginController extends BaseController {
     private static Logger logger= LoggerFactory.getLogger(LoginController.class);
+    private static String VIEWNAME_MAIN="platform/main";
+
+    @Autowired
+    private SysPermissionService sysPermissionService;
 
     private void osInfo(ModelAndView modelAndView)
     {
@@ -97,7 +116,7 @@ public class LoginController {
             UsernamePasswordToken token = new UsernamePasswordToken(username, psw);
             Subject currentUser = SecurityUtils.getSubject();
             if (currentUser.isAuthenticated()) {
-                model = new ModelAndView("redirect:hello");
+                model = new ModelAndView("redirect:"+VIEWNAME_MAIN);
                 return model;
             }
             currentUser.login(token);
@@ -108,7 +127,7 @@ public class LoginController {
                     String viewName= "redirect:" + savedRequest.getRequestUrl().substring(1);
                     return new ModelAndView(viewName);
                 }else {
-                    model = new ModelAndView("redirect:hello");
+                    model = new ModelAndView("redirect:"+VIEWNAME_MAIN);
                     return model;
                 }
             }
@@ -118,6 +137,135 @@ public class LoginController {
             ex.printStackTrace();
         }
         return model;
+    }
+
+    /**
+     * 系统
+     * @return
+     */
+//    @GetMapping("platform/main")
+//    public ModelAndView info(){
+//        ModelAndView model = new ModelAndView("platform/main");
+//        OperatingSystemMXBean osmx = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+//
+//        SystemDo dto = new SystemDo();
+//        dto.setSysTime(System.currentTimeMillis());
+//        dto.setOsName(System.getProperty("os.name"));
+//        dto.setOsArch(System.getProperty("os.arch"));
+//        dto.setOsVersion(System.getProperty("os.version"));
+//        dto.setUserLanguage(System.getProperty("user.language"));
+//        dto.setUserDir(System.getProperty("user.dir"));
+//        dto.setTotalPhysical(osmx.getTotalPhysicalMemorySize()/1024/1024);
+//        dto.setFreePhysical(osmx.getFreePhysicalMemorySize()/1024/1024);
+//        dto.setMemoryRate(BigDecimal.valueOf((1-osmx.getFreePhysicalMemorySize()*1.0/osmx.getTotalPhysicalMemorySize())*100).setScale(2, RoundingMode.HALF_UP));
+//        dto.setProcessors(osmx.getAvailableProcessors());
+//        dto.setJvmName(System.getProperty("java.vm.name"));
+//        dto.setJavaVersion(System.getProperty("java.version"));
+//        dto.setJavaHome(System.getProperty("java.home"));
+//        dto.setJavaTotalMemory(Runtime.getRuntime().totalMemory()/1024/1024);
+//        dto.setJavaFreeMemory(Runtime.getRuntime().freeMemory()/1024/1024);
+//        dto.setJavaMaxMemory(Runtime.getRuntime().maxMemory()/1024/1024);
+//        dto.setUserName(System.getProperty("user.name"));
+//        dto.setSystemCpuLoad(BigDecimal.valueOf(osmx.getSystemCpuLoad()*100).setScale(2, RoundingMode.HALF_UP));
+//        dto.setUserTimezone(System.getProperty("user.timezone"));
+//
+//        model.addObject("sysInfo",dto);
+//        return model;
+//    }
+
+    @GetMapping("platform/main")
+    public ModelAndView platform_main(HttpServletRequest request,
+                              HttpServletResponse response,Integer pid,String lang) {
+        ModelAndView model = new ModelAndView("platform/main");
+
+        try {
+
+
+            platformMenuHtmlData(model,pid);
+
+           OperatingSystemMXBean osmx = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+         SystemDo dto = new SystemDo();
+        dto.setSysTime(System.currentTimeMillis());
+        dto.setOsName(System.getProperty("os.name"));
+        dto.setOsArch(System.getProperty("os.arch"));
+        dto.setOsVersion(System.getProperty("os.version"));
+        dto.setUserLanguage(System.getProperty("user.language"));
+        dto.setUserDir(System.getProperty("user.dir"));
+        dto.setTotalPhysical(osmx.getTotalPhysicalMemorySize()/1024/1024);
+        dto.setFreePhysical(osmx.getFreePhysicalMemorySize()/1024/1024);
+        dto.setMemoryRate(BigDecimal.valueOf((1-osmx.getFreePhysicalMemorySize()*1.0/osmx.getTotalPhysicalMemorySize())*100).setScale(2, RoundingMode.HALF_UP));
+        dto.setProcessors(osmx.getAvailableProcessors());
+        dto.setJvmName(System.getProperty("java.vm.name"));
+        dto.setJavaVersion(System.getProperty("java.version"));
+        dto.setJavaHome(System.getProperty("java.home"));
+        dto.setJavaTotalMemory(Runtime.getRuntime().totalMemory()/1024/1024);
+        dto.setJavaFreeMemory(Runtime.getRuntime().freeMemory()/1024/1024);
+        dto.setJavaMaxMemory(Runtime.getRuntime().maxMemory()/1024/1024);
+        dto.setUserName(System.getProperty("user.name"));
+        dto.setSystemCpuLoad(BigDecimal.valueOf(osmx.getSystemCpuLoad()*100).setScale(2, RoundingMode.HALF_UP));
+        dto.setUserTimezone(System.getProperty("user.timezone"));
+
+        model.addObject("sysInfo",dto);
+
+            // 获取个人通知消息
+
+
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        return model;
+    }
+
+    public String platformMenuHtmlData(ModelAndView model ,Integer platformId) {
+        String result=null;
+        String indexHref=null;
+        try {
+            StringBuilder sb = new StringBuilder();
+            List<AtlantisHtmlMenu> list = null;
+            if (this.isSuperSysUser()) {
+                MenuListHandler<AtlantisHtmlMenu> handler=new  AtlantisHtmlMenuHandler();
+                list = sysPermissionService.findAllPlatformMenuList(handler,platformId);
+            }else{
+                Integer userId=this.currentUser().getId();
+                list =  sysPermissionService.findPlatformMenuList(new AtlantisHtmlMenuHandler(),  userId,platformId);
+            }
+
+
+            if (list != null) {
+                logger.debug("获取总数据记录数有：" + list.size());
+                for (AtlantisHtmlMenu item :list) {
+                    if (item != null) {
+                        sb.append(item.toHtml());
+
+                        if(indexHref==null)
+                        {
+                            if(item.getChildren()!=null && item.getChildren().size()>0) {
+                                List<AtlantisHtmlMenu> childs=item.getChildren();
+                                for(AtlantisHtmlMenu menu:childs) {
+                                    if(StringUtils.isNotBlank( menu.getHref())) {
+                                        indexHref = menu.getHref();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            result = sb.toString();
+            logger.debug("菜单数据：" + result);
+
+        } catch (Exception e) {
+            logger.error("获取html菜单数据异常", e);
+        }
+            model.addObject("menuHtml", result);
+        if(StringUtils.isBlank(indexHref))
+        {
+            indexHref="about:blank";
+        }
+        model.addObject("firstMenuHref", indexHref);
+        return result;
     }
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)

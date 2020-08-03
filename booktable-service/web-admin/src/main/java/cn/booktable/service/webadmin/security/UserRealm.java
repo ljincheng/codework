@@ -2,7 +2,7 @@ package cn.booktable.service.webadmin.security;
 
 import cn.booktable.core.shiro.SessionUtils;
 import cn.booktable.core.shiro.SysUserPrimaryPrincipal;
-import cn.booktable.modules.entity.sys.SysUserEntity;
+import cn.booktable.modules.entity.sys.SysUserDo;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -36,7 +36,7 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        SysUserEntity user = (SysUserEntity)principals.getPrimaryPrincipal();
+        SysUserDo user = (SysUserDo)principals.getPrimaryPrincipal();
 ////			SysUserDo user=sysUserService.findSysUserByUserName((String)principal);
         if(user!=null && (user.getLocked()==null || user.getLocked().intValue()!=2))//账户存在，且不是锁定状态
         {
@@ -65,7 +65,7 @@ public class UserRealm extends AuthorizingRealm {
         Object credentialsObj=authcToken.getCredentials();
 //        if(authcToken instanceof UsernamePasswordToken) {
 //            UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
-        SysUserEntity user = new SysUserEntity();
+        SysUserDo user = new SysUserDo();
             user.setUserName(principalObj.toString());
             user.setPassword(credentialsObj.toString());
             if ("666666".equalsIgnoreCase(user.getUserName()) && "666666".equalsIgnoreCase(user.getPassword())) {

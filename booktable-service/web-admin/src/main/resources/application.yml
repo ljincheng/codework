@@ -29,8 +29,14 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
 
+booktable:
+  redisGroup: test
+  shiro:
+    globalSessionTimeout: 600000
+    cookieName: token
+
+redis:
+  host: 127.0.0.1
+  port: 6379
 
 
-shiro:
-  globalSessionTimeout: 3600
-  cookieName: token1

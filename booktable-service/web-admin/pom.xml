@@ -82,6 +82,7 @@
 					<include>**/*.properties</include>
 					<include>**/templates/*</include>
 					<include>**/res/**</include>
+					<include>**/i18n/*.properties</include>
 					<include>**/*.html</include>
 				</includes>
 				<filtering>false</filtering>

@@ -3,7 +3,6 @@ package cn.booktable.service.webadmin.security;
 import cn.booktable.core.shiro.SessionUtils;
 import cn.booktable.core.shiro.SysUserPrimaryPrincipal;
 import cn.booktable.modules.entity.sys.SysUserDo;
-import cn.booktable.modules.entity.sys.SysUserEntity;
 import cn.booktable.modules.service.sys.ParamService;
 import cn.booktable.modules.service.sys.SysUserService;
 import cn.booktable.util.StringUtils;

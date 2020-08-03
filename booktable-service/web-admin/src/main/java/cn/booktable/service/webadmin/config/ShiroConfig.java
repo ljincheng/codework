@@ -1,5 +1,8 @@
 package cn.booktable.service.webadmin.config;
 
+import cn.booktable.core.redis.RedisManager;
+import cn.booktable.core.shiro.RedisCacheManager;
+import cn.booktable.core.shiro.RedisSessionDAO;
 import cn.booktable.service.webadmin.security.UserCookieRealm;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
@@ -15,9 +18,14 @@ import org.apache.shiro.web.session.mgt.ServletContainerSessionManager;
 import cn.booktable.core.shiro.Oauth2Cookie;
 import cn.booktable.core.shiro.Oauth2Filter;
 import cn.booktable.service.webadmin.security.UserRealm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import javax.servlet.Filter;
 import java.util.*;
@@ -28,19 +36,31 @@ import java.util.*;
 @Configuration
 public class ShiroConfig {
 
+
+    @Bean
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<Object, Object> template = new RedisTemplate<Object, Object>();
+        template.setConnectionFactory(factory);
+        //template.setKeySerializer(new StringRedisSerializer());
+        //template.setValueSerializer(new RedisObjectSerializer());
+        return template;
+    }
+
+    @Bean
+    public RedisManager redisManager( @Qualifier("redisTemplate") RedisTemplate redisTemplate,@Value("${booktable.redisGroup:booktable}")String group)
+    {
+        RedisManager redisManager=new RedisManager(redisTemplate,group);
+        return redisManager;
+    }
+
     /**
      * 单机环境，session交给shiro管理
      */
     @Bean
-    public DefaultWebSessionManager sessionManager(@Value("${shiro.globalSessionTimeout:3600}") long globalSessionTimeout,@Value("${shiro.cookieName:token}") String cookieName){
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setSessionValidationSchedulerEnabled(true);
-        sessionManager.setSessionIdUrlRewritingEnabled(false);
-        sessionManager.setSessionValidationInterval(globalSessionTimeout * 1000);
-        sessionManager.setGlobalSessionTimeout(globalSessionTimeout * 1000);
-        sessionManager.setSessionIdCookie(new Oauth2Cookie(cookieName));
+    public SessionManager sessionManager(@Value("${booktable.shiro.globalSessionTimeout:3600}") long globalSessionTimeout, @Value("${booktable.shiro.cookieName:token}") String cookieName
+    , @Qualifier("redisManager") RedisManager redisManager){
 
-
+        cn.booktable.core.shiro.SessionManager sessionManager=new cn.booktable.core.shiro.SessionManager(globalSessionTimeout,cookieName,redisManager)  ;
         return sessionManager;
     }
 
@@ -53,7 +73,7 @@ public class ShiroConfig {
     }
 
     @Bean("securityManager")
-    public SecurityManager securityManager(UserRealm userRealm, UserCookieRealm cookieRealm, SessionManager sessionManager) {
+    public SecurityManager securityManager(@Value("${booktable.shiro.globalSessionTimeout:3600}") long globalSessionTimeout,UserRealm userRealm, UserCookieRealm cookieRealm, SessionManager sessionManager,@Qualifier("redisManager") RedisManager redisManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 //        securityManager.setRealm(userRealm);
         List<Realm> realms=new ArrayList<>();
@@ -64,11 +84,13 @@ public class ShiroConfig {
         securityManager.setRememberMeManager(null);
 
         // 关闭shiro自带的session
-        DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
-        DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
-        defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
-        subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
-        securityManager.setSubjectDAO(subjectDAO);
+//        DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
+//        DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
+//        defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
+//        subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
+//        securityManager.setSubjectDAO(subjectDAO);
+        RedisCacheManager cacheManager= new RedisCacheManager(redisManager,globalSessionTimeout);
+        securityManager.setCacheManager(cacheManager);
         return securityManager;
     }
 
