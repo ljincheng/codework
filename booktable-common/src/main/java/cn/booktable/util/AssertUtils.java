@@ -14,19 +14,9 @@ import org.springframework.util.StringUtils;
  */
 public class AssertUtils  {
 
-    /**
-     *
-     * notEmptyStr:Assert that a String must not be
-     * {@code null} and not an empty String.
-     *
-     * @author xiezbmf
-     * Date:2016年11月15日上午10:06:29 <br>
-     * @param param
-     * @param message
-     * @throws BusinessException if the object param is {@code null} or empty String
-     */
-    public static void notEmptyStr(String param, String message) {
-        if (StringUtils.isEmpty(param)) {
+
+    public static void isBlank(String param, String message) {
+        if (!StringUtils.isEmpty(param)) {
             throw new BusinessException(BusinessException.code_assert,message);
         }
     }
@@ -48,24 +38,13 @@ public class AssertUtils  {
      * @param code
      * @param message
      */
-    public static void notEmptyStr(String param,Integer code, String message) {
+    public static void isNotBlank(String param,Integer code, String message) {
         if (StringUtils.isEmpty(param)) {
             throw new BusinessException(code,message);
         }
     }
 
-    /**
-     * 非空字符串
-     * notEmptyStr:Assert that a String must not be
-     * {@code null} and not an empty String.
-     *
-     * @author xiezbmf
-     * Date:2016年11月17日下午2:50:43 <br>
-     * @param param the param to check
-     */
-    public static void notEmptyStr(String param) {
-        notEmptyStr(param, "[Assertion failed] - this argument is required; it must not be empty String");
-    }
+
 
     /**
      * Assert a boolean expression, throwing {@code AssertException}

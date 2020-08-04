@@ -73,13 +73,13 @@ public class ShiroConfig {
     }
 
     @Bean("securityManager")
-    public SecurityManager securityManager(@Value("${booktable.shiro.globalSessionTimeout:3600}") long globalSessionTimeout,UserRealm userRealm, UserCookieRealm cookieRealm, SessionManager sessionManager,@Qualifier("redisManager") RedisManager redisManager) {
+    public SecurityManager securityManager(@Value("${booktable.shiro.globalSessionTimeout:3600}") long globalSessionTimeout, UserCookieRealm cookieRealm, SessionManager sessionManager,@Qualifier("redisManager") RedisManager redisManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-//        securityManager.setRealm(userRealm);
-        List<Realm> realms=new ArrayList<>();
-        realms.add(userRealm);
-        realms.add(cookieRealm);
-        securityManager.setRealms(realms);
+        securityManager.setRealm(cookieRealm);
+//        List<Realm> realms=new ArrayList<>();
+       // realms.add(userRealm);
+//        realms.add(cookieRealm);
+//        securityManager.setRealms(realms);
         securityManager.setSessionManager(sessionManager);
         securityManager.setRememberMeManager(null);
 
@@ -99,6 +99,9 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
         shiroFilter.setLoginUrl("/login");
+        //这里的/index是后台的接口名,非页面,登录成功后要跳转的链接
+        shiroFilter.setSuccessUrl("/platform/main");
+        //未授权界面,该配置无效，并不会进行页面跳转
         shiroFilter.setUnauthorizedUrl("/");
 
         Map<String, Filter> filters=new HashMap<>();

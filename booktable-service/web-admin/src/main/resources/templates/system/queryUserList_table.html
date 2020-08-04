@@ -1,0 +1,61 @@
+<div xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<table class="table table-hover" >
+    <thead>
+    <tr >
+        <th style="width:60px; min-width: 60px;">序号</th>
+        <th>用户名</th>
+        <th>姓名</th>
+        <th>手机号</th>
+        <th>锁定状态</th>
+        <th>注销状态</th>
+        <th>注册时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody  >
+
+        <tr th:each="modelObj,status: ${pagedata.page}">
+            <td th:text="${pagedata.totalNum - pagedata.startOfPage - status.index }"></td>
+            <td th:text="${modelObj.userName}"></td>
+            <td th:text="${modelObj.realName}"></td>
+            <td th:text="${modelObj.telphone}"></td>
+            <td th:text="${modelObj.locked==2 }?'锁定':'没锁定'">
+
+            </td>
+            <td th:text="${modelObj.status==1 }?'未注销':'已注销'">
+            </td>
+            <td th:text="${#dates.format(modelObj.createTime,'yyyy-MM-dd HH:mm:ss')}"> </td>
+            <td >
+                <div class="dropdown">
+                    <a class="btn-link dropdown-toggle" data-toggle="dropdown">操作 <span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu pull-right" role="menu">
+                        <li shiro:hasPermission="system_user_edit"><a class="btn-link"  data-toggle="modal" th:href="@{addUser(id=${modelObj.id })}">修改</a></li>
+                       <li shiro:hasPermission="system_user_role_setting"><a class="btn-link"  data-toggle="modal" th:href="@{roleListWithUserId(userId=${modelObj.id})}">角色</a></li>
+                        <li shiro:hasPermission="system_user_password_reset"><a href="javaScript:void(0)" th:onclick="resetPassword('[[${modelObj.id}]]')">重置密码</a></li>
+                            <li shiro:hasPermission="system_user_lock">
+                                <a class="btn-link" th:onclick="'lockUser(\''+${modelObj.id}+'\',\''+${modelObj.locked}+'\')'" th:text="${modelObj.locked==2}?'解锁':'锁定'">
+                                </a></li>
+
+                                    <li shiro:hasPermission="system_user_delete" th:if="${modelObj.status==1 }"><a class="btn-link" th:onclick="delUser('[[${modelObj.id}]]')">注销</a></li>
+
+
+                    </ul>
+                </div>
+            </td>
+        </tr>
+
+    </tbody>
+    </table>
+
+
+<ul class="pager" id="pager">
+</ul>
+<script type="text/javascript">
+    <!--
+    $(function(){
+        jqPager({id:"pager",totalPages:[[${pagedata.totalPage}]],pageIndex:[[${pagedata.pageIndex}]],change:toPage});
+    });
+    //-->
+</script>
+</div>

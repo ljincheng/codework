@@ -16,6 +16,8 @@ public class RedisCacheManager implements CacheManager {
 
     // fast lookup by name map
     private final ConcurrentMap<String, Cache> caches = new ConcurrentHashMap<>();
+    public static final String DEFAULT_PRINCIPAL_ID_FIELD_NAME = "authCacheKey or id";
+    private String principalIdFieldName = DEFAULT_PRINCIPAL_ID_FIELD_NAME;
 
     private RedisManager redisManager;
     private long timeout;

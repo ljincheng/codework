@@ -7,12 +7,15 @@ import cn.booktable.core.util.SerializeUtils;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -81,53 +84,6 @@ public class RedisCache<K, V> implements Cache<K, V> {
         this.keyPrefix = prefix;
     }
 
-    /**
-     * 获得byte[]型的key
-     * @param key
-     * @return
-     */
-//    private byte[] getByteKey(K key){
-//        if(key instanceof String){
-//            String preKey = this.keyPrefix + key;
-//            return preKey.getBytes();
-//        }else if(key instanceof Integer)
-//        {
-//            String preKey = this.keyPrefix + key;
-//            return preKey.getBytes();
-//        }else if(key instanceof Long)
-//        {
-//            String preKey = this.keyPrefix + key;
-//            return preKey.getBytes();
-//        }
-//        else{
-//            return SerializeUtils.serialize(key);
-//        }
-//    }
-
-    private String getStringKey(K key){
-        String preKey= this.keyPrefix ;
-        if(key instanceof String){
-             preKey = this.keyPrefix + key;
-
-        }else if(key instanceof Integer)
-        {
-             preKey = this.keyPrefix + key;
-        }else if(key instanceof Long)
-        {
-            preKey = this.keyPrefix + key;
-        }else if(key instanceof Character || key instanceof CharSequence )
-        {
-            preKey= this.keyPrefix+key;
-        }
-        else{
-            String jsonKey= JSONObject.toJSONString(key);
-            preKey= String.valueOf( SerializeUtils.serialize(this.keyPrefix+jsonKey));
-        }
-        String redisKey= this.cache.getGroupKey(preKey);
-        return redisKey;
-    }
-
-
     @Override
     public V get(K key) throws CacheException {
         logger.debug("根据key从Redis中获取对象 key [" + key + "]");
@@ -135,7 +91,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
             if (key == null) {
                 return null;
             }else{
-                Object rawValue = cache.get(getStringKey(key));
+                Object rawValue = cache.get(getStringRedisKey(key));
 
                 if(rawValue!=null) {
                     @SuppressWarnings("unchecked")
@@ -154,7 +110,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
         logger.debug("根据key从存储 key [" + key + "]");
         try {
 //            byte[] bytesValue= SerializeUtils.serialize(value);
-            cache.set(getStringKey(key), value,expire);
+            cache.set(getStringRedisKey(key), value,expire);
             return value;
         } catch (Throwable t) {
             throw new CacheException(t);
@@ -166,7 +122,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
         logger.debug("从redis中删除 key [" + key + "]");
         try {
             V previous = get(key);
-            cache.delete(getStringKey(key));
+            cache.delete(getStringRedisKey(key));
             return previous;
         } catch (Throwable t) {
             throw new CacheException(t);
@@ -197,7 +153,8 @@ public class RedisCache<K, V> implements Cache<K, V> {
     @Override
     public Set<K> keys() {
         try {
-            Set<Object> keys = cache.keys(this.keyPrefix + "*");
+            String keyStr=this.cache.getGroupKey(this.keyPrefix+"*");
+            Set<Object> keys = cache.keys(keyStr);
             if (CollectionUtils.isEmpty(keys)) {
                 return Collections.emptySet();
             }else{
@@ -215,7 +172,8 @@ public class RedisCache<K, V> implements Cache<K, V> {
     @Override
     public Collection<V> values() {
         try {
-            Set<Object> keys = cache.keys(this.keyPrefix + "*");
+            String keyStr=this.cache.getGroupKey(this.keyPrefix+"*");
+            Set<Object> keys = cache.keys(keyStr);
             if (!CollectionUtils.isEmpty(keys)) {
                 List<V> values = new ArrayList<V>(keys.size());
                 for (Object key : keys) {
@@ -240,5 +198,42 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
     public void setExpire(long expire) {
         this.expire = expire;
+    }
+
+    private String getStringRedisKey(K key) {
+        String redisKey;
+        if (key instanceof PrincipalCollection) {
+            redisKey = getRedisKeyFromPrincipalIdField((PrincipalCollection) key);
+        } else {
+            redisKey = key.toString();
+        }
+        return this.cache.getGroupKey(this.keyPrefix+redisKey);
+    }
+    private String getRedisKeyFromPrincipalIdField(PrincipalCollection key) {
+        String redisKey;
+        Object principalObject = key.getPrimaryPrincipal();
+        Method pincipalIdGetter = null;
+        Method[] methods = principalObject.getClass().getDeclaredMethods();
+        for (Method m:methods) {
+            if ( ("getAuthCacheKey".equals(m.getName()) || "getId".equals(m.getName()))) {
+                pincipalIdGetter = m;
+                break;
+            }
+        }
+        if (pincipalIdGetter == null) {
+            throw new PrincipalInstanceException(principalObject.getClass(), "getId or getAuthCacheKey");
+        }
+        try {
+            Object idObj = pincipalIdGetter.invoke(principalObject);
+            if (idObj == null) {
+                throw new PrincipalInstanceException(principalObject.getClass(), "getId or getAuthCacheKey");
+            }
+            redisKey = idObj.toString();
+        } catch (IllegalAccessException e) {
+            throw new PrincipalInstanceException(principalObject.getClass(), "getId or getAuthCacheKey", e);
+        } catch (InvocationTargetException e) {
+            throw new PrincipalInstanceException(principalObject.getClass(), "getId or getAuthCacheKey", e);
+        }
+        return redisKey;
     }
 }

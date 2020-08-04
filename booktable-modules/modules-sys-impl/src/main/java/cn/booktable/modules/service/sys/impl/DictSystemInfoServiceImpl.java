@@ -47,10 +47,10 @@ public class DictSystemInfoServiceImpl implements DictSystemInfoService {
 	 */
 	@Override
 	public Integer insert(DictSystemInfoDo dictSystemInfoDo) {
-		AssertUtils.notEmptyStr(dictSystemInfoDo.getCodeName(),"字典名称不能为空");
-		AssertUtils.notEmptyStr(dictSystemInfoDo.getCodeType(),"字典类型不能为空");
-		AssertUtils.notEmptyStr(dictSystemInfoDo.getCodeValue(),"字典值不能为空");
-		AssertUtils.notEmptyStr(dictSystemInfoDo.getIsValid(),"字典是否有效不能为空");
+		AssertUtils.isNotBlank(dictSystemInfoDo.getCodeName(),"字典名称不能为空");
+		AssertUtils.isNotBlank(dictSystemInfoDo.getCodeType(),"字典类型不能为空");
+		AssertUtils.isNotBlank(dictSystemInfoDo.getCodeValue(),"字典值不能为空");
+		AssertUtils.isNotBlank(dictSystemInfoDo.getIsValid(),"字典是否有效不能为空");
 		return dictSystemInfoComponent.insert(dictSystemInfoDo);
 	}
 
@@ -69,10 +69,10 @@ public class DictSystemInfoServiceImpl implements DictSystemInfoService {
 	 */
 	@Override
 	public Integer update(DictSystemInfoDo dictSystemInfoDo) {
-		AssertUtils.notEmptyStr(dictSystemInfoDo.getCodeName(),"字典名称不能为空");
-		AssertUtils.notEmptyStr(dictSystemInfoDo.getCodeType(),"字典类型不能为空");
-		AssertUtils.notEmptyStr(dictSystemInfoDo.getCodeValue(),"字典值不能为空");
-//		AssertUtils.notEmptyStr(dictSystemInfoDo.getIsValid(),"字典是否有效不能为空");
+		AssertUtils.isNotBlank(dictSystemInfoDo.getCodeName(),"字典名称不能为空");
+		AssertUtils.isNotBlank(dictSystemInfoDo.getCodeType(),"字典类型不能为空");
+		AssertUtils.isNotBlank(dictSystemInfoDo.getCodeValue(),"字典值不能为空");
+//		AssertUtils.isNotBlank(dictSystemInfoDo.getIsValid(),"字典是否有效不能为空");
 		return dictSystemInfoComponent.update(dictSystemInfoDo);
 	}
 

@@ -3,6 +3,8 @@ package cn.booktable.service.webadmin.security;
 import cn.booktable.core.shiro.SessionUtils;
 import cn.booktable.core.shiro.SysUserPrimaryPrincipal;
 import cn.booktable.modules.entity.sys.SysUserDo;
+import cn.booktable.modules.service.sys.ParamService;
+import cn.booktable.modules.service.sys.SysUserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -11,8 +13,12 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import cn.booktable.core.shiro.Oauth2Token;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,6 +27,11 @@ import java.util.List;
  */
 @Component
 public class UserRealm extends AuthorizingRealm {
+    private static Logger log= LoggerFactory.getLogger(UserRealm.class);
+    @Autowired
+    private SysUserService sysUserService;
+    @Resource
+    private ParamService paramService;
 
     public UserRealm()
     {
@@ -36,21 +47,26 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        SysUserDo user = (SysUserDo)principals.getPrimaryPrincipal();
-////			SysUserDo user=sysUserService.findSysUserByUserName((String)principal);
-        if(user!=null && (user.getLocked()==null || user.getLocked().intValue()!=2))//账户存在，且不是锁定状态
-        {
-            Integer userId=user.getId();
+        try{
+//			Object principal = principals.getPrimaryPrincipal();
+            SysUserDo user = (SysUserDo)principals.getPrimaryPrincipal();
+//			SysUserDo user=sysUserService.findSysUserByUserName((String)principal);
+            if(user!=null && (user.getLocked()==null || user.getLocked().intValue()!=2))//账户存在，且不是锁定状态
+            {
+                Integer userId=user.getId();
 
-            List<String> roleList = Arrays.asList("超级管理员","普通用户");// sysUserService.getRoleStrListByUserId(userId);
-            List<String> permissionList = Arrays.asList("add","read");//  sysUserService.getPermissionCodeStrListByUserId(userId);
+                List<String> roleList = sysUserService.getRoleStrListByUserId(userId);
+                List<String> permissionList = sysUserService.getPermissionCodeStrListByUserId(userId);
 
-            //为当前用户设置角色和权限
-            SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
-            simpleAuthorInfo.addRoles(roleList);
-            simpleAuthorInfo.addStringPermissions(permissionList);
+                //为当前用户设置角色和权限
+                SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
+                simpleAuthorInfo.addRoles(roleList);
+                simpleAuthorInfo.addStringPermissions(permissionList);
 
-            return simpleAuthorInfo;
+                return simpleAuthorInfo;
+            }
+        }catch (Exception e) {
+            log.error("获取用户认证权限异常",e);
         }
         return null;
     }

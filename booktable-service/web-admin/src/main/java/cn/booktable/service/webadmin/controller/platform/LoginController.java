@@ -1,12 +1,17 @@
 package cn.booktable.service.webadmin.controller.platform;
 
+import cn.booktable.core.constant.SystemConst;
 import cn.booktable.cryptojs.CryptoJSUtil;
+import cn.booktable.exception.BusinessException;
 import cn.booktable.modules.entity.sys.AtlantisHtmlMenu;
+import cn.booktable.modules.entity.sys.SysUserDo;
 import cn.booktable.modules.entity.sys.SystemDo;
 import cn.booktable.modules.service.sys.AtlantisHtmlMenuHandler;
 import cn.booktable.modules.service.sys.MenuListHandler;
 import cn.booktable.modules.service.sys.SysPermissionService;
+import cn.booktable.modules.service.sys.SysUserService;
 import cn.booktable.service.webadmin.controller.base.BaseController;
+import cn.booktable.util.AssertUtils;
 import cn.booktable.util.StringUtils;
 import cn.booktable.util.VerifyCodeUtils;
 import com.sun.management.OperatingSystemMXBean;
@@ -26,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +42,7 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,10 +53,13 @@ import java.util.Locale;
 @EnableAutoConfiguration
 public class LoginController extends BaseController {
     private static Logger logger= LoggerFactory.getLogger(LoginController.class);
-    private static String VIEWNAME_MAIN="platform/main";
+    private static final String VIEWNAME_MAIN="platform/main";
 
+    public static final String PASS_KEY="OWSd0&sd(fQl1%Uma8OL";
     @Autowired
     private SysPermissionService sysPermissionService;
+    @Autowired
+    private SysUserService sysUserService;
 
     private void osInfo(ModelAndView modelAndView)
     {
@@ -112,7 +122,7 @@ public class LoginController extends BaseController {
                 return model;
             }
 
-            String psw= DigestUtils.md5Hex(password+ "OWSd0&sd(fQl1%Uma8OL");
+            String psw= DigestUtils.md5Hex(password+ PASS_KEY);
             UsernamePasswordToken token = new UsernamePasswordToken(username, psw);
             Subject currentUser = SecurityUtils.getSubject();
             if (currentUser.isAuthenticated()) {
@@ -139,39 +149,58 @@ public class LoginController extends BaseController {
         return model;
     }
 
-    /**
-     * 系统
-     * @return
-     */
-//    @GetMapping("platform/main")
-//    public ModelAndView info(){
-//        ModelAndView model = new ModelAndView("platform/main");
-//        OperatingSystemMXBean osmx = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-//
-//        SystemDo dto = new SystemDo();
-//        dto.setSysTime(System.currentTimeMillis());
-//        dto.setOsName(System.getProperty("os.name"));
-//        dto.setOsArch(System.getProperty("os.arch"));
-//        dto.setOsVersion(System.getProperty("os.version"));
-//        dto.setUserLanguage(System.getProperty("user.language"));
-//        dto.setUserDir(System.getProperty("user.dir"));
-//        dto.setTotalPhysical(osmx.getTotalPhysicalMemorySize()/1024/1024);
-//        dto.setFreePhysical(osmx.getFreePhysicalMemorySize()/1024/1024);
-//        dto.setMemoryRate(BigDecimal.valueOf((1-osmx.getFreePhysicalMemorySize()*1.0/osmx.getTotalPhysicalMemorySize())*100).setScale(2, RoundingMode.HALF_UP));
-//        dto.setProcessors(osmx.getAvailableProcessors());
-//        dto.setJvmName(System.getProperty("java.vm.name"));
-//        dto.setJavaVersion(System.getProperty("java.version"));
-//        dto.setJavaHome(System.getProperty("java.home"));
-//        dto.setJavaTotalMemory(Runtime.getRuntime().totalMemory()/1024/1024);
-//        dto.setJavaFreeMemory(Runtime.getRuntime().freeMemory()/1024/1024);
-//        dto.setJavaMaxMemory(Runtime.getRuntime().maxMemory()/1024/1024);
-//        dto.setUserName(System.getProperty("user.name"));
-//        dto.setSystemCpuLoad(BigDecimal.valueOf(osmx.getSystemCpuLoad()*100).setScale(2, RoundingMode.HALF_UP));
-//        dto.setUserTimezone(System.getProperty("user.timezone"));
-//
-//        model.addObject("sysInfo",dto);
-//        return model;
-//    }
+    @RequestMapping("/platform/logout")
+    public String logout(HttpServletRequest request){
+        SecurityUtils.getSubject().logout();
+        return InternalResourceViewResolver.REDIRECT_URL_PREFIX + "login";
+    }
+
+    @RequestMapping(value="/resetPassword.do", method=RequestMethod.GET)
+    public ModelAndView resetPasswordPage()
+    {
+        ModelAndView model = new ModelAndView("platform/resetPassword");
+        return model;
+    }
+
+    @RequestMapping(value="/resetPassword.do", method=RequestMethod.POST)
+    public ModelAndView resetPassword(String oldPassword,String password,String password2)
+    {
+        ModelAndView model = new ModelAndView("platform/resetPassword");
+        try{
+            AssertUtils.isNotBlank(password, "新密码不能为空");
+            AssertUtils.isNotBlank(oldPassword,"原密码不能为空");
+            if(!password.equals(password2))
+            {
+                throw new BusinessException("密码不一致");
+            }
+            SysUserDo currentUser=currentUser();
+            if(currentUser==null)
+            {
+                throw new BusinessException("请先登录");
+            }
+            currentUser=sysUserService.findSysUserById(currentUser.getId());
+            if(currentUser!=null)
+            {
+                String psw=DigestUtils.md5Hex(oldPassword+ PASS_KEY);
+                if(currentUser.getPassword().equals(psw))
+                {
+                    String newPsw=DigestUtils.md5Hex(password+PASS_KEY);
+                    sysUserService.resetPassword(currentUser.getId(), newPsw, new Date());
+                    setPromptMessage(model, "修改密码成功");
+                }else{
+                    throw new BusinessException("原密码不正确");
+                }
+            }else{
+                throw new BusinessException("请先登录");
+            }
+        }catch (BusinessException e) {
+            setPromptException(model, e);
+        }catch (Exception ex) {
+            logger.error("修改密码异常", ex);
+            setPromptException(model, ex);
+        }
+        return model;
+    }
 
     @GetMapping("platform/main")
     public ModelAndView platform_main(HttpServletRequest request,
@@ -181,7 +210,7 @@ public class LoginController extends BaseController {
         try {
 
 
-            platformMenuHtmlData(model,pid);
+            platformMenuHtmlData(model,pid==null? SystemConst.PLATFORM_DEFAULT:pid);
 
            OperatingSystemMXBean osmx = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
          SystemDo dto = new SystemDo();
@@ -221,12 +250,14 @@ public class LoginController extends BaseController {
         String indexHref=null;
         try {
             StringBuilder sb = new StringBuilder();
+            SysUserDo userDo=this.currentUser();
+            model.addObject("user",userDo);
             List<AtlantisHtmlMenu> list = null;
             if (this.isSuperSysUser()) {
                 MenuListHandler<AtlantisHtmlMenu> handler=new  AtlantisHtmlMenuHandler();
                 list = sysPermissionService.findAllPlatformMenuList(handler,platformId);
             }else{
-                Integer userId=this.currentUser().getId();
+                Integer userId=userDo.getId();
                 list =  sysPermissionService.findPlatformMenuList(new AtlantisHtmlMenuHandler(),  userId,platformId);
             }
 

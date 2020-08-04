@@ -37,19 +37,19 @@ public class ParamServiceImpl implements ParamService {
 
 	@Override
 	public Integer insert(ParamDo paramDo) {
-		AssertUtils.notEmptyStr(paramDo.getParamName(),"参数名称不能为空");
-		AssertUtils.notEmptyStr(paramDo.getParamCode(),"参数编码不能为空");
-		AssertUtils.notEmptyStr(paramDo.getParamValue(),"参数值不能为空");
-		AssertUtils.notEmptyStr(paramDo.getIsValid(),"参数是否有效不能为空");
+		AssertUtils.isNotBlank(paramDo.getParamName(),"参数名称不能为空");
+		AssertUtils.isNotBlank(paramDo.getParamCode(),"参数编码不能为空");
+		AssertUtils.isNotBlank(paramDo.getParamValue(),"参数值不能为空");
+		AssertUtils.isNotBlank(paramDo.getIsValid(),"参数是否有效不能为空");
 		return paramComponent.insert(paramDo);
 	}
 
 	@Override
 	public Integer update(ParamDo paramDo) {
-		AssertUtils.notEmptyStr(paramDo.getParamName(),"参数名称不能为空");
-		AssertUtils.notEmptyStr(paramDo.getParamCode(),"参数编码不能为空");
-		AssertUtils.notEmptyStr(paramDo.getParamValue(),"参数值不能为空");
-		AssertUtils.notEmptyStr(paramDo.getIsValid(),"参数是否有效不能为空");
+		AssertUtils.isNotBlank(paramDo.getParamName(),"参数名称不能为空");
+		AssertUtils.isNotBlank(paramDo.getParamCode(),"参数编码不能为空");
+		AssertUtils.isNotBlank(paramDo.getParamValue(),"参数值不能为空");
+		AssertUtils.isNotBlank(paramDo.getIsValid(),"参数是否有效不能为空");
 		return paramComponent.update(paramDo);
 	}
 

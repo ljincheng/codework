@@ -1,5 +1,7 @@
 package cn.booktable.service.webadmin.security;
 
+import cn.booktable.core.constant.SystemConst;
+import cn.booktable.core.shiro.Oauth2Token;
 import cn.booktable.core.shiro.SessionUtils;
 import cn.booktable.core.shiro.SysUserPrimaryPrincipal;
 import cn.booktable.modules.entity.sys.SysUserDo;
@@ -36,6 +38,14 @@ public class UserCookieRealm extends AuthorizingRealm {
         //this.setAuthenticationTokenClass(Oauth2Token.class);
     }
 
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        if(token instanceof Oauth2Token)
+        {
+            return true;
+        }
+        return super.supports(token);
+    }
 
     /**
      * 授权(验证权限时调用)
@@ -128,5 +138,24 @@ public class UserCookieRealm extends AuthorizingRealm {
         return null;
     }
 
+    @Override
+    public boolean isPermitted(PrincipalCollection principals, String permission) {
+        boolean result=this.hasRole(principals, SystemConst.SYSTEM_SUPERROLE);
+        if(!result)
+        {
+            return super.isPermitted(principals, permission);
+        }
+        return result;
+    }
+
+    @Override
+    protected Object getAuthorizationCacheKey(PrincipalCollection principals) {
+        if(principals!=null)
+        {
+            SysUserDo user=(SysUserDo) principals.getPrimaryPrincipal();
+            return user.getId();
+        }
+        return principals;
+    }
 
 }

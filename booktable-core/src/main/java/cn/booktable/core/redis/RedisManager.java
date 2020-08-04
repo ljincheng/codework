@@ -19,9 +19,9 @@ public class RedisManager {
         this.redisTemplate=redisTemplate;
         if(redisTemplate!=null)
         {
-            redisTemplate.setKeySerializer(new RedisObjectSerializer());
-            redisTemplate.setValueSerializer(new RedisObjectSerializer());
             redisTemplate.setDefaultSerializer(new RedisObjectSerializer());
+            redisTemplate.setKeySerializer(new StringRedisSerializer());
+            redisTemplate.setValueSerializer(new RedisObjectSerializer());
             this.group=group;
         }
     }
