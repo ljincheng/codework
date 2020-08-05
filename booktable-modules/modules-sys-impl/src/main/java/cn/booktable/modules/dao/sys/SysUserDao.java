@@ -118,4 +118,11 @@ public interface SysUserDao{
 	 * @return
 	 */
 	public Integer updateUserWallPhoto(SysUserDo sysUserDo);
+
+	/**
+	 * 恢复用户状态
+	 * @param sysUserDo
+	 * @return
+	 */
+	public Integer recoverUserStatusById(Integer id);
 }

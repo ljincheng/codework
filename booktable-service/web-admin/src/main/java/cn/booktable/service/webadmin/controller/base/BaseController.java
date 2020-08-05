@@ -12,6 +12,9 @@ import org.apache.shiro.dao.DataAccessException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -129,6 +132,28 @@ public class BaseController {
     {
         view.setCode(code);
         view.setMsg(msg);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Map<String, Object> getRequestToParamMap(
+            HttpServletRequest request) {
+
+        Map<String, Object> paramMap = new HashMap<>();
+        Enumeration<String> keyNames = request.getParameterNames();
+        if(StringUtils.isEmpty(request.getParameter("pageIndex"))){
+            paramMap.put("pageIndex", "1");
+        }
+        if(StringUtils.isEmpty(request.getParameter("pageSize"))){
+            paramMap.put("pageSize","20");
+        }
+        while (keyNames.hasMoreElements()) {
+            String attrName = keyNames.nextElement();
+            String attrValue = request.getParameter(attrName);
+            if (StringUtils.isNotEmpty(attrValue)) {
+                paramMap.put(attrName, attrValue.trim());
+            }
+        }
+        return paramMap;
     }
 
 }

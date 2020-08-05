@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.sys.SysLockDao">
+    <resultMap id="FullResultMap" type="sysLockDo">
+        <result property="lockNum" column="lock_num" />
+        <result property="createTime" column="create_time" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <insert id="addLock" parameterType="sysLockDo">
+    	insert into sys_lock (lock_num,create_time,remark) values(#{lockNum},#{createTime},#{remark})
+    </insert>
+
+    <delete id="delLock">
+    	delete from sys_lock where lock_num=#{lockNum}
+    </delete>
+
+    <select id="findLock" parameterType="string" resultMap="FullResultMap">
+    	select lock_num,remark,create_time from sys_lock where  lock_num=#{lockNum}
+    </select>
+
+     <select id="queryListPage" parameterType="map" resultType="sysLockDo">
+        SELECT * FROM  sys_lock WHERE 1=1
+        <if test="lockNum!= null and lockNum != '' "> and lock_num=#{lockNum}</if>
+        <if test="createTime!= null "> and create_time=#{createTime}</if>
+        <if test="remark!= null and remark != '' "> and remark=#{remark}</if>
+
+    </select>
+
+    <delete id="deleteByLockNum" parameterType="String">
+        DELETE FROM sys_lock WHERE lock_num=#{lockNum}
+    </delete>
+</mapper>

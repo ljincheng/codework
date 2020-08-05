@@ -189,5 +189,11 @@ public interface SysUserService {
      */
     public Integer updateUserWallPhoto(SysUserDo sysUserDo);
 
+    /**
+     * 恢复用户ID
+     * @param userId
+     * @return
+     */
+    public Integer recoverUserStatusById(Integer userId);
 
 }

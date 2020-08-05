@@ -1,0 +1,45 @@
+<div xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <table class="table table-hover" >
+        <thead>
+        <tr >
+            <th style="width:60px; min-width: 60px;">序号</th>
+            <th>唯一标识锁</th>
+            <th>创建时间</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody  >
+
+        <tr th:each="modelObj,status: ${pagedata.page}">
+            <td th:text="${pagedata.totalNum - pagedata.startOfPage - status.index }"></td>
+            <td th:text="${modelObj?.lockNum}"></td>
+            <td th:text="${#dates.format(modelObj.createTime,'yyyy-MM-dd HH:mm:ss')}"> </td>
+            <td th:text="${modelObj?.remark}"></td>
+
+
+            <td >
+                <div class="dropdown">
+                    <a class="btn-link dropdown-toggle" data-toggle="dropdown">操作 <span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu pull-right" role="menu">
+                        <li shiro:hasPermission="sys:lock:delete"><a href="javaScript:void(0)" th:onclick="deleteLock('[(${modelObj?.lockNum})]')">删除</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+
+    <ul class="pager" id="pager">
+    </ul>
+    <script type="text/javascript">
+        <!--
+        $(function(){
+            jqPager({id:"pager",totalPages:[[${pagedata.totalPage}]],pageIndex:[[${pagedata.pageIndex}]],change:toPage});
+        });
+        //-->
+    </script>
+</div>

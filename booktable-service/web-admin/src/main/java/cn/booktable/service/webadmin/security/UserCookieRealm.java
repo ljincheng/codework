@@ -5,7 +5,7 @@ import cn.booktable.core.shiro.Oauth2Token;
 import cn.booktable.core.shiro.SessionUtils;
 import cn.booktable.core.shiro.SysUserPrimaryPrincipal;
 import cn.booktable.modules.entity.sys.SysUserDo;
-import cn.booktable.modules.service.sys.ParamService;
+import cn.booktable.modules.service.sys.SysParamService;
 import cn.booktable.modules.service.sys.SysUserService;
 import cn.booktable.util.StringUtils;
 import org.apache.shiro.authc.*;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -31,7 +30,7 @@ public class UserCookieRealm extends AuthorizingRealm {
     @Autowired
     private SysUserService sysUserService;
     @Resource
-    private ParamService paramService;
+    private SysParamService sysParamService;
 
     public UserCookieRealm()
     {
@@ -97,7 +96,7 @@ public class UserCookieRealm extends AuthorizingRealm {
             {
                 throw new LockedAccountException("账户已锁定");
             }
-            String ERROR_PWD_TIME = paramService.queryValueByCode("ERROR_PWD_TIME");
+            String ERROR_PWD_TIME = sysParamService.queryValueByCode("ERROR_PWD_TIME");
             ERROR_PWD_TIME = StringUtils.isBlank(ERROR_PWD_TIME) ? "5" : ERROR_PWD_TIME;
             int months = Integer.parseInt(ERROR_PWD_TIME);
 

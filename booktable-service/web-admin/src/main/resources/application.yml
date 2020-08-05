@@ -34,6 +34,9 @@ booktable:
   shiro:
     globalSessionTimeout: 6000000
     cookieName: token
+  sys:
+    passwordKey: OWSd0&sd(fQl1%Uma8OL
+
 
 redis:
   host: 127.0.0.1

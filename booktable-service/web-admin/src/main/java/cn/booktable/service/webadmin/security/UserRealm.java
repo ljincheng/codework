@@ -3,7 +3,7 @@ package cn.booktable.service.webadmin.security;
 import cn.booktable.core.shiro.SessionUtils;
 import cn.booktable.core.shiro.SysUserPrimaryPrincipal;
 import cn.booktable.modules.entity.sys.SysUserDo;
-import cn.booktable.modules.service.sys.ParamService;
+import cn.booktable.modules.service.sys.SysParamService;
 import cn.booktable.modules.service.sys.SysUserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ public class UserRealm extends AuthorizingRealm {
     @Autowired
     private SysUserService sysUserService;
     @Resource
-    private ParamService paramService;
+    private SysParamService sysParamService;
 
     public UserRealm()
     {

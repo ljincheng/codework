@@ -1,5 +1,6 @@
 package cn.booktable.service.webadmin.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import cn.booktable.core.redis.RedisManager;
 import cn.booktable.core.shiro.RedisCacheManager;
 import cn.booktable.core.shiro.RedisSessionDAO;
@@ -139,4 +140,15 @@ public class ShiroConfig {
         advisor.setSecurityManager(securityManager);
         return advisor;
     }
+
+    /**
+     * Thymeleaf-extras-shiro标签配置
+     * @return
+     */
+    @Bean
+    public ShiroDialect shiroDialect()
+    {
+        return new ShiroDialect();
+    }
+
 }

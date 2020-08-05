@@ -153,4 +153,9 @@ public class SysUserComponentImpl  implements SysUserComponent{
 	public Integer updateUserWallPhoto(SysUserDo sysUserDo) {
 		return sysUserDao.updateUserWallPhoto(sysUserDo);
 	}
+
+	@Override
+	public Integer recoverUserStatusById(Integer userId) {
+		return sysUserDao.recoverUserStatusById(userId);
+	}
 }

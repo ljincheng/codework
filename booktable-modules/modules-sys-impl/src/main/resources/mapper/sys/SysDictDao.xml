@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.booktable.modules.dao.sys.SysDictDao">
+
+	<sql id="TABLE_NAME">sys_dict</sql>
+
+	<sql id="INSERT_TITLE">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="codeId != null">code_id,</if>
+			<if test="codeType != null">code_type,</if>
+			<if test="codeValue != null">code_value,</if>
+			<if test="codeName != null">code_name,</if>
+			<if test="isValid != null">is_valid,</if>
+			<if test="createTime != null">create_time,</if>
+			<if test="codeNameEn != null">code_name_en,</if>
+			<if test="codeNameCn != null">code_name_cn,</if>
+			<if test="indexs != null">indexs,</if>
+		</trim>
+	</sql>
+
+	<sql id="INSERT_DATA">
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="codeId != null">#{codeId},</if>
+			<if test="codeType != null">#{codeType},</if>
+			<if test="codeValue != null">#{codeValue},</if>
+			<if test="codeName != null">#{codeName},</if>
+			<if test="isValid != null">#{isValid},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="codeNameEn != null">#{codeNameEn},</if>
+			<if test="codeNameCn != null">#{codeNameCn},</if>
+			<if test="indexs != null">#{indexs},</if>
+		</trim>
+	</sql>
+
+	<sql id="UPDATE_DATA">
+		<set>
+			<if test="codeType != null">code_type = #{codeType},</if>
+			<if test="codeValue != null">code_value = #{codeValue},</if>
+			<if test="codeName != null">code_name = #{codeName},</if>
+			<if test="isValid != null">is_valid = #{isValid},</if>
+			<if test="createTime != null">create_time = #{createTime},</if>
+			<if test="codeNameEn != null">code_name_en = #{codeNameEn},</if>
+			<if test="codeNameCn != null">code_name_cn = #{codeNameCn},</if>
+			<if test="indexs != null">indexs = #{indexs},</if>
+		</set>
+	</sql>
+
+	<sql id="PAGE_SEARCH_ITEM">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="codeType != null">and code_type like CONCAT('%',#{codeType},'%')</if>
+			<if test="codeName != null">and code_name like CONCAT('%',#{codeName},'%')</if>
+			<if test="codeValue != null">and code_value like CONCAT('%',#{codeValue},'%')</if>
+			<if test="isValid != null">and is_valid = #{isValid}</if>
+			<if test="codeNameEn != null"> and code_name_en like CONCAT('%',#{codeNameEn},'%')</if>
+			<if test="codeNameCn != null"> and code_name_cn like CONCAT('%',#{codeNameCn},'%')</if>
+			<if test="indexs != null"> and indexs = #{indexs}</if>
+		</trim>
+	</sql>
+
+
+	<resultMap id="BaseSystemInfo" type="sysDictDo">
+		<id column="code_id" property="codeId" />
+		<result column="code_type" property="codeType" />
+		<result column="code_value" property="codeValue" />
+		<result column="code_name" property="codeName" />
+		<result column="is_valid" property="isValid" />
+		<result column="create_time" property="createTime" />
+		<result column="code_name_en" property="codeNameEn" />
+		<result column="code_name_cn" property="codeNameCn" />
+		<result column="indexs" property="indexs" />
+	</resultMap>
+
+	<select id="queryAll" resultMap="BaseSystemInfo" >
+		select code_id,code_type,code_value,code_name,code_name_en,code_name_cn,indexs from
+		<include refid="TABLE_NAME" />
+		where is_valid = "T"
+		order by indexs desc
+	</select>
+
+	<select id="queryById" resultMap="BaseSystemInfo" parameterType="string">
+		select * from
+		<include refid="TABLE_NAME" />
+		where code_id = #{codeId}
+	</select>
+
+	<insert id="insert" parameterType="sysDictDo">
+		<selectKey keyProperty="codeId" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into
+		<include refid="TABLE_NAME" />
+		<include refid="INSERT_TITLE" />
+		<include refid="INSERT_DATA" />
+	</insert>
+
+	<update id="update" parameterType="sysDictDo">
+		update
+		<include refid="TABLE_NAME" />
+		<include refid="UPDATE_DATA" />
+		where code_id = #{codeId}
+	</update>
+
+	<delete id="delete" parameterType="string">
+		delete from
+		<include refid="TABLE_NAME" />
+		where code_id = #{codeId}
+	</delete>
+
+	<select id="queryCodeList" parameterType="string" resultMap="BaseSystemInfo">
+		select code_name,code_value,code_name_en,code_name_cn,indexs from
+		<include refid="TABLE_NAME" />
+ 		where code_type = #{value} and is_valid = "T"
+ 		order by indexs desc
+	</select>
+
+	<select id="queryListPage" resultMap="BaseSystemInfo">
+		select
+			*
+		from
+		<include refid="TABLE_NAME" />
+		<include refid="PAGE_SEARCH_ITEM" />
+		order by create_time desc
+	</select>
+
+	<select id="findByCodeTypeAndValue" parameterType="map" resultMap="BaseSystemInfo">
+		select * from
+		<include refid="TABLE_NAME" />
+		where code_type = #{codeType} and code_value = #{codeValue}
+		order by indexs desc
+	</select>
+
+
+</mapper>

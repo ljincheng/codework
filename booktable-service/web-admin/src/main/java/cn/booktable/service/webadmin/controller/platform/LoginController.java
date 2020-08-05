@@ -10,6 +10,7 @@ import cn.booktable.modules.service.sys.AtlantisHtmlMenuHandler;
 import cn.booktable.modules.service.sys.MenuListHandler;
 import cn.booktable.modules.service.sys.SysPermissionService;
 import cn.booktable.modules.service.sys.SysUserService;
+import cn.booktable.service.webadmin.config.AdminSysConfig;
 import cn.booktable.service.webadmin.controller.base.BaseController;
 import cn.booktable.util.AssertUtils;
 import cn.booktable.util.StringUtils;
@@ -55,7 +56,8 @@ public class LoginController extends BaseController {
     private static Logger logger= LoggerFactory.getLogger(LoginController.class);
     private static final String VIEWNAME_MAIN="platform/main";
 
-    public static final String PASS_KEY="OWSd0&sd(fQl1%Uma8OL";
+    @Autowired
+    private AdminSysConfig adminSysConfig;
     @Autowired
     private SysPermissionService sysPermissionService;
     @Autowired
@@ -122,7 +124,7 @@ public class LoginController extends BaseController {
                 return model;
             }
 
-            String psw= DigestUtils.md5Hex(password+ PASS_KEY);
+            String psw= DigestUtils.md5Hex(password+ adminSysConfig.getPasswordKey());
             UsernamePasswordToken token = new UsernamePasswordToken(username, psw);
             Subject currentUser = SecurityUtils.getSubject();
             if (currentUser.isAuthenticated()) {
@@ -181,10 +183,10 @@ public class LoginController extends BaseController {
             currentUser=sysUserService.findSysUserById(currentUser.getId());
             if(currentUser!=null)
             {
-                String psw=DigestUtils.md5Hex(oldPassword+ PASS_KEY);
+                String psw=DigestUtils.md5Hex(oldPassword+ adminSysConfig.getPasswordKey());
                 if(currentUser.getPassword().equals(psw))
                 {
-                    String newPsw=DigestUtils.md5Hex(password+PASS_KEY);
+                    String newPsw=DigestUtils.md5Hex(password+adminSysConfig.getPasswordKey());
                     sysUserService.resetPassword(currentUser.getId(), newPsw, new Date());
                     setPromptMessage(model, "修改密码成功");
                 }else{

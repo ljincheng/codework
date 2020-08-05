@@ -101,9 +101,9 @@
 	 	 and status=1
 	 </update>
 
-    <delete id="deleteById" parameterType="int">
+    <update id="deleteById" parameterType="int">
         UPDATE sys_user SET status=0 WHERE id=#{id}
-    </delete>
+    </update>
 
      <select id="findById" parameterType="int" resultType="sysUserDo">
         SELECT * FROM  sys_user WHERE id=#{id}
@@ -141,5 +141,9 @@
 
     <update id="updateUserWallPhoto" parameterType="sysUserDo">
         update sys_user set bgImg=#{bgImg},updateTime=now() where id=#{id}
+    </update>
+
+    <update id="recoverUserStatusById" parameterType="int">
+        UPDATE sys_user SET status=1 WHERE id=#{id}
     </update>
 </mapper>

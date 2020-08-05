@@ -6,14 +6,13 @@ import cn.booktable.core.view.JsonView;
 import cn.booktable.exception.BusinessException;
 import cn.booktable.modules.entity.sys.SysActionLogDo;
 import cn.booktable.modules.entity.sys.SysUserDo;
-import cn.booktable.modules.entity.sys.SysUserEntity;
-import cn.booktable.modules.service.sys.ParamService;
+import cn.booktable.modules.service.sys.SysParamService;
 import cn.booktable.modules.service.sys.SysActionLogService;
 import cn.booktable.modules.service.sys.SysUserService;
+import cn.booktable.service.webadmin.config.AdminSysConfig;
 import cn.booktable.service.webadmin.controller.base.ActionLogConst;
 import cn.booktable.service.webadmin.controller.base.BaseController;
 import cn.booktable.service.webadmin.controller.base.PermissionCode;
-import cn.booktable.service.webadmin.controller.platform.LoginController;
 import cn.booktable.util.AssertUtils;
 import cn.booktable.util.StringUtils;
 import com.alibaba.fastjson.JSON;
@@ -22,14 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -37,7 +34,7 @@ import java.util.regex.Pattern;
  * @author ljc
  */
 @Controller
-@RequestMapping("/system/")
+@RequestMapping("/sys/user")
 public class SysUserController extends BaseController {
     private static Logger logger= LoggerFactory.getLogger(SysUserController.class);
 
@@ -45,22 +42,24 @@ public class SysUserController extends BaseController {
     private SysUserService sysUserService;
 
     @Resource
-    private ParamService paramService;
+    private SysParamService sysParamService;
     @Autowired
     private SysActionLogService sysActionLogService;
+    @Autowired
+    private AdminSysConfig adminSysConfig;
 
 
-    @RequestMapping(value="/queryUserList",method=RequestMethod.GET)
+    @RequestMapping(value="/list",method=RequestMethod.GET)
     public ModelAndView queryUserList_methodGet()
     {
-        ModelAndView view=new ModelAndView("system/queryUserList");
+        ModelAndView view=new ModelAndView("sys/user/list");
         return view;
     }
 
-    @RequestMapping(value="/queryUserList",method=RequestMethod.POST)
+    @RequestMapping(value="/list",method=RequestMethod.POST)
     public ModelAndView queryUserList_methodPost(HttpServletRequest request,String startDate,String endDate, Long pageIndex,Integer pageSize)
     {
-        ModelAndView view=new ModelAndView("system/queryUserList_table");
+        ModelAndView view=new ModelAndView("sys/user/list_table");
         try{
             checkPermission(PermissionCode.system_user_list);
             Map<String, Object> selectItem=new HashMap<>();
@@ -80,10 +79,10 @@ public class SysUserController extends BaseController {
         return view;
     }
 
-    @RequestMapping(value="/addUser",method=RequestMethod.GET)
+    @RequestMapping(value="/add",method=RequestMethod.GET)
     public ModelAndView addUser_methodGet(Integer id)
     {
-        ModelAndView view=new ModelAndView("system/editUser");
+        ModelAndView view=new ModelAndView("sys/user/edit");
 
         try{
             SysUserDo sysUser = sysUserService.findSysUserById(id);
@@ -96,7 +95,7 @@ public class SysUserController extends BaseController {
         return view;
     }
 
-    @RequestMapping(value="/addUser",method=RequestMethod.POST)
+    @RequestMapping(value="/add",method=RequestMethod.POST)
     public JsonView<String> addUser(HttpServletRequest request, SysUserDo user,String password2)
     {
         if(null != user.getId()){//修改用户
@@ -130,7 +129,7 @@ public class SysUserController extends BaseController {
             {
                 user.setLocked(1);//未锁定
             }
-            String psw= DigestUtils.md5Hex(password2+ LoginController.PASS_KEY);
+            String psw= DigestUtils.md5Hex(password2+ adminSysConfig.getPasswordKey());
             user.setPassword(psw);
             user.setPlatformId(currentPlatformId());
 
@@ -157,11 +156,6 @@ public class SysUserController extends BaseController {
 
     /**
      * 修改用户
-     * @author: sungymf
-     * @date: 2017年7月27日 下午5:53:36
-     * @param user
-     * @param password2
-     * @return
      */
     public JsonView<String> editUser(SysUserDo user,String password2)
     {
@@ -231,10 +225,10 @@ public class SysUserController extends BaseController {
         return view;
     }
 
-    @RequestMapping(value="/queryRoleUserList",method=RequestMethod.GET)
+    @RequestMapping(value="/roleUserList",method=RequestMethod.GET)
     public ModelAndView queryRoleUserList_methodGet(HttpServletRequest request,String roleId)
     {
-        ModelAndView view=new ModelAndView("system/queryRoleUserList");
+        ModelAndView view=new ModelAndView("sys/user/roleUserList");
         try{
             view.addObject("roleId", roleId);
         }catch (Exception e) {
@@ -243,10 +237,10 @@ public class SysUserController extends BaseController {
         return view;
     }
 
-    @RequestMapping(value="/queryRoleUserList",method=RequestMethod.POST)
+    @RequestMapping(value="/roleUserList",method=RequestMethod.POST)
     public ModelAndView queryRoleUserList_methodPost(HttpServletRequest request,String startDate,String endDate, Long pageIndex,Integer pageSize)
     {
-        ModelAndView view=new ModelAndView("system/queryRoleUserList_table");
+        ModelAndView view=new ModelAndView("sys/user/roleUserList_table");
         try{
             checkPermission(PermissionCode.system_role_permission_edit);
             String roleId=request.getParameter("roleId");
@@ -294,23 +288,32 @@ public class SysUserController extends BaseController {
         return view;
     }
 
-    @RequestMapping(value="/deleteUser",method=RequestMethod.POST)
-    public JsonView<String> deleteUser(HttpServletRequest request, String roleListStr,Integer userId)
+    @RequestMapping(value="/status",method=RequestMethod.POST)
+    public JsonView<String> deleteUser(HttpServletRequest request, String roleListStr,Integer userId,Integer status)
     {
         JsonView<String> view=new JsonView<String>();
         SysActionLogDo actionLogDo=getUserActionLog(request,ActionLogConst.model_system_sysuser,"注销账号",SysActionLogDo.LEVEL_IMPORTANT);
         try{
             checkPermission(PermissionCode.system_user_delete);
             AssertUtils.notNull(userId, "请先选择用户");
+            AssertUtils.notNull(status, "请求参数错误");
 
             SysUserDo user=sysUserService.findSysUserById(userId);
             AssertUtils.notNull(user,"无效参数");
             actionLogDo.setContent("注销账号:"+user.getUserName()+"("+user.getRealName()+")");
 
-            Integer dbResult=sysUserService.deleteSysUserById(userId);
-            AssertUtils.isTrue(dbResult!=null && dbResult.intValue()>0,"注销用户失败");
-            view.setCode(view.CODE_SUCCESS);
-            view.setMsg("操作成功");
+            if(status==1)
+            {
+                Integer dbResult = sysUserService.recoverUserStatusById(userId);
+                AssertUtils.isTrue(dbResult != null && dbResult.intValue() > 0, "恢复用户失败");
+                view.setCode(view.CODE_SUCCESS);
+                view.setMsg("操作成功");
+            }else {
+                Integer dbResult = sysUserService.deleteSysUserById(userId);
+                AssertUtils.isTrue(dbResult != null && dbResult.intValue() > 0, "注销用户失败");
+                view.setCode(view.CODE_SUCCESS);
+                view.setMsg("操作成功");
+            }
         }catch (BusinessException e) {
             setPromptException(view, e);
             actionLogDo.setContent("注销账号失败："+e.getMessage());
@@ -325,14 +328,7 @@ public class SysUserController extends BaseController {
     }
 
     /**
-     *
-     * releaseLoan:(这里用一句话描述这个方法的作用). <br>
-     *
-     * @author anxymf
-     * Date:2017年4月26日下午3:32:10 <br>
-     * @param userId
-     * @param password
-     * @return
+     *密码重置
      */
     @RequestMapping(value = "/resetPassword")
     public JsonView<String> resetPassword(HttpServletRequest request, Integer userId,@RequestParam(defaultValue="")String password){
@@ -342,13 +338,13 @@ public class SysUserController extends BaseController {
         try {
             checkPermission(PermissionCode.system_user_password_reset);
             if(StringUtils.isBlank(password)){
-                password = paramService.queryValueByCode("DEFAULT_PASSWORD");
+                password = sysParamService.queryValueByCode("DEFAULT_PASSWORD");
                 password = StringUtils.isNotBlank(password)?password:"Aa123456";
             }
             SysUserDo user=sysUserService.findSysUserById(userId);
             AssertUtils.notNull(user,"无效请求参数");
             actionLogDo.setContent("重置账号："+user.getUserName()+"("+user.getRealName()+")的密码");
-            String newPsw=DigestUtils.md5Hex(password.trim()+ LoginController.PASS_KEY);
+            String newPsw=DigestUtils.md5Hex(password.trim()+ adminSysConfig.getPasswordKey());
             if(sysUserService.resetPassword(userId, newPsw,null) == 1){//管理员重置密码不需要修改用户的modifyPwdTime
                 view.setCode(JsonView.CODE_SUCCESS);
                 view.setMsg("重置密码成功");

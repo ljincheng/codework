@@ -212,4 +212,9 @@ public class SysUserServiceImpl  implements SysUserService{
     public Integer updateUserWallPhoto(SysUserDo sysUserDo) {
         return sysUserComponent.updateUserWallPhoto(sysUserDo);
     }
+
+    @Override
+    public Integer recoverUserStatusById(Integer userId) {
+        return sysUserComponent.recoverUserStatusById(userId);
+    }
 }

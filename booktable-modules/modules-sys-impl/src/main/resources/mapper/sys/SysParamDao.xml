@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.booktable.modules.dao.sys.SysParamDao">
+
+	<sql id="TABLE_NAME">sys_param</sql>
+
+	<sql id="INSERT_TITLE">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="paramId != null">param_id,</if>
+			<if test="paramName != null">param_name,</if>
+			<if test="paramCode != null">param_code,</if>
+			<if test="paramValue != null">param_value,</if>
+			<if test="isValid != null">is_valid,</if>
+			<if test="createTime != null">create_time,</if>
+		</trim>
+	</sql>
+
+	<sql id="INSERT_DATA">
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="paramId != null">#{paramId},</if>
+			<if test="paramName != null">#{paramName},</if>
+			<if test="paramCode != null">#{paramCode},</if>
+			<if test="paramValue != null">#{paramValue},</if>
+			<if test="isValid != null">#{isValid},</if>
+			<if test="createTime != null">#{createTime},</if>
+		</trim>
+	</sql>
+
+	<sql id="UPDATE_DATA">
+		<set>
+			<if test="paramName != null">param_name = #{paramName},</if>
+			<if test="paramCode != null">param_code = #{paramCode},</if>
+			<if test="paramValue != null">param_value = #{paramValue},</if>
+			<if test="isValid != null">is_valid = #{isValid},</if>
+			<if test="createTime != null">create_time = #{createTime},</if>
+		</set>
+	</sql>
+
+	<sql id="PAGE_SEARCH_ITEM">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="paramName != null">and param_name like CONCAT('%',#{paramName},'%')</if>
+			<if test="paramCode != null">and param_code like CONCAT('%',#{paramCode},'%')</if>
+			<if test="isValid != null">and is_valid = #{isValid}</if>
+		</trim>
+	</sql>
+
+
+	<resultMap id="BaseParam" type="sysParamDo">
+		<id column="param_id" property="paramId" />
+		<result column="param_name" property="paramName" />
+		<result column="param_code" property="paramCode" />
+		<result column="param_value" property="paramValue" />
+		<result column="is_valid" property="isValid" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+
+	<select id="queryById" resultMap="BaseParam">
+		select * from
+		<include refid="TABLE_NAME" />
+		where param_id = #{value}
+	</select>
+
+	<select id="queryByCode" parameterType="String" resultMap="BaseParam">
+		select * from
+		<include refid="TABLE_NAME" />
+		where param_code = #{paramCode}
+	</select>
+
+	<insert id="insert" parameterType="sysParamDo">
+		<selectKey keyProperty="paramId" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into
+		<include refid="TABLE_NAME" />
+		<include refid="INSERT_TITLE" />
+		<include refid="INSERT_DATA" />
+	</insert>
+
+	<update id="update" parameterType="sysParamDo">
+		update
+		<include refid="TABLE_NAME" />
+		<include refid="UPDATE_DATA" />
+		where param_id = #{paramId}
+	</update>
+
+	<delete id="delete">
+		delete from
+		<include refid="TABLE_NAME" />
+		where param_id = #{value}
+	</delete>
+
+	<select id="queryValueByCode" resultType="String">
+		select param_value from
+		<include refid="TABLE_NAME" />
+		where param_code = #{value} and is_valid = "T"
+	</select>
+
+	<select id="queryListPage" resultMap="BaseParam">
+		select
+			*
+		from
+		<include refid="TABLE_NAME" />
+		<include refid="PAGE_SEARCH_ITEM" />
+		order by create_time desc
+	</select>
+
+
+
+</mapper>
