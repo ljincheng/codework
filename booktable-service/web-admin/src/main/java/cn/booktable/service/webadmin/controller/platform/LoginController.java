@@ -26,12 +26,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.imageio.ImageIO;
@@ -203,6 +207,8 @@ public class LoginController extends BaseController {
         }
         return model;
     }
+    @Autowired
+    MessageSource messageSource;
 
     @GetMapping("platform/main")
     public ModelAndView platform_main(HttpServletRequest request,
@@ -210,7 +216,9 @@ public class LoginController extends BaseController {
         ModelAndView model = new ModelAndView("platform/main");
 
         try {
-
+            Locale locale = LocaleContextHolder.getLocale();
+            String msg = messageSource.getMessage("i18n.lang.zh",null,locale);
+            model.addObject("langName",msg);
 
             platformMenuHtmlData(model,pid==null? SystemConst.PLATFORM_DEFAULT:pid);
 

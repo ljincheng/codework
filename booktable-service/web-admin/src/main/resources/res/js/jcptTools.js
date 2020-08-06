@@ -388,16 +388,16 @@ function closeAlert() {
  * @param opt
  */
 function jqPager(opt) {
-    var opts = $.extend({id: null, totalPages: 0, pageSize: 10, pageIndex: 1, change: null}, opt);
+    var opts = $.extend({id: null, totalPages: 0, pageSize: 10, pageIndex: 1, change: null,firstBt:"首页",preBt:"上一页",nextBt:"下一页",lastBt:"末页"}, opt);
     if (opts.totalPages > 0) {
         $('#' + opts.id).jqPaginator({
             totalPages: opts.totalPages,
             visiblePages: opts.pageSize,
             currentPage: opts.pageIndex,
-            first: '<li class="first"><a href="javascript:void(0);">首页<\/a><\/li>',
-            prev: '<li class="previous"><a href="javascript:void(0);"><i class="arrow arrow2"><\/i>上一页<\/a><\/li>',
-            next: '<li class="next"><a href="javascript:void(0);">下一页<i class="arrow arrow3"><\/i><\/a><\/li>',
-            last: '<li class="last"><a href="javascript:void(0);">末页<\/a><\/li>',
+            first: '<li class="first"><a href="javascript:void(0);">'+opts.firstBt+'<\/a><\/li>',
+            prev: '<li class="previous"><a href="javascript:void(0);"><i class="arrow arrow2"><\/i>'+opts.preBt+'<\/a><\/li>',
+            next: '<li class="next"><a href="javascript:void(0);">'+opts.nextBt+'<i class="arrow arrow3"><\/i><\/a><\/li>',
+            last: '<li class="last"><a href="javascript:void(0);">'+opts.lastBt+'<\/a><\/li>',
             page: '<li class="page"><a href="javascript:void(0);">{{page}}<\/a><\/li>',
             onPageChange: function (num, type) {
                 if (type == "change") {

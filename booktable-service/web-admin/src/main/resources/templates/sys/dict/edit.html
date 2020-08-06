@@ -11,37 +11,37 @@
         <div class="form-panel">
             <form id="form" name="form"  method="post"  class="form-horizontal">
                 <div class="form-group">
-                    <label class="col-xs-3 text-right required">编码:</label>
+                    <label class="col-xs-3 text-right required" th:text="#{i18n.code}+':'">编码:</label>
                     <div class="col-xs-9">
                         <input type="text"  name="codeType" placeholder="编码" class="form-control" th:value="${model?.codeType}" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-3 text-right required">字典名称:</label>
+                    <label class="col-xs-3 text-right required" th:text="#{i18n.text}+':'">字典名称:</label>
                     <div class="col-xs-9">
                         <input type="text"  name="codeName" placeholder="字典名称" class="form-control" th:value="${model?.codeName}" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-3 text-right required">字典值:</label>
+                    <label class="col-xs-3 text-right required" th:text="#{i18n.value}+':'">字典值:</label>
                     <div class="col-xs-9">
                         <input type="text"  name="codeValue" placeholder="字典值" class="form-control" th:value="${model?.codeValue}" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-3 text-right">字典英文名称:</label>
+                    <label class="col-xs-3 text-right"  th:text="'EN'+ #{i18n.text}+':'">字典英文名称:</label>
                     <div class="col-xs-9">
                         <input type="text"  name="codeNameEn" placeholder="字典英文名称" class="form-control" th:value="${model?.codeNameEn}" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-3 text-right">字典中文名称:</label>
+                    <label class="col-xs-3 text-right"  th:text="'CN'+ #{i18n.text}+':'">字典中文名称:</label>
                     <div class="col-xs-9">
                         <input type="text"  name="codeNameCn" placeholder="字典中文名称" class="form-control" th:value="${model?.codeNameCn}" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-3 text-right">排序权重:</label>
+                    <label class="col-xs-3 text-right"   th:text=" #{i18n.sortWeights}+':'">排序权重:</label>
                     <div class="col-xs-9">
                         <input type="text"  name="indexs" placeholder="排序权重" class="form-control numText" th:value="${model?.indexs}" />
                     </div>
@@ -50,10 +50,10 @@
                     <div class="col-xs-offset-3  col-xs-9 text-center">
                         <input type="hidden" name="codeId" th:value="${model?.codeId}" />
                             <div secure:hasPermission="sys:dict:add" th:if="${model == null}">
-                                <input type="button" class="btn btn-primary" onclick="loadData('add')" id="addBtn" value="保存" />
+                                <input type="button" class="btn btn-primary" onclick="loadData('add')" id="addBtn" value="保存" th:value="#{i18n.add('')}" />
                             </div>
                         <div th:unless="${model == null }" secure:hasPermission="sys:dict:edit">
-                                <input type="button" class="btn btn-primary" onclick="loadData('edit')" id="updateBtn" value="保存" />
+                                <input type="button" class="btn btn-primary" onclick="loadData('edit')" id="updateBtn" value="保存" th:value="#{i18n.save('')}" />
                         </div>
                     </div>
                 </div>

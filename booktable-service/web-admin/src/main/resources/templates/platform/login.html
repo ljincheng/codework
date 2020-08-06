@@ -44,7 +44,7 @@
         <div class="systemtitle" th:text="${osName}" >
            系统标题
         </div>
-        <div class="login-top">
+        <div class="login-top" th:text="#{i18n.login}">
             登录
         </div>
         <div class="errerMsg" th:if=" ${not #strings.isEmpty(message_login)}">
@@ -54,29 +54,29 @@
             <div class="login-center clearfix">
                 <div class="login-center-img"><img src="res/lib/login/img/name.png" /></div>
                 <div class="login-center-input">
-                    <input type="text"  id="username" value="" placeholder="请输入您的用户名" autofocus="autofocus" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的用户名'" />
-                    <div class="login-center-input-text">用户名</div>
+                    <input type="text"  id="username" value="" placeholder="请输入您的用户名" th:placeholder="#{sys.profile.loginId.placeholder}" autofocus="autofocus"   />
+                    <div class="login-center-input-text" th:text="#{sys.profile.loginId}">用户名</div>
                 </div>
             </div>
             <div class="login-center clearfix">
                 <div class="login-center-img"><img src="res/lib/login/img/password.png" /></div>
                 <div class="login-center-input">
-                    <input type="password"  id="password" value="" placeholder="请输入您的密码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的密码'" />
-                    <div class="login-center-input-text">密码</div>
+                    <input type="password"  id="password" value="" placeholder="请输入您的密码" th:placeholder="#{sys.profile.password.placeholder}"   />
+                    <div class="login-center-input-text" th:text="#{sys.profile.password}">密码</div>
                 </div>
             </div>
             <div class="login-center clearfix">
                 <div class="login-center-img"><img src="res/lib/login/img/code.png" /></div>
                 <div class="login-center-input">
-                    <input type="text"  id="verifyCode" value="" placeholder="请输入验证码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入验证码'" />
+                    <input type="text"  id="verifyCode" value="" placeholder="请输入验证码" th:placeholder="#{i18n.captcha.placeholder}"  />
                     <img id="verifyCodeImage"
                          onclick="reloadVerifyCode()" src="captcha"
                          style="cursor: pointer;height: 25px; position: relative; top:-26px; left: 150px; z-index: 999;" title="点击重新成生验证码" />
-                    <div class="login-center-input-text">验证码</div>
+                    <div class="login-center-input-text" th:text="#{i18n.captcha}">验证码</div>
                 </div>
             </div>
             <div style="text-align: center">
-                <input type="submit" value="登录" class="btn login-button">
+                <input type="submit" value="登录" th:value="#{i18n.login}" class="btn login-button">
             </div>
 
         </form>

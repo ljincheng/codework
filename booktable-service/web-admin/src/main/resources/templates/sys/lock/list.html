@@ -12,7 +12,9 @@
             <input type="hidden" name="pageSize" value="20" >
             <div class="form-group">
                 <label for="startDate">时间：</label>
-                <input id="startDate" class="form-control" type="text" name="startDate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:'readOnly'})" th:value="${#dates.format(startDate,'yyyy-MM-dd')}"  />-<input type="text" name="endDate" class="form-control"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:'readOnly'})"  th:value="${#dates.format(endDate,'yyyy-MM-dd')}"  />
+                <input id="startDate" class="form-control" type="text" name="startDate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:'readOnly'})"   />-<label>
+                <input type="text" name="endDate" class="form-control"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:'readOnly'})"    />
+            </label>
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" id="queryBtn" value="查询" />

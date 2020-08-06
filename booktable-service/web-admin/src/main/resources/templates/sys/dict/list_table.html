@@ -2,14 +2,14 @@
     <table class="table table-hover" >
         <thead>
         <tr >
-            <th>序号</th>
-            <th>编码</th>
-            <th>字典名称</th>
-            <th>字典值</th>
-            <th>字典英文名称</th>
-            <th>字典中文名称</th>
-            <th>排序权重</th>
-            <th>操作</th>
+            <th th:text="#{i18n.serial}">序号</th>
+            <th th:text="#{i18n.code}">编码</th>
+            <th th:text="#{i18n.text}">字典名称</th>
+            <th th:text="#{i18n.value}">字典值</th>
+            <th th:text="'EN '+#{i18n.text}">字典英文名称</th>
+            <th th:text="'CN '+#{i18n.text}">字典中文名称</th>
+            <th th:text="#{i18n.sortWeights}">排序权重</th>
+            <th th:text="#{i18n.actions}">操作</th>
         </tr>
         </thead>
         <tbody  >
@@ -25,11 +25,11 @@
 
             <td >
                 <div class="dropdown">
-                    <a class="btn-link dropdown-toggle" data-toggle="dropdown">操作 <span
-                            class="caret"></span></a>
+                    <a class="btn-link dropdown-toggle" data-toggle="dropdown">
+                       <th:block  th:text="#{i18n.actions}" ></th:block> <span class="caret" ></span></a>
                     <ul class="dropdown-menu pull-right" role="menu">
-                        <li shiro:hasPermission="sys:dict:edit"><a href="javaScript:void(0)" th:onclick="preShow('[(${modelObj?.codeId})]')">修改</a></li>
-                        <li shiro:hasPermission="sys:dict:delete"><a href="javaScript:void(0)" th:onclick="deleteData('[(${modelObj?.codeId})]','[(${model?.codeType})]')">删除</a></li>
+                        <li shiro:hasPermission="sys:dict:edit"><a href="javaScript:void(0)" th:onclick="preShow('[(${modelObj?.codeId})]')" th:text="#{i18n.edit}">修改</a></li>
+                        <li shiro:hasPermission="sys:dict:delete"><a href="javaScript:void(0)" th:onclick="deleteData('[(${modelObj?.codeId})]','[(${model?.codeType})]')" th:text="#{i18n.delete}">删除</a></li>
                     </ul>
                 </div>
             </td>
@@ -41,10 +41,10 @@
 
     <ul class="pager" id="pager">
     </ul>
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
         <!--
         $(function(){
-            jqPager({id:"pager",totalPages:[[${pagedata.totalPage}]],pageIndex:[[${pagedata.pageIndex}]],change:toPage});
+            jqPager({id:"pager",firstBt:/*[[#{sys.page.first}]]*/"首页",preBt:/*[[#{sys.page.previous}]]*/"上一页",nextBt:/*[[#{sys.page.next}]]*/"下一页",lastBt:/*[[#{sys.page.last}]]*/"末页",totalPages:[[${pagedata.totalPage}]],pageIndex:[[${pagedata.pageIndex}]],change:toPage});
         });
         //-->
     </script>
