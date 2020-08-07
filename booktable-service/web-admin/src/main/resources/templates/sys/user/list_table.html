@@ -30,7 +30,7 @@
             <td th:text="${#dates.format(modelObj.createTime,'yyyy-MM-dd HH:mm:ss')}"> </td>
             <td >
                 <div class="dropdown">
-                    <a class="btn-link dropdown-toggle" data-toggle="dropdown" th:inline="text">[[#{i18n.actions}]] <span
+                    <a class="btn-link dropdown-toggle" data-toggle="dropdown" ><th:block th:text="#{i18n.actions}" /> <span
                             class="caret"></span></a>
                     <ul class="dropdown-menu pull-right" role="menu">
                         <li shiro:hasPermission="system_user_edit"><a class="btn-link"  data-toggle="modal" th:href="@{add(id=${modelObj.id })}" th:text="#{i18n.edit}">修改</a></li>

@@ -27,8 +27,8 @@
 
                         <div class="form-group col-md-3">
                             <input type="hidden" id="pageIndex" name="pageIndex" />
-                                <input secure:hasPermission="sys:param:list" type="button" class="btn btn-primary" id="queryBtn" value="查询" th:value="#{i18n.query}" />
-                                <input secure:hasPermission="sys:param:add" type="button" class="btn btn-primary" id="addBtn" value="新增" th:value="#{i18n.add(#{i18n.parameter})}" />
+                            <input secure:hasPermission="sys:param:list" type="button" class="btn btn-primary" id="queryBtn" value="查询" th:value="#{i18n.query}" />
+                            <input secure:hasPermission="sys:param:add" type="button" class="btn btn-primary" id="addBtn" value="新增" th:value="#{i18n.add(#{i18n.parameter})}" />
                         </div>
                     </div>
                 </form>
@@ -72,10 +72,10 @@
         });
     }
 
-    function preShow(paramId){
+    function preShow(id){
         openWindow({
             title:/*[[#{i18n.settings(#{i18n.parameter})}]]*/"参数设置",
-            url:"preShow?paramId="+paramId,
+            url:"list?id="+id,
             width:600,
             height:350,
             complete:function (resData){

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:secure="http://www.pollix.at/thymeleaf/shiro">
 <head >
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title></title>
 </head>
 <body style="background: #ffffff;">
 <div id="activity">
@@ -44,7 +44,7 @@
                         </tr>
                 </table>
             </div>
-                <input secure:hasPermission="sys:role:edit" type="submit" class="btn btn-primary mt10" value="保存" />
+                <input secure:hasPermission="sys:role:edit" type="submit" class="btn btn-primary mt10" value="保存" th:value="#{i18n.save('')}" />
         </form>
     </div>
 </div>

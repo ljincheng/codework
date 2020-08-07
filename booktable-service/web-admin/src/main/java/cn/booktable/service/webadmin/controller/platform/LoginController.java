@@ -107,7 +107,7 @@ public class LoginController extends BaseController {
             //获取用户请求表单中输入的验证码
             String submitCode = WebUtils.getCleanParam(request, "verifyCode");
             String verifyCode = (String)SecurityUtils.getSubject().getSession().getAttribute("verifyCode");
-            logger.info("用户[" + username + "]登录时输入的验证码为[" + submitCode + "],HttpSession中的验证码为[" + verifyCode + "]");
+            logger.debug("用户[" + username + "]登录时输入的验证码为[" + submitCode + "],HttpSession中的验证码为[" + verifyCode + "]");
             if (StringUtils.isEmpty(submitCode) || StringUtils.isEmpty(verifyCode) || !verifyCode.equals(submitCode.toLowerCase())){
                 request.setAttribute("message_login", "验证码不正确");
                 return model;
@@ -137,15 +137,15 @@ public class LoginController extends BaseController {
             }
             currentUser.login(token);
             if (currentUser.isAuthenticated()) {
-                SavedRequest savedRequest= WebUtils.getSavedRequest(request);
-                if(null!=savedRequest){
-                    System.out.println("注意登录之前的路径是"+savedRequest.getRequestUrl());
-                    String viewName= "redirect:" + savedRequest.getRequestUrl().substring(1);
-                    return new ModelAndView(viewName);
-                }else {
+//                SavedRequest savedRequest= WebUtils.getSavedRequest(request);
+//                if(null!=savedRequest){
+//                    System.out.println("注意登录之前的路径是"+savedRequest.getRequestUrl());
+//                    String viewName= "redirect:" + savedRequest.getRequestUrl().substring(1);
+//                    return new ModelAndView(viewName);
+//                }else {
                     model = new ModelAndView("redirect:"+VIEWNAME_MAIN);
                     return model;
-                }
+//                }
             }
 
         }catch(Exception ex)

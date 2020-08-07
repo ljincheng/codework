@@ -16,20 +16,20 @@
                     <input type="hidden" name="pageSize" value="20" >
                     <input type="hidden" name="roleId" th:value="${roleId}"  >
                     <div class="form-group">
-                        <label for="userName">名称:</label>
+                        <label for="userName" th:text="#{i18n.name(#{sys.role})}+' :'">名称:</label>
                         <input type="text" id="userName" name="name" class="form-control" />
                     </div>
                     <div class="form-group">
-                        <label >状态:</label>
+                        <label th:text="#{i18n.status} +' :'">状态:</label>
                         <select name="available" class="form-control">
-                            <option value=""> 全部</option>
-                            <option value="1"> 有效</option>
-                            <option value="0"> 无效</option>
+                            <option value="" th:text="#{i18n.choose}"> 全部</option>
+                            <option value="1" th:text="#{i18n.open('')}"> 有效</option>
+                            <option value="0" th:text="#{i18n.close('')}"> 无效</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <input type="submit" class="btn btn-primary" id="queryBtn" value="查询" />
-                            <a secure:hasPermission="sys:role:add" class="btn btn-primary" data-toggle="modal" href="add">增加角色</a>
+                        <input type="submit" class="btn btn-primary" id="queryBtn" value="查询" th:value="#{i18n.query}" />
+                            <a secure:hasPermission="sys:role:add" class="btn btn-primary" data-toggle="modal" href="add" th:text="#{i18n.add(#{sys.role})}">增加角色</a>
                     </div>
 
                 </form>

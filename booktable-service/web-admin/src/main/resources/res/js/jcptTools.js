@@ -50,9 +50,10 @@ window.alertLayer = function (msg, opt) {
  * noFn:第二个按钮回调事件
  */
 window.confirmLayer = function (opt) {
-    var opts = $.extend({msg: "", yesTitle: '确定', yesFn: null, noTitle: '取消', noFn: null}, opt);
+    var opts = $.extend({msg: "", yesTitle: '确定', yesFn: null, noTitle: '取消', noFn: null,title:'信息'}, opt);
     window.confirmLayerLastIndex = layer.confirm(opts.msg, {
         btn: [opts.yesTitle, opts.noTitle] //按钮
+        ,title:opts.title
     }, function () {
         layer.close(window.confirmLayerLastIndex);
         if (opts.yesFn != null) {
