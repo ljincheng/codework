@@ -7,32 +7,38 @@
         <result column="reviewId" property="reviewId" />
         <result column="userId" property="userId" />
         <result column="content" property="content" />
+        <result column="reviewNums" property="reviewNums" />
         <result column="createTime" property="createTime" />
         <result column="updateTime" property="updateTime" />
         <result column="status" property="status" />
+        <association property="user" javaType="sysUserDo">
+            <result column="userName" property="userName"/>
+            <result column="realName" property="realName"/>
+            <result column="img" property="img"/>
+        </association>
     </resultMap>
     <insert id="insert" parameterType="map"  keyProperty="id"  useGeneratedKeys="true" >
         INSERT INTO ${review_table}(subjectId,reviewId,userId,content,createTime,updateTime,status) VALUES (#{sysReview.subjectId},#{sysReview.reviewId},#{sysReview.userId},#{sysReview.content},#{sysReview.createTime},#{sysReview.updateTime},#{sysReview.status})
     </insert>
-    <select id="queryList" parameterType="map" resultType="sysReviewDo">
-        SELECT * FROM  ${review_table}  WHERE 1=1
-        <if test="id!= null "> and id = #{id} </if>
-        <if test="subjectId!= null "> and subjectId = #{subjectId} </if>
-        <if test="reviewId!= null "> and reviewId = #{reviewId} </if>
-        <if test="userId!= null "> and userId = #{userId} </if>
-        <if test="content!= null and content != '' "> and content = #{content} </if>
-        <if test="createTime!= null "> and createTime = #{createTime} </if>
-        <if test="status!= null "> and status = #{status} </if>
+    <select id="queryList" parameterType="map" resultMap="BaseResultMap">
+        SELECT t2.userName,t2.realName,t2.img,t1.* FROM ${review_table} t1 left join sys_user t2 on t1.userId=t2.id WHERE 1=1
+        <if test="id!= null "> and t1.id = #{id} </if>
+        <if test="subjectId!= null "> and t1.subjectId = #{subjectId} </if>
+        <if test="reviewId!= null "> and t1.reviewId = #{reviewId} </if>
+        <if test="userId!= null "> and t1.userId = #{userId} </if>
+        <if test="content!= null and content != '' "> and t1.content = #{content} </if>
+        <if test="createTime!= null "> and t1.createTime = #{createTime} </if>
+        <if test="status!= null "> and t1.status = #{status} </if>
     </select>
-    <select id="queryListPage" parameterType="map" resultType="sysReviewDo">
-        SELECT * FROM  ${review_table} WHERE 1=1
-        <if test="id!= null "> and id = #{id} </if>
-        <if test="subjectId!= null "> and subjectId = #{subjectId} </if>
-        <if test="reviewId!= null "> and reviewId = #{reviewId} </if>
-        <if test="userId!= null "> and userId = #{userId} </if>
-        <if test="content!= null and content != '' "> and content = #{content} </if>
-        <if test="createTime!= null "> and createTime = #{createTime} </if>
-        <if test="status!= null "> and status = #{status} </if>
+    <select id="queryListPage" parameterType="map" resultMap="BaseResultMap">
+        SELECT t2.userName,t2.realName,t2.img,t1.* FROM ${review_table} t1 left join sys_user t2 on t1.userId=t2.id WHERE 1=1
+        <if test="id!= null "> and t1.id = #{id} </if>
+        <if test="subjectId!= null "> and t1.subjectId = #{subjectId} </if>
+        <if test="reviewId!= null "> and t1.reviewId = #{reviewId} </if>
+        <if test="userId!= null "> and t1.userId = #{userId} </if>
+        <if test="content!= null and content != '' "> and t1.content = #{content} </if>
+        <if test="createTime!= null "> and t1.createTime = #{createTime} </if>
+        <if test="status!= null "> and t1.status = #{status} </if>
     </select>
     <update id="updateById" parameterType="sysReviewDo">
         update ${review_table} set subjectId=#{sysReview.subjectId},reviewId=#{sysReview.reviewId},userId=#{sysReview.userId},content=#{sysReview.content},updateTime=#{sysReview.updateTime},status=#{sysReview.status} where id = #{sysReview.id}
@@ -43,4 +49,7 @@
     <select id="findById" parameterType="Long" resultType="sysReviewDo">
         SELECT * FROM ${review_table} WHERE id = #{id}
     </select>
+    <update id="addReviewNums" parameterType="map">
+        update ${review_table} set reviewNums=ifnull(reviewNums,0)+#{num} where id=#{id}
+    </update>
 </mapper>

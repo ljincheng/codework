@@ -1,5 +1,6 @@
 package cn.booktable.modules.dao.sys;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
@@ -57,5 +58,6 @@ public interface SysReviewDao {
      */
     public SysReviewDo findById(Map<String,Object> items);
 
+    public Integer addReviewNums(@Param("id") Long id, @Param("num")Integer num,@Param("review_table") String review_table);
 
 }

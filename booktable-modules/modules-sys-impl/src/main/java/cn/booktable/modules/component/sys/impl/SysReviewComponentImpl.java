@@ -13,6 +13,7 @@ import cn.booktable.modules.component.sys.SysReviewComponent;
 import cn.booktable.modules.dao.sys.SysReviewDao;
 
 import cn.booktable.modules.entity.sys.SysReviewDo;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 评论
@@ -27,6 +28,7 @@ public class SysReviewComponentImpl implements SysReviewComponent {
 
 
     @Override
+    @Transactional
     public Integer insertSysReview(SysReviewDo sysReviewDo,String reviewTableName){
         AssertUtils.isNotBlank(reviewTableName,"评论表名不能为空");
         AssertUtils.notNull(sysReviewDo,"评论内容不能为空");
@@ -42,6 +44,11 @@ public class SysReviewComponentImpl implements SysReviewComponent {
         Map<String,Object> items=new HashMap();
         items.put("sysReview",sysReviewDo);
         items.put("review_table",reviewTableName);
+        if(sysReviewDo.getReviewId()>0)
+        {
+            Integer updateReviewNumRes=sysReviewDao.addReviewNums(sysReviewDo.getReviewId(),1,reviewTableName);
+            AssertUtils.isPositiveNumber(updateReviewNumRes,"更新评论数失败");
+        }
         return sysReviewDao.insert(items);
     }
 
@@ -102,5 +109,24 @@ public class SysReviewComponentImpl implements SysReviewComponent {
         return sysReviewDao.findById(items);
     }
 
-
+    @Override
+    public List<SysReviewDo> suppleChildReview(List<SysReviewDo> reviewList, String reviewTableName) {
+        if(reviewList!=null && reviewList.size()>0)
+        {
+            for(int i=0,k=reviewList.size();i<k;i++)
+            {
+                SysReviewDo sysReviewDo=reviewList.get(i);
+                if(sysReviewDo.getReviewNums()!=null && sysReviewDo.getReviewNums()>0)
+                {
+                    Map<String,Object>selectItem=new HashMap<>();
+                    selectItem.put("reviewId",sysReviewDo.getId());
+                    selectItem.put("review_table",reviewTableName);
+                    List<SysReviewDo> childReviewList= sysReviewDao.queryList(selectItem);
+                    suppleChildReview(childReviewList,reviewTableName);
+                   sysReviewDo.setChildReviewList(childReviewList);
+                }
+            }
+        }
+        return reviewList;
+    }
 }

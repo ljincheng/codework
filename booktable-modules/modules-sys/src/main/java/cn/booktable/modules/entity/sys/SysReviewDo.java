@@ -3,6 +3,7 @@ import org.apache.ibatis.type.Alias;
 import java.io.Serializable;
 import lombok.Data;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 评论
@@ -31,7 +32,11 @@ public class SysReviewDo implements Serializable {
     private Date updateTime;
     /** 状态：1有效，0无效 */
     private Integer status;
+    /** 回复数 **/
+    private Integer reviewNums;
 
     private SysUserDo user;
+
+    private List<SysReviewDo> childReviewList;
 
 }

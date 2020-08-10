@@ -56,5 +56,12 @@ public interface SysReviewComponent {
      */
     public SysReviewDo findSysReviewById(Long id,String reviewTableName);
 
+    /**
+     * 补充子回复
+     * @param reviewList
+     * @param reviewTableName
+     * @return
+     */
+    public List<SysReviewDo> suppleChildReview(List<SysReviewDo> reviewList,String reviewTableName);
 
 }

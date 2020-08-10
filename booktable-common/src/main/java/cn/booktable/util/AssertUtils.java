@@ -15,6 +15,24 @@ import org.springframework.util.StringUtils;
 public class AssertUtils  {
 
 
+    /**
+     * 正数
+     * @param value
+     * @param message
+     */
+    public static void isPositiveNumber(Integer value,String message)
+    {
+         isPositiveNumber(value,BusinessException.code_assert,message);
+    }
+
+    public static void isPositiveNumber(Integer value,Integer code, String message) {
+        if(value==null || value.intValue()<=0)
+        {
+            throw new BusinessException(code,message);
+        }
+    }
+
+
     public static void isBlank(String param, String message) {
         if (!StringUtils.isEmpty(param)) {
             throw new BusinessException(BusinessException.code_assert,message);

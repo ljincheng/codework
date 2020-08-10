@@ -17,18 +17,14 @@
                 <form id="form" name="form" method="post" class="form-inline">
                     <div class="row">
                         <div class="form-group col-md-3">
-                            <label th:text="#{i18n.text}+' :'">参数名称:</label>
-                            <input type="text"  name="paramName" class="form-control" />
-                        </div>
-                        <div class="form-group  col-md-3">
-                            <label th:text="#{i18n.code}+' :'">参数编码:</label>
-                            <input type="text"  name="paramCode" class="form-control" />
+                            <label th:text="#{i18n.text}+' :'">内容:</label>
+                            <input type="text"  name="content" class="form-control" />
                         </div>
 
                         <div class="form-group col-md-3">
                             <input type="hidden" id="pageIndex" name="pageIndex" />
-                            <input secure:hasPermission="sys:param:list" type="button" class="btn btn-primary" id="queryBtn" value="查询" th:value="#{i18n.query}" />
-                            <input secure:hasPermission="sys:param:add" type="button" class="btn btn-primary" id="addBtn" value="新增" th:value="#{i18n.add(#{i18n.parameter})}" />
+                            <input secure:hasPermission="sys:review:list" type="button" class="btn btn-primary" id="queryBtn" value="查询" th:value="#{i18n.query}" />
+                            <a secure:hasPermission="sys:review:add" class="btn btn-primary" href="add"  data-toggle="modal" th:text="#{i18n.add('')}" >添加</a>
                         </div>
                     </div>
                 </form>

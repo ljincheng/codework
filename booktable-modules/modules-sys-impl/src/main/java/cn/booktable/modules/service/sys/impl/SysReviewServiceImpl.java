@@ -53,5 +53,8 @@ public class SysReviewServiceImpl implements SysReviewService {
         return sysReviewComponent.findSysReviewById(id,reviewTableName);
     }
 
-
+    @Override
+    public List<SysReviewDo> suppleChildReview(List<SysReviewDo> reviewList,String reviewTableName) {
+        return sysReviewComponent.suppleChildReview(reviewList,reviewTableName);
+    }
 }
