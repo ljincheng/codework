@@ -1,5 +1,6 @@
 package cn.booktable.service.webadmin.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,9 @@ import java.util.Locale;
 //public class WebMvcConfig implements WebMvcConfigurationSupport {
 public class WebMvcConfig implements WebMvcConfigurer {
 
+    @Autowired
+    private AdminSysConfig adminSysConfig;
+
     /**
      * 添加静态资源--过滤swagger-api (开源的在线API文档)
      * @param registry
@@ -28,6 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/res/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"/res/");
+        registry.addResourceHandler("/avatar/**").addResourceLocations(adminSysConfig.getAvatarSavePath());
 //        registry.addResourceHandler("/views/**").addResourceLocations("classpath:/views/");
 
     }

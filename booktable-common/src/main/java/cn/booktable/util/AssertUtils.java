@@ -78,6 +78,8 @@ public class AssertUtils  {
         }
     }
 
+
+
     /**
      * 校验是否为真
      * @param expression 表达式
@@ -99,6 +101,13 @@ public class AssertUtils  {
      */
     public static void isTrue(boolean expression) {
         isTrue(expression, "[Assertion failed] - this expression must be true");
+    }
+
+
+    public static void isFalse(boolean expression, String message) {
+        if (expression) {
+            throw new BusinessException(BusinessException.code_assert,message);
+        }
     }
 
     /**

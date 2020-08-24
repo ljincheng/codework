@@ -16,6 +16,11 @@
                 <input type="text" name="endDate" class="form-control"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:'readOnly'})"    />
             </label>
             </div>
+                <div class="form-group">
+                    <label for="startDate" th:text="#{i18n.mode}+' :'">模块：</label>
+                    <input type="text" name="mode" class="form-control"     />
+                </label>
+            </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" id="queryBtn" value="查询" th:value="#{i18n.query}" />
             </div>
@@ -49,19 +54,7 @@
         loadData();
     }
 
-    function deleteLock(lockNum)
-    {
-        confirmLayer({msg:"确定要删除？",yesFn:function(){
-                loadJsonData({url:"delete?lockNum="+lockNum,complete:function(resultData){
-                        if(resultData.code)
-                        {
-                            queryStart();
-                        }
-                        alertLayer(resultData.msg);
-                    }});
-            }});
-        return false;
-    }
+
 </script>
 </body>
 </html>

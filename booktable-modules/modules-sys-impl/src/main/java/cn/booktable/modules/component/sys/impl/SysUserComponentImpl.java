@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cn.booktable.toolkit.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -126,7 +128,7 @@ public class SysUserComponentImpl  implements SysUserComponent{
 				for(String role:roles)
 				{
 					SysUserRoleDo userRole=new SysUserRoleDo();
-					userRole.setId(StringUtils.getUUID32());
+					userRole.setId(IdWorker.getIdStr());
 					userRole.setUserId(userId);
 					userRole.setRoleId(role);
 					sysUserDao.insertUserRoles(userRole);

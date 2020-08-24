@@ -46,7 +46,7 @@ public class SysPermissionController extends BaseController {
     @GetMapping("/list")
     public ModelAndView listPermission(HttpServletRequest request)
     {
-        ModelAndView view=new ModelAndView("/system/listPermission");
+        ModelAndView view=new ModelAndView("/sys/permission/list");
         return view;
     }
 
@@ -54,7 +54,7 @@ public class SysPermissionController extends BaseController {
     @RequiresPermissions("sys:permission:list")
     public ModelAndView listPermissionData(HttpServletRequest request,Long pageIndex,Integer pageSize,Integer dataType,Long parentId)
     {
-        ModelAndView view=new ModelAndView("/system/listPermission_table");
+        ModelAndView view=new ModelAndView("/sys/permission/list_table");
         try{
             //查询
             pageIndex=pageIndex==null?1L:pageIndex;

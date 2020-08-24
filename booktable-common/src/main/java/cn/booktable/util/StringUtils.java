@@ -13,12 +13,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return (str==null || str.length()==0) ? true:false;
     }
 
-    public static String getUUID32(){
-        UUID uuid = UUID.randomUUID();
-        String s = uuid.toString();
-        s = s.replace("-", "");
-        return s;
-    }
 
     /**
      * 转化为javascript的String值格式。

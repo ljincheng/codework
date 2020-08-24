@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.booktable.toolkit.IdWorker;
 import cn.booktable.util.StringUtils;
 import cn.booktable.modules.entity.sys.SysUserRoleDo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,7 +191,7 @@ public class SysUserServiceImpl  implements SysUserService{
 
         AssertUtils.isTrue(sysRoleDo != null, "角色不存在");
         SysUserRoleDo userRole = new SysUserRoleDo();
-        userRole.setId(StringUtils.getUUID32());
+        userRole.setId(IdWorker.getIdStr());
         userRole.setUserId(userId);
         userRole.setRoleId(roleId);
         return sysUserRoleComponent.insertSysUserRole(userRole);

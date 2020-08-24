@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cn.booktable.toolkit.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +39,7 @@ public class SysRoleComponentImpl  implements SysRoleComponent{
 	 */
 	public Integer insertSysRole(SysRoleDo sysRole)
 	{
-		sysRole.setId(StringUtils.getUUID32());
+		sysRole.setId(IdWorker.getIdStr());
 		sysRole.setCreateTime(new Date());
 		if(sysRole.getAvailable()==null)
 		{
@@ -125,7 +127,7 @@ public class SysRoleComponentImpl  implements SysRoleComponent{
 			for(Long permissionId:permissionIds)
 			{
 				SysRolePermissionDo rolePermission=new SysRolePermissionDo();
-				rolePermission.setId(StringUtils.getUUID32());
+				rolePermission.setId(IdWorker.getIdStr());
 				rolePermission.setRoleId(roleId);
 				rolePermission.setPermissionId(permissionId);
 				Integer dbresult= sysRolePermissionDao.insert(rolePermission);

@@ -35,7 +35,10 @@ booktable:
     globalSessionTimeout: 6000000
     cookieName: token
   sys:
-    passwordKey: OWSd0&sd(fQl1%Uma8OL
+    passwordKey: O12sd!@(Y8OL
+    attachmentRoot: /usr/local/workspace/temp/webapps/uploads/
+    avatarHost: http://localhost:8080/avatar
+    avatarSavePath: file:///usr/local/workspace/temp/webapps/avatar/
 
 
 redis:
