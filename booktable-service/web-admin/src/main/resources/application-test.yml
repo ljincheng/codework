@@ -3,8 +3,8 @@ spring:
     name: dataSource
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/codework?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-    username: root
-    password:
+    username: dev
+    password: dev123
     # 使用druid连接池
     type: com.alibaba.druid.pool.DruidDataSource
     filters: stat
