@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>cn.booktable</groupId>
+		<artifactId>booktable-modules</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>modules-shop-impl</artifactId>
+	<packaging>jar</packaging>
+
+
+	<properties>
+<!--		<shiro.version>1.4.0</shiro.version>-->
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>cn.booktable</groupId>
+			<artifactId>booktable-common</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.booktable</groupId>
+			<artifactId>booktable-core</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+        <dependency>
+            <groupId>cn.booktable</groupId>
+            <artifactId>modules-shop</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>${mybatis.version}</version>
+		</dependency>
+	</dependencies>
+
+
+</project>

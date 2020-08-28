@@ -33,6 +33,18 @@
 			<artifactId>modules-sys-impl</artifactId>
 			<version>${parent.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>cn.booktable</groupId>
+			<artifactId>modules-shop</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.booktable</groupId>
+			<artifactId>modules-shop-impl</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+
 		<dependency>
 		    <groupId>org.apache.shiro</groupId>
 		    <artifactId>shiro-core</artifactId>

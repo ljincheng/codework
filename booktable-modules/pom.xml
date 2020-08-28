@@ -14,6 +14,8 @@
     <modules>
         <module>modules-sys</module>
         <module>modules-sys-impl</module>
+        <module>modules-shop</module>
+        <module>modules-shop-impl</module>
 
     </modules>
 

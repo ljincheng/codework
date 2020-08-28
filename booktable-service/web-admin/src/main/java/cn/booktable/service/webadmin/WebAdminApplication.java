@@ -12,9 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  * eic-admin
  * @author ljc
  */
-@SpringBootApplication //(exclude= {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
-//@SpringBootApplication(scanBasePackages="com.eic",exclude= {DataSourceAutoConfiguration.class})
-//@MapperScan("com.eic.jcptsystem.dao")
+@SpringBootApplication
 @MapperScan("cn.booktable.modules.dao")
 @ComponentScan("cn.booktable")
 public class WebAdminApplication {
@@ -25,15 +23,3 @@ public class WebAdminApplication {
 
 
 }
-
-//public class EicAdminApplication extends SpringBootServletInitializer {
-//
-//    public static void main(String[] args) {
-//        SpringApplication.run(EicAdminApplication.class, args);
-//    }
-//
-//    @Override
-//    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-//        return application.sources(EicAdminApplication.class);
-//    }
-//}
