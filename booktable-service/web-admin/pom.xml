@@ -46,6 +46,17 @@
 		</dependency>
 
 		<dependency>
+			<groupId>cn.booktable</groupId>
+			<artifactId>modules-mobile</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.booktable</groupId>
+			<artifactId>modules-mobile-impl</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+
+		<dependency>
 		    <groupId>org.apache.shiro</groupId>
 		    <artifactId>shiro-core</artifactId>
 		    <version>${shiro.version}</version>

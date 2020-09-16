@@ -16,6 +16,8 @@
         <module>modules-sys-impl</module>
         <module>modules-shop</module>
         <module>modules-shop-impl</module>
+        <module>modules-mobile</module>
+        <module>modules-mobile-impl</module>
 
     </modules>
 

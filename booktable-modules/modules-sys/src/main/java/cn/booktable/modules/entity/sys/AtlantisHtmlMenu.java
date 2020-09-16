@@ -20,6 +20,8 @@ public class AtlantisHtmlMenu implements Serializable {
     private String icon;
     private String title;
     private Long   id;
+    private Integer dataType;
+    private Long parentId;
     private List<AtlantisHtmlMenu> children;
     private AtlantisHtmlMenu parentMenu;
     /** 当前活动的 */
@@ -124,6 +126,22 @@ public class AtlantisHtmlMenu implements Serializable {
         this.id = id;
     }
 
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public Integer getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(Integer dataType) {
+        this.dataType = dataType;
+    }
+
     public AtlantisHtmlMenu getParentMenu() {
         return parentMenu;
     }
@@ -166,7 +184,20 @@ public class AtlantisHtmlMenu implements Serializable {
             }
             html.append("</ul></div>");
         }else{
-            html.append("<li class='menu_link_item' >").append("<a  eventdata=\""+this.getHref()+"\" target='main_frame' href=\""+this.getHref()+"\">").append(this.getTitleHtml()).append("</a>");
+            if(getDataType()!=null ) {
+                int datatype=getDataType().intValue();
+                if(datatype==3)
+                {
+                    html.append("<li class='nav-item submenu' >").append("<a  eventdata=\"" + this.getHref() + "\" target='main_frame' href=\"" + this.getHref() + "\">").append(this.getTitleHtml()).append("</a>");
+                }else if(datatype==1) {
+                    if(parentMenu==null)
+                    {
+                        html.append("<li class='nav-item submenu' >").append("<a  eventdata=\"" + this.getHref() + "\" target='main_frame' href=\"" + this.getHref() + "\">").append(this.getTitleHtml()).append("</a>");
+                    }else {
+                        html.append("<li class='menu_link_item' >").append("<a  eventdata=\"" + this.getHref() + "\" target='main_frame' href=\"" + this.getHref() + "\">").append(this.getTitleHtml()).append("</a>");
+                    }
+                }
+            }
         }
         html.append("</li>");
         return html.toString();

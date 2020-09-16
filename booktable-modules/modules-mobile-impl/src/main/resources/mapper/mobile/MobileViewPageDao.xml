@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.mobile.MobileViewPageDao">
+    <resultMap id="BaseResultMap" type="mobileViewPageDo" >
+        <result column="id" property="id" />
+        <result column="parentId" property="parentId" />
+        <result column="name" property="name" />
+        <result column="viewType" property="viewType" />
+        <result column="viewData" property="viewData" />
+        <result column="userId" property="userId" />
+        <result column="weight" property="weight" />
+        <result column="status" property="status" />
+        <result column="createTime" property="createTime" />
+        <result column="updateTime" property="updateTime" />
+    </resultMap>
+    <insert id="insert" parameterType="mobileViewPageDo"  keyProperty="id"  useGeneratedKeys="true" >
+        INSERT INTO mobile_view_page(parentId,name,viewType,viewData,userId,weight,status,createTime,updateTime) VALUES (#{parentId},#{name},#{viewType},#{viewData},#{userId},#{weight},#{status},#{createTime},#{updateTime})
+    </insert>
+    <select id="queryList" parameterType="map" resultType="mobileViewPageDo">
+        SELECT * FROM  mobile_view_page  WHERE 1=1
+        <if test="id!= null "> and id = #{id} </if>
+        <if test="parentId!= null "> and parentId = #{parentId} </if>
+        <if test="name!= null and name != '' "> and name = #{name} </if>
+        <if test="viewType!= null "> and viewType = #{viewType} </if>
+        <if test="viewData!= null and viewData != '' "> and viewData = #{viewData} </if>
+        <if test="userId!= null "> and userId = #{userId} </if>
+        <if test="weight!= null "> and weight = #{weight} </if>
+        <if test="status!= null "> and status = #{status} </if>
+        <if test="createTime!= null "> and createTime = #{createTime} </if>
+        <if test="updateTime!= null "> and updateTime = #{updateTime} </if>
+    </select>
+    <select id="queryListPage" parameterType="map" resultType="mobileViewPageDo">
+        SELECT * FROM  mobile_view_page WHERE 1=1
+        <if test="id!= null "> and id = #{id} </if>
+        <if test="parentId!= null "> and parentId = #{parentId} </if>
+        <if test="name!= null and name != '' "> and name = #{name} </if>
+        <if test="viewType!= null "> and viewType = #{viewType} </if>
+        <if test="viewData!= null and viewData != '' "> and viewData = #{viewData} </if>
+        <if test="userId!= null "> and userId = #{userId} </if>
+        <if test="weight!= null "> and weight = #{weight} </if>
+        <if test="status!= null "> and status = #{status} </if>
+        <if test="createTime!= null "> and createTime = #{createTime} </if>
+        <if test="updateTime!= null "> and updateTime = #{updateTime} </if>
+    </select>
+    <update id="updateById" parameterType="mobileViewPageDo">
+        update mobile_view_page set parentId=#{parentId},name=#{name},viewType=#{viewType},viewData=#{viewData},userId=#{userId},weight=#{weight},status=#{status},createTime=#{createTime},updateTime=#{updateTime} where id = #{id}
+    </update>
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM mobile_view_page WHERE id = #{id}
+    </delete>
+    <select id="findById" parameterType="Long" resultType="mobileViewPageDo">
+        SELECT * FROM mobile_view_page WHERE id = #{id}
+    </select>
+</mapper>

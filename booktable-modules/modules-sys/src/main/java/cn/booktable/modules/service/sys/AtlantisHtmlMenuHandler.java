@@ -33,6 +33,8 @@ public class AtlantisHtmlMenuHandler implements Serializable, MenuListHandler<At
                 menu.setTitle(sysPer.getName());
                 Long nodeId= sysPer.getId();
                 menu.setId(nodeId);
+                menu.setParentId(sysPer.getParentId());
+                menu.setDataType(sysPer.getDataType());
                 String pathStart=sysPer.getUrl().startsWith("http")?"":"..";
                 menu.setHref(pathStart+sysPer.getUrl());
 
@@ -47,6 +49,8 @@ public class AtlantisHtmlMenuHandler implements Serializable, MenuListHandler<At
                 menu=new AtlantisHtmlMenu();
                 menu.setIcon(sysPer.getIcon());
                 menu.setTitle(sysPer.getName());
+                menu.setParentId(sysPer.getParentId());
+                menu.setDataType(sysPer.getDataType());
                 Long nodeId= sysPer.getId();
                 menu.setId(nodeId);
 

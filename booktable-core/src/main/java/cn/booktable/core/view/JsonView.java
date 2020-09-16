@@ -29,6 +29,7 @@ public class JsonView<T> extends AbstractView{
     }
 
     private Integer code;
+    private Integer errorCode;//错误码
     private String msg;
     private T data;
     public static final Integer CODE_SUCCESS=1;
@@ -72,6 +73,14 @@ public class JsonView<T> extends AbstractView{
         return this.code;
     }
 
+    public Integer getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(Integer errorCode) {
+        this.errorCode = errorCode;
+    }
+
     /**
      * 结果信息
      * @param msg
@@ -106,6 +115,41 @@ public class JsonView<T> extends AbstractView{
     public T getData()
     {
         return this.data;
+    }
+
+    public static JsonView error(String msg)
+    {
+        JsonView jsonView=new JsonView();
+        jsonView.setCode(CODE_FAILE);
+        jsonView.setMsg(msg);
+        return jsonView;
+    }
+
+    public static JsonView error(Integer errorCode,String msg)
+    {
+        JsonView jsonView=new JsonView();
+        jsonView.setCode(CODE_FAILE);
+        jsonView.setErrorCode(errorCode);
+        jsonView.setMsg(msg);
+        return jsonView;
+    }
+
+    public static <T> JsonView<T> ok(T data)
+    {
+        JsonView jsonView=new JsonView();
+        jsonView.setCode(CODE_SUCCESS);
+        jsonView.setMsg("success");
+        jsonView.setData(data);
+        return jsonView;
+    }
+
+    public static <T> JsonView<T> ok(String msg,T data)
+    {
+        JsonView jsonView=new JsonView();
+        jsonView.setCode(CODE_SUCCESS);
+        jsonView.setMsg(msg);
+        jsonView.setData(data);
+        return jsonView;
     }
 
     /**

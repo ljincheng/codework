@@ -10,11 +10,17 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.dao.DataAccessException;
 import org.apache.shiro.subject.Subject;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -68,9 +74,20 @@ public class BaseController {
      */
     protected void setPromptException(ModelAndView view,Exception e)
     {
-        if(e instanceof DataAccessException)
+        if(e instanceof DataAccessException || e instanceof SQLException || e instanceof DataIntegrityViolationException)
         {
             view.addObject("error", new BusinessException(BusinessException.code_other, "Fail [Error:1001]"));
+        }else {
+            view.addObject("error", new BusinessException(BusinessException.code_other, e.getMessage()));
+        }
+    }
+
+    protected void setPromptException(ModelAndView view, Exception e, MessageSource messageSource)
+    {
+        if(e instanceof DataAccessException || e instanceof SQLException || e instanceof DataIntegrityViolationException)
+        {
+            Locale locale = LocaleContextHolder.getLocale();
+            view.addObject("error", new BusinessException(BusinessException.code_other,messageSource.getMessage("i18n.error.internalError", null, locale) ));
         }else {
             view.addObject("error", new BusinessException(BusinessException.code_other, e.getMessage()));
         }
