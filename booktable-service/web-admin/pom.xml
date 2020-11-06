@@ -9,7 +9,6 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<shiro.version>1.5.3</shiro.version>
 		<eic.version>4.0</eic.version>
 		<thymeleaf-shiro.version>2.0.1-SNAPSHOT</thymeleaf-shiro.version>
 	</properties>
@@ -24,6 +23,11 @@
 		<dependency>
 			<groupId>cn.booktable</groupId>
 			<artifactId>booktable-core</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.booktable</groupId>
+			<artifactId>thymeleaf-shiro</artifactId>
 			<version>${parent.version}</version>
 		</dependency>
 
@@ -57,15 +61,22 @@
 		</dependency>
 
 		<dependency>
+			<groupId>cn.booktable</groupId>
+			<artifactId>modules-kids</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.booktable</groupId>
+			<artifactId>modules-kids-impl</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+
+		<dependency>
 		    <groupId>org.apache.shiro</groupId>
 		    <artifactId>shiro-core</artifactId>
 		    <version>${shiro.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.github.theborakompanioni</groupId>
-			<artifactId>thymeleaf-extras-shiro</artifactId>
-			<version>${thymeleaf-shiro.version}</version>
-		</dependency>
+
 		<dependency>
 		    <groupId>org.apache.shiro</groupId>
 		    <artifactId>shiro-spring</artifactId>

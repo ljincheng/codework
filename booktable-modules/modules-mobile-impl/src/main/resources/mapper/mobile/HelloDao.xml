@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.mobile.HelloDao">
+
+	<resultMap id="BaseResultMap" type="helloDo" >
+		<result column="id" property="id" />
+<result column="title" property="title" />
+<result column="descs" property="descs" />
+<result column="createTime" property="createTime" />
+<result column="updateTime" property="updateTime" />
+
+	</resultMap>
+
+	<insert id="insert" parameterType="helloDo"   keyProperty="id"  useGeneratedKeys="true"  >
+		INSERT INTO hello (  title, descs, createTime, updateTime ) VALUES 
+		(#{title} ,#{descs} ,#{createTime} ,#{updateTime} )
+	</insert>
+
+	<select id="queryList" parameterType="map" resultType="helloDo">
+	SELECT * FROM  hello  WHERE 1=1 
+	<if test="id != null"> and id = #{id} </if>
+		<if test="title != null and title !='' "> and title = #{title} </if>
+		<if test="descs != null and descs !='' "> and descs = #{descs} </if>
+		<if test="createTime != null"> and createTime = #{createTime} </if>
+		<if test="updateTime != null"> and updateTime = #{updateTime} </if>
+
+	</select>
+
+	<select id="queryListPage" parameterType="map" resultType="helloDo">
+	SELECT * FROM  hello WHERE 1=1 
+	<if test="id != null"> and id = #{id} </if>
+		<if test="title != null and title !='' "> and title = #{title} </if>
+		<if test="descs != null and descs !='' "> and descs = #{descs} </if>
+		<if test="createTime != null"> and createTime = #{createTime} </if>
+		<if test="updateTime != null"> and updateTime = #{updateTime} </if>
+
+	 order by id desc
+	</select>
+	
+		
+	<update id="updateById" parameterType="helloDo"> 
+	 UPDATE hello SET title = #{title},descs = #{descs},updateTime = #{updateTime}
+	  WHERE id = #{id} 
+	</update>
+	
+	
+	<delete id="deleteById" parameterType="Long">
+	 DELETE FROM hello WHERE id = #{id}
+	</delete>
+	
+	<select id="findById" parameterType="Long" resultType="helloDo">
+	 SELECT * FROM hello WHERE id = #{id}
+	</select>
+	
+	
+</mapper>

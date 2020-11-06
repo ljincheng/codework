@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.kids.KidsMediaMetadataDao">
+
+	<resultMap id="BaseResultMap" type="kidsMediaMetadataDo" >
+		<result column="id" property="id" />
+<result column="category_id" property="categoryId" />
+<result column="title" property="title" />
+<result column="image_url" property="imageUrl" />
+<result column="media_type" property="mediaType" />
+<result column="media_url" property="mediaUrl" />
+<result column="source_url" property="sourceUrl" />
+<result column="descs" property="descs" />
+<result column="create_time" property="createTime" />
+<result column="update_time" property="updateTime" />
+
+	</resultMap>
+
+	<insert id="insert" parameterType="kidsMediaMetadataDo"   keyProperty="id"  useGeneratedKeys="true"  >
+		INSERT INTO kids_media_metadata (  category_id, title, image_url, media_type, media_url, source_url, descs, create_time, update_time ) VALUES 
+		(#{categoryId} ,#{title} ,#{imageUrl} ,#{mediaType} ,#{mediaUrl} ,#{sourceUrl} ,#{descs} ,#{createTime} ,#{updateTime} )
+	</insert>
+
+	<select id="queryList" parameterType="map" resultType="kidsMediaMetadataDo">
+	SELECT * FROM  kids_media_metadata  WHERE 1=1 
+	<if test="id != null"> and id = #{id} </if>
+		<if test="categoryId != null"> and category_id = #{categoryId} </if>
+		<if test="title != null and title !='' "> and title = #{title} </if>
+		<if test="imageUrl != null and imageUrl !='' "> and image_url = #{imageUrl} </if>
+		<if test="mediaType != null and mediaType !='' "> and media_type = #{mediaType} </if>
+		<if test="mediaUrl != null and mediaUrl !='' "> and media_url = #{mediaUrl} </if>
+		<if test="sourceUrl != null and sourceUrl !='' "> and source_url = #{sourceUrl} </if>
+		<if test="descs != null and descs !='' "> and descs = #{descs} </if>
+		<if test="createTime != null"> and create_time = #{createTime} </if>
+		<if test="updateTime != null"> and update_time = #{updateTime} </if>
+
+	</select>
+
+	<select id="queryListPage" parameterType="map" resultType="kidsMediaMetadataDo">
+	SELECT * FROM  kids_media_metadata WHERE 1=1
+		<if test="categoryId != null"> and category_id = #{categoryId} </if>
+		<if test="title != null and title !='' "> and title = #{title} </if>
+		<if test="_title != null and _title !='' "> and title like CONCAT('%',#{_title},'%') </if>
+		<if test="imageUrl != null and imageUrl !='' "> and image_url = #{imageUrl} </if>
+		<if test="_imageUrl != null and _imageUrl !='' "> and image_url like CONCAT('%',#{_imageUrl},'%') </if>
+		<if test="mediaType != null and mediaType !='' "> and media_type = #{mediaType} </if>
+		<if test="_mediaType != null and _mediaType !='' "> and media_type like CONCAT('%',#{_mediaType},'%') </if>
+		<if test="mediaUrl != null and mediaUrl !='' "> and media_url = #{mediaUrl} </if>
+		<if test="_mediaUrl != null and _mediaUrl !='' "> and media_url like CONCAT('%',#{_mediaUrl},'%') </if>
+		<if test="sourceUrl != null and sourceUrl !='' "> and source_url = #{sourceUrl} </if>
+		<if test="_sourceUrl != null and _sourceUrl !='' "> and source_url like CONCAT('%',#{_sourceUrl},'%') </if>
+		<if test="descs != null and descs !='' "> and descs = #{descs} </if>
+		<if test="_descs != null and _descs !='' "> and descs like CONCAT('%',#{_descs},'%') </if>
+		<if test="createTime != null"> and create_time = #{createTime} </if>
+		<if test="updateTime != null"> and update_time = #{updateTime} </if>
+	 order by id desc
+	</select>
+	
+		
+	<update id="updateById" parameterType="kidsMediaMetadataDo"> 
+	 UPDATE kids_media_metadata SET category_id = #{categoryId},title = #{title},image_url = #{imageUrl},media_type = #{mediaType},media_url = #{mediaUrl},source_url = #{sourceUrl},descs = #{descs},update_time = #{updateTime}
+	  WHERE id = #{id} 
+	</update>
+	
+	
+	<delete id="deleteById" parameterType="Long">
+	 DELETE FROM kids_media_metadata WHERE id = #{id}
+	</delete>
+	
+	<select id="findById" parameterType="Long" resultType="kidsMediaMetadataDo">
+	 SELECT * FROM kids_media_metadata WHERE id = #{id}
+	</select>
+	<select id="countRepeatUrl" parameterType="map" resultType="int">
+		select count(*) from (
+		select count(*),t.media_url from kids_media_metadata t group by t.media_url HAVING count(*)>1
+		)tml_countings
+	</select>
+	
+</mapper>

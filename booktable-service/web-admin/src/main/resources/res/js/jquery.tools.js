@@ -15,28 +15,51 @@ window.getNowFormatDate = function () {
 }
 
 window.alertLayer = function (msg, opt) {
-    var opts = $.extend({end: null, icon: -1, id: null,}, opt);
+    var opts = $.extend({end: null, icon: -1,title:"", id: null,}, opt);
 //	layer.alert({dialog: { msg:msg,type:opts.type},border:[0],end:opts.end});
-    if (opts.id != null) {
-        switch (opts.icon) {
-            case -1:
-                $("#" + opts.id).html("<div class=\"alert alert-block alert-warning alert-dismissable\"> " + msg + "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button>  </div>");
-                break;
-            case 0:
-                $("#" + opts.id).html("<div class=\"alert alert-block alert-info alert-dismissable with-icon\">   <i class=\"icon-info-sign\"></i><div class=\"content\">" + msg + "</div><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button></div>");
-                break;
-            case 1:
-                $("#" + opts.id).html("<div class=\"alert alert-block alert-success alert-dismissable with-icon\">  <i class=\"icon-ok-sign\"></i><div class=\"content\">" + msg + "</div> <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button></div>");
-                break;
-            case 2:
-                $("#" + opts.id).html("<div class=\"alert alert-block alert-danger alert-dismissable with-icon\">   <i class=\"icon-remove-sign\"></i><div class=\"content\">" + msg + "</div><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button></div>");
-                break;
-            default:
-                $("#" + opts.id).html("<div class=\"alert alert-block alert-dismissable alert-warning\">  " + msg + "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button></div>");
-                break;
-        }
-    } else {
-        layer.alert(msg, opts);
+    //  if (opts.id != null) {
+    switch (opts.icon) {
+        case -1:
+            swal(msg, {
+                buttons: false,
+                timer: 3000,
+            });
+            break;
+        // case 0:
+        //     $("#" + opts.id).html("<div class=\"alert alert-block alert-info alert-dismissable with-icon\">   <i class=\"icon-info-sign\"></i><div class=\"content\">" + msg + "</div><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">×</button></div>");
+        //     break;
+        case 1:
+            swal(opts.title, msg, {
+                icon : "warning",
+                buttons: {
+                    confirm: {
+                        className : 'btn btn-warning'
+                    }
+                },
+            });
+
+            break;
+        case 2:
+            swal(opts.title, msg, {
+                icon : "error",
+                buttons: {
+                    confirm: {
+                        className : 'btn btn-danger'
+                    }
+                },
+            });
+
+            break;
+        default:
+            swal(opts.title, msg, {
+                icon : "info",
+                buttons: {
+                    confirm: {
+                        className : 'btn btn-info'
+                    }
+                },
+            });
+            break;
     }
 }
 
@@ -50,17 +73,32 @@ window.alertLayer = function (msg, opt) {
  * noFn:第二个按钮回调事件
  */
 window.confirmLayer = function (opt) {
-    var opts = $.extend({msg: "", yesTitle: '确定', yesFn: null, noTitle: '取消', noFn: null,title:'信息'}, opt);
-    window.confirmLayerLastIndex = layer.confirm(opts.msg, {
-        btn: [opts.yesTitle, opts.noTitle] //按钮
-        ,title:opts.title
-    }, function () {
-        layer.close(window.confirmLayerLastIndex);
-        if (opts.yesFn != null) {
-            opts.yesFn();
+    var opts = $.extend({msg: "", yesTitle: '确定', yesFn: null, noTitle: '取消', noFn: null,title:''}, opt);
+
+    swal({
+        title: opt.title,
+        text: opt.msg,
+        type: 'warning',
+        buttons:{
+            confirm: {
+                text : opts.yesTitle,
+                className : 'btn btn-success'
+            },
+            cancel: {
+                visible: true,
+                text : opts.noTitle,
+                className: 'btn btn-danger'
+            }
         }
-    }, opts.noFn);
-    return window.confirmLayerLastIndex;
+    }).then((Delete) => {
+        if (Delete) {
+            if (opts.yesFn != null) {
+                opts.yesFn();
+            }
+        } else {
+            swal.close();
+        }
+    });
 }
 
 /**
@@ -389,7 +427,7 @@ function closeAlert() {
  * @param opt
  */
 function jqPager(opt) {
-    var opts = $.extend({navObj:"ul.pager", totalPages: 0, pageSize: 10, pageIndex: 1, change: null,firstBt:"首页",preBt:"上一页",nextBt:"下一页",lastBt:"末页"}, opt);
+    var opts = $.extend({navObj:"ul.pager",navCountObj:".pager_totalnum", totalPages: 0, pageSize: 10, pageIndex: 1, change: null,firstBt:"首页",preBt:"上一页",nextBt:"下一页",lastBt:"末页",totalNum:null}, opt);
     if (opts.totalPages > 0) {
         $(opts.navObj).jqPaginator({
             totalPages: opts.totalPages,
@@ -410,6 +448,29 @@ function jqPager(opt) {
             }
         });
 
+     }else{
+        $(opts.navObj).jqPaginator({
+            totalPages: 1,
+            visiblePages: opts.pageSize,
+            currentPage: 1,
+            first: '<li class="first page-item"><a href="javascript:void(0);" class="page-link">'+opts.firstBt+'<\/a><\/li>',
+            prev: '<li class="previous page-item"><a href="javascript:void(0);" class="page-link"><i class="arrow arrow2"><\/i>'+opts.preBt+'<\/a><\/li>',
+            next: '<li class="next page-item"><a href="javascript:void(0);" class="page-link">'+opts.nextBt+'<i class="arrow arrow3"><\/i><\/a><\/li>',
+            last: '<li class="last page-item"><a href="javascript:void(0);" class="page-link">'+opts.lastBt+'<\/a><\/li>',
+            page: '<li class="page page-item"><a href="javascript:void(0);" class="page-link">{{page}}<\/a><\/li>',
+            onPageChange: function (num, type) {
+                if (type == "change") {
+                    if (opts.change != null) {
+                        opts.change(num);
+                    }
+                }
+
+            }
+        });
+    }
+
+    if($(opts.navCountObj).length > 0 && opts.totalNum!=null){
+        $(opts.navCountObj).text(opts.totalNum);
     }
 }
 

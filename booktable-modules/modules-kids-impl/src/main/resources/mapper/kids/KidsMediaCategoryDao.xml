@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.booktable.modules.dao.kids.KidsMediaCategoryDao">
+
+	<resultMap id="BaseResultMap" type="kidsMediaCategoryDo" >
+		<result column="id" property="id" />
+<result column="title" property="title" />
+<result column="image_url" property="imageUrl" />
+<result column="descs" property="descs" />
+<result column="pid" property="pid" />
+<result column="create_time" property="createTime" />
+<result column="update_time" property="updateTime" />
+
+	</resultMap>
+
+	<insert id="insert" parameterType="kidsMediaCategoryDo"   keyProperty="id"  useGeneratedKeys="true"  >
+		INSERT INTO kids_media_category (  title, image_url, descs, pid, create_time, update_time ) VALUES 
+		(#{title} ,#{imageUrl} ,#{descs} ,#{pid} ,#{createTime} ,#{updateTime} )
+	</insert>
+
+	<select id="queryList" parameterType="map" resultType="kidsMediaCategoryDo">
+	SELECT * FROM  kids_media_category  WHERE 1=1 
+	<if test="id != null"> and id = #{id} </if>
+		<if test="title != null and title !='' "> and title = #{title} </if>
+		<if test="imageUrl != null and imageUrl !='' "> and image_url = #{imageUrl} </if>
+		<if test="descs != null and descs !='' "> and descs = #{descs} </if>
+		<if test="pid != null"> and pid = #{pid} </if>
+		<if test="createTime != null"> and create_time = #{createTime} </if>
+		<if test="updateTime != null"> and update_time = #{updateTime} </if>
+
+	</select>
+
+	<select id="queryListPage" parameterType="map" resultType="kidsMediaCategoryDo">
+	SELECT * FROM  kids_media_category WHERE 1=1 
+	<if test="id != null"> and id = #{id} </if>
+		<if test="title != null and title !='' "> and title = #{title} </if>
+		<if test="imageUrl != null and imageUrl !='' "> and image_url = #{imageUrl} </if>
+		<if test="descs != null and descs !='' "> and descs = #{descs} </if>
+		<if test="pid != null"> and pid = #{pid} </if>
+		<if test="createTime != null"> and create_time = #{createTime} </if>
+		<if test="updateTime != null"> and update_time = #{updateTime} </if>
+
+	 order by id desc
+	</select>
+	
+		
+	<update id="updateById" parameterType="kidsMediaCategoryDo"> 
+	 UPDATE kids_media_category SET title = #{title},image_url = #{imageUrl},descs = #{descs},pid = #{pid},update_time = #{updateTime}
+	  WHERE id = #{id} 
+	</update>
+	
+	
+	<delete id="deleteById" parameterType="Long">
+	 DELETE FROM kids_media_category WHERE id = #{id}
+	</delete>
+	
+	<select id="findById" parameterType="Long" resultType="kidsMediaCategoryDo">
+	 SELECT * FROM kids_media_category WHERE id = #{id}
+	</select>
+	
+	
+</mapper>

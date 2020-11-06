@@ -18,7 +18,8 @@
         <module>modules-shop-impl</module>
         <module>modules-mobile</module>
         <module>modules-mobile-impl</module>
-
+<module>modules-kids</module>
+<module>modules-kids-impl</module>
     </modules>
 
 

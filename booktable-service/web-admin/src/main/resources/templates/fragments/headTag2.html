@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head th:fragment="style" th:remove="tag">
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
     <script th:src="@{/res/lib/atlantislite/js/plugin/webfont/webfont.min.js}"></script>
     <script>
         WebFont.load({
@@ -15,6 +16,10 @@
     <!-- CSS Files -->
     <link rel="stylesheet" th:href="@{/res/lib/atlantislite/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/res/lib/atlantislite/css/atlantis.min.css}">
+    <!-- Select2 -->
+    <link th:href="@{/res/lib/atlantislite/js/plugin/select2/select2.min.css}" rel="stylesheet" />
+    <link th:href="@{/res/lib/atlantislite/js/plugin/select2/select2-bootstrap.min.css}" rel="stylesheet" />
+
 </head>
 <body th:fragment="script" th:remove="tag">
 
@@ -53,9 +58,12 @@
     <!-- Sweet Alert -->
     <script th:src="@{/res/lib/atlantislite/js/plugin/sweetalert/sweetalert.min.js}"></script>
 
+   <!-- Select2 -->
+    <script th:src="@{/res/lib/atlantislite/js/plugin/select2/select2.full.min.js}"></script>
     <!-- Atlantis JS -->
     <script th:src="@{/res/lib/atlantislite/js/atlantis.min.js}"></script>
     <!-- Atlantis JS -->
+
 
 
     <script type="text/javascript" th:src="@{/res/js/jqPaginator.min.js}"></script>

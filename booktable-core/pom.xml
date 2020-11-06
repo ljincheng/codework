@@ -8,9 +8,7 @@
     <artifactId>booktable-core</artifactId>
     <packaging>jar</packaging>
 
-    <properties>
-        <shiro.version>1.4.0</shiro.version>
-    </properties>
+
     <dependencies>
         <dependency>
             <groupId>cn.booktable</groupId>

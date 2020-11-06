@@ -1,9 +1,9 @@
 package cn.booktable.service.webadmin.config;
 
-import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import cn.booktable.core.redis.RedisManager;
 import cn.booktable.core.shiro.RedisCacheManager;
 import cn.booktable.core.shiro.RedisSessionDAO;
+import cn.booktable.extras.thymeleaf.shiro.dialect.ShiroDialect;
 import cn.booktable.service.webadmin.security.UserCookieRealm;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;

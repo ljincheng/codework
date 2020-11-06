@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:secure="http://www.pollix.at/thymeleaf/shiro">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:secure="http://dev.booktable.cn/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -26,6 +26,16 @@
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="../res/lib/atlantislite/css/demo.css">
+
+    <style type="text/css">
+        .fullFrame {
+            position: absolute;
+            top: 0; left: 0;
+            width:100%;
+            height:100%;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -55,11 +65,9 @@
         <nav class="navbar navbar-header navbar-expand-lg" data-background-color="blue2">
 
             <div class="container-fluid">
-                <div id="search-nav" class="collapse fa-inverse" >
-                    <a th:text="${sysInfo.osName}"></a>|
-                    <a th:text="${langName}"></a>|
-                    <a th:text="${#locale.country}"></a>
 
+                <div id="search-nav" class="collapse fa-inverse" >
+                    <a th:text="${#dates.format(#dates.createNow(),'yyyy-MM-dd HH:mm')}"></a>
                 </div>
                 <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
                     <li class="nav-item toggle-nav-search hidden-caret">
@@ -68,6 +76,9 @@
                         </a>
                     </li>
 
+                    <li class="nav-item  hidden-caret" onclick="toggleActiveContent()">
+                        <button type="button" class="changeLogoHeaderColor" data-color="green"></button>
+                    </li>
                     <li class="nav-item dropdown hidden-caret">
                         <a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                             <img src="/res/lib/atlantislite/img/flags/zh.png" th:src="@{/res/lib/atlantislite/img/flags/{lang}.png(lang=${#strings.toLowerCase(#locale.country)})}">
@@ -170,17 +181,21 @@
     <div class="sidebar sidebar-style-2">
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
             <div class="sidebar-content">
-
                 <ul class="nav nav-primary" th:utext="${menuHtml}">
-ocla                </ul>
+                </ul>
             </div>
         </div>
     </div>
     <!-- End Sidebar -->
 
     <div class="main-panel" >
-        <iframe id="main_frame" name="main_frame" frameborder="0" width="100%" style="margin: 0px; padding: 0px; width: 100%;height:0px; border: 0px; " src="../sys/info"></iframe>
+        <div id="activityContent" class="content-activity"  style="z-index:1;">
+            <iframe width="100%" height="100%" frameborder="0" id="playerFrame" class="fullFrame"></iframe>
+        </div>
+        <div class="content-activity" style="z-index:2;"><iframe id="main_frame" name="main_frame" frameborder="0" width="100%" class="fullFrame"  src="../sys/info"></iframe></div>
+
     </div>
+
 
 </div>
 <!--   Core JS Files   -->
@@ -218,15 +233,18 @@ ocla                </ul>
 <!-- Atlantis JS -->
 <script src="../res/lib/atlantislite/js/atlantis.min.js"></script>
 <script type="text/javascript">
-
+    var toggle_customSidebar = false,custom_full=false,
+        custom_open = 0;
     $(function () {
-        var WIN_H = $(window).height();
-        var HEAER_HEIGHT=62;
-        var frame_h=WIN_H - HEAER_HEIGHT - 3;
-        $("#main_frame").css("height",frame_h+"px");
-        $("#main_frame").css("marginTop",HEAER_HEIGHT+"px");
+        // var WIN_H = $(window).height();
+        // var HEAER_HEIGHT=62;
+        // var frame_h=WIN_H - HEAER_HEIGHT - 3;
+        // $("#main_frame").css("height",frame_h+"px");
+        // $("#main_frame").css("marginTop",HEAER_HEIGHT+"px");
+
 
         $("li.menu_link_item").bind("click",function(){
+            activeContent(false);
             var aitem=$(this);
             $("li.menu_link_item").each(function(){
                 var myEl=$(this);
@@ -240,8 +258,32 @@ ocla                </ul>
             });
             aitem.addClass("active");
             aitem.parent().parents('li.submenu').addClass("active");
-        })
-    })
+        });
+    });
+
+function loadPlayer(url) {
+$("#playerFrame").attr("src",url);
+    activeContent(true);
+}
+function toggleActiveContent() {
+    if($("#activityContent").hasClass("active")){
+        activeContent(false);
+    }else{
+        activeContent(true);
+    }
+}
+function activeContent(show){
+    if(show) {
+        if (!$("#activityContent").hasClass("active")) {
+            $("#activityContent").addClass("active");
+        }
+    }else{
+        if ($("#activityContent").hasClass("active")) {
+            $("#activityContent").removeClass("active");
+        }
+    }
+}
+
 </script>
 </body>
 </html>
