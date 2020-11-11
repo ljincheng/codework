@@ -12,14 +12,15 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>modules-sys</module>
-        <module>modules-sys-impl</module>
-        <module>modules-shop</module>
-        <module>modules-shop-impl</module>
+        <module>modules-kids</module>
+        <module>modules-kids-impl</module>
         <module>modules-mobile</module>
         <module>modules-mobile-impl</module>
-<module>modules-kids</module>
-<module>modules-kids-impl</module>
+        <module>modules-shop</module>
+        <module>modules-shop-impl</module>
+        <module>modules-sys</module>
+        <module>modules-sys-impl</module>
+        <module>modules-elasticsearch</module>
     </modules>
 
 

@@ -44,7 +44,7 @@ public class KidsMediaMetadataController extends BaseController{
 
 	@GetMapping("/list")
 	public ModelAndView list(){
-		ModelAndView view=new ModelAndView("/kids/kidsMediaMetadata/list");
+		ModelAndView view=new ModelAndView("kids/kidsMediaMetadata/list");
 		try{
 			view.addObject("mediaCategoryList",kidsMediaCategoryService.queryKidsMediaCategoryList(null));
 		}catch(Exception ex){
@@ -56,7 +56,7 @@ public class KidsMediaMetadataController extends BaseController{
 	@PostMapping("/list")
 	@RequiresPermissions("kids:kidsMediaMetadata:list")
 	public ModelAndView listTable(HttpServletRequest request,@RequestParam(required = false,defaultValue ="1")Long pageIndex,@RequestParam(required = false,defaultValue ="20")Integer pageSize,String startDate,String endDate){
-	ModelAndView view=new ModelAndView("/kids/kidsMediaMetadata/list_table");
+	ModelAndView view=new ModelAndView("kids/kidsMediaMetadata/list_table");
 		 Map<String,Object> selectItem = getRequestToParamMap(request); 
 		 view.addObject("pagedata",kidsMediaMetadataService.queryKidsMediaMetadataListPage(pageIndex,pageSize,selectItem));
 		 return view;
@@ -64,7 +64,7 @@ public class KidsMediaMetadataController extends BaseController{
 
 	@GetMapping(value="/add")
 	public ModelAndView add(HttpServletRequest request){
-		ModelAndView view=new ModelAndView("/kids/kidsMediaMetadata/add");
+		ModelAndView view=new ModelAndView("kids/kidsMediaMetadata/add");
 		return view;
 	}
 
@@ -86,7 +86,7 @@ public class KidsMediaMetadataController extends BaseController{
 	@GetMapping(value="/view")
 	@RequiresPermissions("kids:kidsMediaMetadata:view")
 	public ModelAndView view(HttpServletRequest request,Long id){
-		ModelAndView view =new ModelAndView("/kids/kidsMediaMetadata/view");
+		ModelAndView view =new ModelAndView("kids/kidsMediaMetadata/view");
 		KidsMediaMetadataDo kidsMediaMetadataDo= kidsMediaMetadataService.findKidsMediaMetadataById(id);
 		view.addObject("kidsMediaMetadataDo", kidsMediaMetadataDo);
 		return view;
@@ -94,7 +94,7 @@ public class KidsMediaMetadataController extends BaseController{
 
 	@GetMapping(value="/edit/{id}")
 	public ModelAndView edit(HttpServletRequest request,@PathVariable("id") Long id){
-		ModelAndView view =new ModelAndView("/kids/kidsMediaMetadata/edit");
+		ModelAndView view =new ModelAndView("kids/kidsMediaMetadata/edit");
 		KidsMediaMetadataDo kidsMediaMetadataDo= kidsMediaMetadataService.findKidsMediaMetadataById(id);
 		view.addObject("kidsMediaMetadataDo", kidsMediaMetadataDo);
 		return view;
@@ -136,7 +136,7 @@ public class KidsMediaMetadataController extends BaseController{
 
 	@GetMapping(value="/play/{id}")
 	public ModelAndView play(HttpServletRequest request,@PathVariable("id") Long id){
-		ModelAndView view =new ModelAndView("/kids/kidsMediaMetadata/play");
+		ModelAndView view =new ModelAndView("kids/kidsMediaMetadata/play");
 		KidsMediaMetadataDo kidsMediaMetadataDo= kidsMediaMetadataService.findKidsMediaMetadataById(id);
 		view.addObject("kidsMediaMetadataDo", kidsMediaMetadataDo);
 		return view;

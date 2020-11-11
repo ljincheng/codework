@@ -47,14 +47,14 @@ public class SysDictController extends BaseController {
 
     @GetMapping(value = "/list")
     public ModelAndView list() {
-        return new ModelAndView("/sys/dict/list");
+        return new ModelAndView("sys/dict/list");
     }
 
 
     @PostMapping(value = "/list")
     @RequiresPermissions("sys:dict:list")
     public ModelAndView listData(HttpServletRequest request) {
-        ModelAndView model = new ModelAndView("/sys/dict/list_table");
+        ModelAndView model = new ModelAndView("sys/dict/list_table");
         try {
             Map<String,Object> selectItem = getRequestToParamMap(request);
             selectItem.put("isValid", SysDictDo.ISVALID_T);
@@ -76,7 +76,7 @@ public class SysDictController extends BaseController {
      */
     @GetMapping("/preShow")
     public ModelAndView preShow(String codeId){
-        ModelAndView model = new ModelAndView("/sys/dict/edit");
+        ModelAndView model = new ModelAndView("sys/dict/edit");
         try{
             if(StringUtils.isNotEmpty(codeId)){
                 checkPermission("sys:dict:edit");

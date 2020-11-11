@@ -70,6 +70,11 @@
 			<artifactId>modules-kids-impl</artifactId>
 			<version>${parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>cn.booktable</groupId>
+			<artifactId>modules-elasticsearch</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
 
 		<dependency>
 		    <groupId>org.apache.shiro</groupId>
@@ -95,8 +100,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-
-
 		<!-- 添加依赖以支持 JSTL 和 JSP -->
 <!--		<dependency>-->
 <!--			<groupId>javax.servlet</groupId>-->
@@ -109,6 +112,33 @@
 
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<!-- 环境标识，需要与配置文件的名称相对应 -->
+				<activatedProperties>dev</activatedProperties>
+			</properties>
+			<activation>
+				<!-- 默认环境 -->
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<activatedProperties>test</activatedProperties>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<activatedProperties>prod</activatedProperties>
+			</properties>
+		</profile>
+	</profiles>
+
+
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<resources>
@@ -117,9 +147,10 @@
 				<includes>
 					<include>**/*.yml</include>
 					<include>**/*.properties</include>
-					<include>**/templates/*</include>
+					<include>**/templates/**</include>
 					<include>**/res/**</include>
 					<include>**/i18n/*.properties</include>
+					<include>**/banner.txt</include>
 					<include>**/*.html</include>
 				</includes>
 				<filtering>false</filtering>
@@ -127,6 +158,7 @@
 
 
 		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -41,7 +41,7 @@ public class SysParamController extends BaseController {
      */
     @GetMapping("/list")
     public ModelAndView list() {
-        return new ModelAndView("/sys/param/list");
+        return new ModelAndView("sys/param/list");
     }
 
     /**
@@ -53,7 +53,7 @@ public class SysParamController extends BaseController {
     @PostMapping("/list")
     @RequiresPermissions("sys:param:list")
     public ModelAndView listData(HttpServletRequest request) {
-        ModelAndView model = new ModelAndView("/sys/param/list_table");
+        ModelAndView model = new ModelAndView("sys/param/list_table");
         try {
             Map<String,Object> selectItem = getRequestToParamMap(request);
             selectItem.put("isValid", SysParamDo.ISVALID_T);
@@ -75,7 +75,7 @@ public class SysParamController extends BaseController {
      */
     @GetMapping( "/preShow")
     public ModelAndView preShow(String paramId){
-        ModelAndView model = new ModelAndView("/sys/param/edit");
+        ModelAndView model = new ModelAndView("sys/param/edit");
         try{
             if(StringUtils.isNotEmpty(paramId)){
                 model.addObject("model",sysParamService.queryById(paramId));

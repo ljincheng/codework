@@ -37,14 +37,14 @@ public class KidsCopyDataController extends BaseController{
 	
 	@GetMapping("/list")
 	public ModelAndView list(){
-		ModelAndView view=new ModelAndView("/kids/kidsCopyData/list");
+		ModelAndView view=new ModelAndView("kids/kidsCopyData/list");
 		return view;
 	}
 
 	@PostMapping("/list")
 	@RequiresPermissions("kids:kidsCopyData:list")
 	public ModelAndView listTable(HttpServletRequest request,@RequestParam(required = false,defaultValue ="1")Long pageIndex,@RequestParam(required = false,defaultValue ="20")Integer pageSize,String startDate,String endDate){
-	ModelAndView view=new ModelAndView("/kids/kidsCopyData/list_table");
+	ModelAndView view=new ModelAndView("kids/kidsCopyData/list_table");
 		 Map<String,Object> selectItem = getRequestToParamMap(request); 
 		 view.addObject("pagedata",kidsCopyDataService.queryKidsCopyDataListPage(pageIndex,pageSize,selectItem));
 		 return view;
@@ -52,7 +52,7 @@ public class KidsCopyDataController extends BaseController{
 
 	@GetMapping(value="/add")
 	public ModelAndView add(HttpServletRequest request){
-		ModelAndView view=new ModelAndView("/kids/kidsCopyData/add");
+		ModelAndView view=new ModelAndView("kids/kidsCopyData/add");
 		return view;
 	}
 
@@ -82,7 +82,7 @@ public class KidsCopyDataController extends BaseController{
 
 	@GetMapping(value="/edit/{id}")
 	public ModelAndView edit(HttpServletRequest request,@PathVariable("id") Long id){
-		ModelAndView view =new ModelAndView("/kids/kidsCopyData/edit");
+		ModelAndView view =new ModelAndView("kids/kidsCopyData/edit");
 		KidsCopyDataDo kidsCopyDataDo= kidsCopyDataService.findKidsCopyDataById(id);
 		view.addObject("kidsCopyDataDo", kidsCopyDataDo);
 		return view;

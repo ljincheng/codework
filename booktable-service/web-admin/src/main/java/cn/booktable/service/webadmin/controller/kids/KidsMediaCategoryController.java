@@ -37,14 +37,14 @@ public class KidsMediaCategoryController extends BaseController{
 	
 	@GetMapping("/list")
 	public ModelAndView list(){
-		ModelAndView view=new ModelAndView("/kids/kidsMediaCategory/list");
+		ModelAndView view=new ModelAndView("kids/kidsMediaCategory/list");
 		return view;
 	}
 
 	@PostMapping("/list")
 	@RequiresPermissions("kids:kidsMediaCategory:list")
 	public ModelAndView listTable(HttpServletRequest request,@RequestParam(required = false,defaultValue ="1")Long pageIndex,@RequestParam(required = false,defaultValue ="20")Integer pageSize,String startDate,String endDate){
-	ModelAndView view=new ModelAndView("/kids/kidsMediaCategory/list_table");
+	ModelAndView view=new ModelAndView("kids/kidsMediaCategory/list_table");
 		 Map<String,Object> selectItem = getRequestToParamMap(request); 
 		 view.addObject("pagedata",kidsMediaCategoryService.queryKidsMediaCategoryListPage(pageIndex,pageSize,selectItem));
 		 return view;
@@ -52,7 +52,7 @@ public class KidsMediaCategoryController extends BaseController{
 
 	@GetMapping(value="/add")
 	public ModelAndView add(HttpServletRequest request){
-		ModelAndView view=new ModelAndView("/kids/kidsMediaCategory/add");
+		ModelAndView view=new ModelAndView("kids/kidsMediaCategory/add");
 		return view;
 	}
 
@@ -74,7 +74,7 @@ public class KidsMediaCategoryController extends BaseController{
 	@GetMapping(value="/view")
 	@RequiresPermissions("kids:kidsMediaCategory:view")
 	public ModelAndView view(HttpServletRequest request,Long id){
-		ModelAndView view =new ModelAndView("/kids/kidsMediaCategory/view");
+		ModelAndView view =new ModelAndView("kids/kidsMediaCategory/view");
 		KidsMediaCategoryDo kidsMediaCategoryDo= kidsMediaCategoryService.findKidsMediaCategoryById(id);
 		view.addObject("kidsMediaCategoryDo", kidsMediaCategoryDo);
 		return view;
@@ -82,7 +82,7 @@ public class KidsMediaCategoryController extends BaseController{
 
 	@GetMapping(value="/edit/{id}")
 	public ModelAndView edit(HttpServletRequest request,@PathVariable("id") Long id){
-		ModelAndView view =new ModelAndView("/kids/kidsMediaCategory/edit");
+		ModelAndView view =new ModelAndView("kids/kidsMediaCategory/edit");
 		KidsMediaCategoryDo kidsMediaCategoryDo= kidsMediaCategoryService.findKidsMediaCategoryById(id);
 		view.addObject("kidsMediaCategoryDo", kidsMediaCategoryDo);
 		return view;
