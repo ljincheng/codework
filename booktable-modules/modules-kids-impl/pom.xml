@@ -19,6 +19,11 @@
             <artifactId>modules-kids</artifactId>
             <version>${parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.booktable</groupId>
+            <artifactId>modules-elasticsearch</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
     </dependencies>
 
 

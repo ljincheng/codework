@@ -3,10 +3,11 @@ import java.util.List;
 import java.util.Map;
 
 import cn.booktable.core.page.PageDo;
-import cn.booktable.modules.entity.kids.KidsMediaMetadataDo; 
+import cn.booktable.modules.entity.kids.EsKidsMediaMetadataBo;
+import cn.booktable.modules.entity.kids.KidsMediaMetadataDo;
 
 /**
- * 
+ *
  * @author ljc
  */
 public interface KidsMediaMetadataComponent {
@@ -54,4 +55,20 @@ public interface KidsMediaMetadataComponent {
 	 * @return
 	 */
 	public KidsMediaMetadataDo findKidsMediaMetadataById(Long id);
+
+
+	/**
+	 * 带分类的列表
+	 * @param selectItem
+	 * @return
+	 */
+	public List<EsKidsMediaMetadataBo> queryEsKidsMetaList(Map<String,Object> selectItem);
+
+	/**
+	 * 匹配ES探索数据
+	 * @return
+	 */
+	public List<KidsMediaMetadataDo> 	matchEsKidsMetaList(List<EsKidsMediaMetadataBo> data);
+
+
 }

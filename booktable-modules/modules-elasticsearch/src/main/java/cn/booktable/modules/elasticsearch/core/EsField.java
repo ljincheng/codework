@@ -16,7 +16,7 @@ public @interface  EsField {
      *
      * @return
      */
-    String type() default "text";
+    EsFieldType type() default EsFieldType.text;
 
     boolean index() default false;
 }

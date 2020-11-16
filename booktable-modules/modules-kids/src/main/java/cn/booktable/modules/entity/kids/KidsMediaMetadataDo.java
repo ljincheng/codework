@@ -8,7 +8,7 @@ import java.util.Date;
 
 
 /**
- * 
+ *
  * @author ljc
  */
 @Alias("kidsMediaMetadataDo")
@@ -16,7 +16,7 @@ import java.util.Date;
 public class KidsMediaMetadataDo implements Serializable {
 
 private static final long serialVersionUID = 1L;
- 
+
 		private Long id;//主键ID
 		private Long categoryId;//类别
 		private String title;//名称
@@ -28,5 +28,7 @@ private static final long serialVersionUID = 1L;
 		private Date createTime;//创建时间
 		private Date updateTime;//更新时间
 
- 
+		private KidsMediaCategoryDo category;
+
+
 }

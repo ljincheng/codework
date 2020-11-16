@@ -13,16 +13,19 @@
 <result column="descs" property="descs" />
 <result column="create_time" property="createTime" />
 <result column="update_time" property="updateTime" />
+		<association property="category" javaType="KidsMediaCategoryDo">
+		<result column="category" property="title"/>
+		</association>
 
 	</resultMap>
 
 	<insert id="insert" parameterType="kidsMediaMetadataDo"   keyProperty="id"  useGeneratedKeys="true"  >
-		INSERT INTO kids_media_metadata (  category_id, title, image_url, media_type, media_url, source_url, descs, create_time, update_time ) VALUES 
+		INSERT INTO kids_media_metadata (  category_id, title, image_url, media_type, media_url, source_url, descs, create_time, update_time ) VALUES
 		(#{categoryId} ,#{title} ,#{imageUrl} ,#{mediaType} ,#{mediaUrl} ,#{sourceUrl} ,#{descs} ,#{createTime} ,#{updateTime} )
 	</insert>
 
 	<select id="queryList" parameterType="map" resultType="kidsMediaMetadataDo">
-	SELECT * FROM  kids_media_metadata  WHERE 1=1 
+	SELECT * FROM  kids_media_metadata  WHERE 1=1
 	<if test="id != null"> and id = #{id} </if>
 		<if test="categoryId != null"> and category_id = #{categoryId} </if>
 		<if test="title != null and title !='' "> and title = #{title} </if>
@@ -55,18 +58,18 @@
 		<if test="updateTime != null"> and update_time = #{updateTime} </if>
 	 order by id desc
 	</select>
-	
-		
-	<update id="updateById" parameterType="kidsMediaMetadataDo"> 
+
+
+	<update id="updateById" parameterType="kidsMediaMetadataDo">
 	 UPDATE kids_media_metadata SET category_id = #{categoryId},title = #{title},image_url = #{imageUrl},media_type = #{mediaType},media_url = #{mediaUrl},source_url = #{sourceUrl},descs = #{descs},update_time = #{updateTime}
-	  WHERE id = #{id} 
+	  WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<delete id="deleteById" parameterType="Long">
 	 DELETE FROM kids_media_metadata WHERE id = #{id}
 	</delete>
-	
+
 	<select id="findById" parameterType="Long" resultType="kidsMediaMetadataDo">
 	 SELECT * FROM kids_media_metadata WHERE id = #{id}
 	</select>
@@ -75,5 +78,33 @@
 		select count(*),t.media_url from kids_media_metadata t group by t.media_url HAVING count(*)>1
 		)tml_countings
 	</select>
-	
+
+
+	<select id="queryEsKidsMetaList" parameterType="map" resultType="esKidsMediaMetadataBo">
+		SELECT t2.title as category,t1.id,t1.title FROM  kids_media_metadata t1 left join kids_media_category t2 on t1.category_id=t2.id WHERE 1=1
+		<if test="id != null"> and t1.id = #{id} </if>
+		<if test="categoryId != null"> and t1.category_id = #{categoryId} </if>
+		<if test="title != null and title !='' "> and t1.title = #{title} </if>
+		<if test="imageUrl != null and imageUrl !='' "> and t1.image_url = #{imageUrl} </if>
+		<if test="mediaType != null and mediaType !='' "> and t1.media_type = #{mediaType} </if>
+		<if test="mediaUrl != null and mediaUrl !='' "> and t1.media_url = #{mediaUrl} </if>
+		<if test="sourceUrl != null and sourceUrl !='' "> and t1.source_url = #{sourceUrl} </if>
+		<if test="descs != null and descs !='' "> and t1.descs = #{descs} </if>
+		<if test="createTime != null"> and t1.create_time = #{createTime} </if>
+		<if test="updateTime != null"> and t1.update_time = #{updateTime} </if>
+
+	</select>
+
+	<select id="matchEsKidsMetaList"   resultMap="BaseResultMap">
+		SELECT t2.title as category,t1.* FROM  kids_media_metadata t1 left join kids_media_category t2 on t1.category_id=t2.id WHERE  t1.id in
+		<foreach collection="datalist"  item="node" separator="," open="(" close=")">
+		<if test="node.id != null">
+			#{node.id}
+		</if>
+		</foreach>
+
+	</select>
+
+
+
 </mapper>

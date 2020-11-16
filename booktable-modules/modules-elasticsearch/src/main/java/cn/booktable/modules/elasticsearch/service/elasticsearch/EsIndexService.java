@@ -1,6 +1,9 @@
 package cn.booktable.modules.elasticsearch.service.elasticsearch;
 
+import cn.booktable.modules.elasticsearch.core.EsEntity;
 import cn.booktable.modules.elasticsearch.core.EsIndexMappings;
+
+import java.util.List;
 
 /**
  * 索引服务
@@ -24,4 +27,12 @@ public interface EsIndexService {
      * @return
      */
     boolean create(String index, EsIndexMappings mappings, int shards, int replicas);
+
+    boolean insert(String index,EsEntity entity);
+
+    boolean insertOrUpdate(String index, EsEntity entity);
+
+    boolean delete(String index);
+
+    List<String> indexs();
 }

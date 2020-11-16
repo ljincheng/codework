@@ -40,7 +40,7 @@ public class SysReviewController extends BaseController {
      */
     @GetMapping("/list")
     public ModelAndView list() {
-        return new ModelAndView("/sys/review/list");
+        return new ModelAndView("sys/review/list");
     }
 
     /**
@@ -52,7 +52,7 @@ public class SysReviewController extends BaseController {
     @PostMapping("/list")
     @RequiresPermissions("sys:param:list")
     public ModelAndView listData(HttpServletRequest request,@RequestParam(value = "pageIndex",required = false,defaultValue = "1")Long pageIndex,@RequestParam(value = "pageSize",required = false,defaultValue = "20")Integer pageSize) {
-        ModelAndView model = new ModelAndView("/sys/review/list_table");
+        ModelAndView model = new ModelAndView("sys/review/list_table");
         try {
             Map<String,Object> selectItem = getRequestToParamMap(request);
             selectItem.put("isValid", SysParamDo.ISVALID_T);

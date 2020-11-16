@@ -1,5 +1,6 @@
 package cn.booktable.modules.elasticsearch.core;
 
+import cn.booktable.util.StringUtils;
 import lombok.Data;
 
 import java.lang.reflect.Field;
@@ -29,14 +30,15 @@ public class EsIndexMappings {
         for (Field field : fields) {
             Map<String, Object> value = new HashMap<>();
             EsField esField = field.getAnnotation(EsField.class);
-            if (esField == null) {
-                value.put("type", "text");
-                value.put("index", true);
-            } else {
-                value.put("type", esField.type());
-                value.put("index", esField.index());
+            if (esField != null) {
+
+                if(esField.type()!=null){
+                    value.put("type", esField.type().getValue());
+                    value.put("index", esField.index());
+                    esIndexMappings.getProperties().put(field.getName(), value);
+                }
             }
-            esIndexMappings.getProperties().put(field.getName(), value);
+
         }
         return esIndexMappings;
     }

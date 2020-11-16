@@ -2,23 +2,25 @@ package cn.booktable.modules.component.kids.impl;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+
+import cn.booktable.modules.entity.kids.EsKidsMediaMetadataBo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.Date;
 
 import cn.booktable.core.page.PageDo;
-import cn.booktable.modules.entity.kids.KidsMediaMetadataDo; 
+import cn.booktable.modules.entity.kids.KidsMediaMetadataDo;
 import cn.booktable.modules.component.kids.KidsMediaMetadataComponent;
 import cn.booktable.modules.dao.kids.KidsMediaMetadataDao;
 
 /**
- * 
+ *
  * @author ljc
  */
 @Component("kidsMediaMetadataComponent")
 public class KidsMediaMetadataComponentImpl implements KidsMediaMetadataComponent {
 
-	@Autowired 
+	@Autowired
 	private KidsMediaMetadataDao kidsMediaMetadataDao;
 
 	@Override
@@ -63,5 +65,15 @@ public class KidsMediaMetadataComponentImpl implements KidsMediaMetadataComponen
 	@Override
 	public KidsMediaMetadataDo findKidsMediaMetadataById(Long id){
 		return kidsMediaMetadataDao.findById(id);
+	}
+
+	@Override
+	public List<EsKidsMediaMetadataBo> queryEsKidsMetaList(Map<String, Object> selectItem) {
+		return kidsMediaMetadataDao.queryEsKidsMetaList(selectItem);
+	}
+
+	@Override
+	public List<KidsMediaMetadataDo> matchEsKidsMetaList(List<EsKidsMediaMetadataBo> data) {
+		return kidsMediaMetadataDao.matchEsKidsMetaList(data);
 	}
 }

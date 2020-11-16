@@ -1,28 +1,27 @@
-package test.cn.booktable.entity;
+package cn.booktable.modules.elasticsearch.bean;
 
 import cn.booktable.modules.elasticsearch.core.EsField;
 import cn.booktable.modules.elasticsearch.core.EsFieldType;
 import lombok.Data;
 
-/**
- * @author ljc
- */
 @Data
-public class ProductTest {
+public class ProductBo {
+
     /**
      * 商品id
      */
-    @EsField(type = EsFieldType.text)
+    @EsField(type = EsFieldType.integer,index = true)
     private String id;
-    /**
-     * 品牌id
-     */
-    @EsField(type = EsFieldType.text)
-    private Integer brandId;
+
     /**
      * 品牌名称
      */
+    @EsField(type =EsFieldType.keyword,index = true)
     private String brandName;
+
+    @EsField(type =EsFieldType.text,index = true)
+    private String name;
+
     /**
      * 日期
      */
@@ -38,6 +37,6 @@ public class ProductTest {
     private String category;
     private String isJDLogistics;
     private String paramJson;
-    private String name;
+
     private String seoModel;
 }

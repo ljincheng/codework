@@ -21,8 +21,8 @@ public class EsSearchServiceTest extends BaseTest {
     @Test
     public void matchQuery(){
         Map<String,Object> selected=new HashMap<>();
-        selected.put("brandName","huawei");
-        PageDo<ProductTest> page= esSearchService.matchQuery(ProductTest.class,1,20,"product",selected);
+//        selected.put("brandName","huawei");
+        PageDo<ProductTest> page= esSearchService.matchQuery(ProductTest.class,1,20,"kids_media",selected);
         log.info("matchQuery Test:{}", JSON.toJSON(page));
     }
 }

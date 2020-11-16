@@ -5,19 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.booktable.core.page.PageDo;
-import cn.booktable.modules.entity.kids.KidsMediaMetadataDo; 
+import cn.booktable.modules.entity.kids.KidsMediaMetadataDo;
 import cn.booktable.modules.service.kids.KidsMediaMetadataService;
 import cn.booktable.modules.component.kids.KidsMediaMetadataComponent;
 
 
 /**
- * 
+ *
  * @author ljc
  */
 @Service("kidsMediaMetadataService")
 public class KidsMediaMetadataServiceImpl implements KidsMediaMetadataService {
 
-	@Autowired 
+	@Autowired
 	private KidsMediaMetadataComponent kidsMediaMetadataComponent;
 
 	@Override

@@ -46,7 +46,7 @@ public class SysPermissionController extends BaseController {
     @GetMapping("/list")
     public ModelAndView listPermission(HttpServletRequest request)
     {
-        ModelAndView view=new ModelAndView("/sys/permission/list");
+        ModelAndView view=new ModelAndView("sys/permission/list");
         return view;
     }
 
@@ -54,7 +54,7 @@ public class SysPermissionController extends BaseController {
     @RequiresPermissions("sys:permission:list")
     public ModelAndView listPermissionData(HttpServletRequest request,Long pageIndex,Integer pageSize,Integer dataType,Long parentId)
     {
-        ModelAndView view=new ModelAndView("/sys/permission/list_table");
+        ModelAndView view=new ModelAndView("sys/permission/list_table");
         try{
             //查询
             pageIndex=pageIndex==null?1L:pageIndex;
@@ -78,7 +78,7 @@ public class SysPermissionController extends BaseController {
     @RequestMapping(value="/edit",method=RequestMethod.GET)
     public ModelAndView editPermission_page(Long id)
     {
-        ModelAndView view=new ModelAndView("/system/editPermission");
+        ModelAndView view=new ModelAndView("system/editPermission");
         try{
             view.addObject("id", id);
             SysPermissionDo sysPermission= sysPermissionService.findSysPermissionById(id);
@@ -94,7 +94,7 @@ public class SysPermissionController extends BaseController {
     @ActionLog(level = ActionLogLevel.IMPORTANT,mode ="sys_permission_edit",detail = "修改菜单")
     public ModelAndView editPermission(HttpServletRequest request, SysPermissionDo sysPermission)
     {
-        ModelAndView view=new ModelAndView("/system/editPermission");
+        ModelAndView view=new ModelAndView("system/editPermission");
         try{
 
             //返回页面表单信息
@@ -133,7 +133,7 @@ public class SysPermissionController extends BaseController {
     @RequestMapping(value="/add",method=RequestMethod.GET)
     public ModelAndView addPerimission_methodGet(Long parentId)
     {
-        ModelAndView view=new ModelAndView("/system/addPermission");
+        ModelAndView view=new ModelAndView("system/addPermission");
         try{
             view.addObject("parentId", parentId);
         }catch (Exception e) {
@@ -148,7 +148,7 @@ public class SysPermissionController extends BaseController {
     @ActionLog(level = ActionLogLevel.IMPORTANT,mode = "sys_permission_add",detail = "新增菜单")
     public ModelAndView addPerimission_methodPost(HttpServletRequest request,SysPermissionDo sysPermission)
     {
-        ModelAndView view=new ModelAndView("/system/addPermission");
+        ModelAndView view=new ModelAndView("system/addPermission");
         try{
             //返回页面表单信息
             view.addObject("sysPermission", sysPermission);
@@ -192,7 +192,7 @@ public class SysPermissionController extends BaseController {
     @RequiresPermissions("sys:permission:edit")
     public ModelAndView editPermissionTree_page(Long parentId)
     {
-        ModelAndView view=new ModelAndView("/sys/permission/editTree");
+        ModelAndView view=new ModelAndView("sys/permission/editTree");
         try{
             view.addObject("parentId", parentId);
             SysPermissionDo sysPermission= sysPermissionService.findSysPermissionById(parentId);
@@ -209,7 +209,7 @@ public class SysPermissionController extends BaseController {
     @ActionLog(level = ActionLogLevel.IMPORTANT,mode = "sys_permission_tree_edit",detail = "修改菜单")
     public ModelAndView editPermissionTree_methodPost(HttpServletRequest request,SysPermissionDo sysPermission,Integer parentId)
     {
-        ModelAndView view=new ModelAndView("/sys/permission/editTree");
+        ModelAndView view=new ModelAndView("sys/permission/editTree");
         try{
             //权限验证
             //返回页面表单信息
@@ -254,7 +254,7 @@ public class SysPermissionController extends BaseController {
     @RequiresPermissions("sys:permission:add")
     public ModelAndView addPerimissionTree_methodPost(HttpServletRequest request,SysPermissionDo sysPermission,Integer parentId)
     {
-        ModelAndView view=new ModelAndView("/system/editPermissionTree");
+        ModelAndView view=new ModelAndView("sys/permission/editTree");
         try{
             //返回页面表单信息
             view.addObject("sysPermission", sysPermission);

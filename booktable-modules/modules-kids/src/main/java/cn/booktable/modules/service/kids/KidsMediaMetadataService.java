@@ -3,10 +3,10 @@ import java.util.List;
 import java.util.Map;
 
 import cn.booktable.core.page.PageDo;
-import cn.booktable.modules.entity.kids.KidsMediaMetadataDo; 
+import cn.booktable.modules.entity.kids.KidsMediaMetadataDo;
 
 /**
- * 
+ *
  * @author ljc
  */
 public interface KidsMediaMetadataService {
@@ -54,4 +54,7 @@ public interface KidsMediaMetadataService {
 	 * @return
 	 */
 	public KidsMediaMetadataDo findKidsMediaMetadataById(Long id);
+
+
+
 }
